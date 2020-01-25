@@ -1,7 +1,7 @@
 # unified-dotfiles
 My unified dotfiles from Gentoo and macOS
 
-# Softwares used
+# Softwares used on macOS
 
 - Homebrew
 - Exa
@@ -12,3 +12,12 @@ My unified dotfiles from Gentoo and macOS
 - VSCode
 - Spotify
 - iTerm 2
+
+# Softwares used on Gentoo
+
+- Exa
+- ripgrep
+- Google Chrome
+- VSCode
+- Spotify
+- Alacritty
