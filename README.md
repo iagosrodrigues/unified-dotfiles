@@ -12,6 +12,7 @@ My unified dotfiles from Gentoo and macOS
 - VSCode
 - Spotify
 - iTerm 2
+- Telegram
 
 # Softwares used on Gentoo
 
