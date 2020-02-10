@@ -353,6 +353,7 @@ let g:ale_sign_column_always = 1
 " let g:ale_completion_enabled = 1
 let g:ale_fixers = ['prettier', 'eslint']
 let g:ale_completion_tsserver_autoimport = 1
+let g:indentLine_char = '┊'
 
 if s:noamcore_wayland
 	let g:clipboard = {
@@ -371,6 +372,7 @@ endif
 
 let g:coc_global_extensions = [
 	\ 'coc-snippets',
+  \ 'coc-rls',
 	\ 'coc-pairs',
 	\ 'coc-tsserver',
 	\ 'coc-eslint',

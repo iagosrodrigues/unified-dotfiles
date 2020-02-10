@@ -15,6 +15,7 @@ Plug 'NLKNguyen/papercolor-theme'
 Plug 'morhetz/gruvbox'
 Plug 'itchyny/lightline.vim'
 Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
+Plug 'Yggdroot/indentLine' " Indent level bars
 
 " Extensions
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
