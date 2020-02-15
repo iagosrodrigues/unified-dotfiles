@@ -51,7 +51,6 @@ set relativenumber    " Mostrar os números relativos
 set noequalalways
 set splitbelow        " Novas janelas serão colocadas em baixo da atual se o split for horizontal
 set splitright        " Novas janelas serão colocadas ao lado direito da atual se o split for vertical
-set list              " Mostra caracteres invisíveis
 set listchars=tab:»\ ,eol:⤶,trail:·,extends:❯,precedes:❮,nbsp:␣
 " set listchars=tab:→\ ,eol:⤶¬,trail:·,extends:❯,precedes:❮,nbsp:␣
 set updatetime=300
