@@ -39,7 +39,11 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'justinmk/vim-sneak'
 Plug 'Raimondi/delimitMate'
-Plug '/usr/bin/fzf'
+if has("mac")
+  Plug '/usr/local/opt/fzf'
+elseif has("linux")
+  Plug '/usr/bin/fzf'
+endif
 Plug 'junegunn/fzf.vim'
 Plug 'kshenoy/vim-signature' " Gerenciar marcações com o m
 Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }

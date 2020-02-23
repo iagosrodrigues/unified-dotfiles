@@ -298,7 +298,7 @@ map <leader>m :Make<CR>
 " nnoremap <silent> <leader>k :NERDTreeToggle<cr>
 " nnoremap <silent> <leader>y :NERDTreeFind<cr>
 nnoremap <silent> <leader>k :NERDTreeToggle<cr>
-nnoremap <leader>f :FZF<cr>
+nnoremap <leader>F :FZF<cr>
 nnoremap <leader><tab> <plug>(fzf-maps-n)
 xnoremap <leader><tab> <plug>(fzf-maps-x)
 onoremap <leader><tab> <plug>(fzf-maps-o)
@@ -346,6 +346,7 @@ xmap <silent> <S-TAB> <Plug>(coc-range-select-backword)
 " }}}
 " Variáveis de plugins {{{2
 
+let $FZF_DEFAULT_COMMAND='fd'
 set omnifunc=ale#completion#OmniFunc
 let g:ale_fix_on_save = 1
 let g:ale_sign_column_always = 1
