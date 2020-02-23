@@ -271,9 +271,9 @@ nnoremap <silent> <leader><C-]> <C-W><C-]><C-W>T
 vnoremap <leader>su !awk '{ print length(), $0 \| "sort -n \| cut -d\\  -f2-" }'<cr>
 
 if has('nvim')
-	nnoremap <silent><M-t> :FloatermToggle<CR>
-	inoremap <silent><M-t> <Esc>:FloatermToggle<CR>
-	tnoremap <silent><M-t> <C-\><C-n>:FloatermToggle<CR>
+	nnoremap <silent><M-t> :call TermToggle(10)<CR>
+	inoremap <silent><M-t> <Esc>:call TermToggle(10)<CR>
+	tnoremap <silent><M-t> <C-\><C-n>:call TermToggle(10)<CR>
 	tnoremap <silent><Esc> <C-\><C-n>
 endif
 
