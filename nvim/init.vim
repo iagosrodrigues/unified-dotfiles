@@ -17,7 +17,7 @@ let s:noamcore_wayland=0
 " set background=dark " Permite temas escolherem cores para um fundo mais escuro
 set termguicolors
 " colorscheme base16-default-dark
-colorscheme base16-eighties
+colorscheme xcodedark
 
 if executable('tmux') && $TMUX !=# ''
 	let g:tmux = 1
@@ -186,10 +186,12 @@ noremap <left>  <nop>
 noremap <right> <nop>
 noremap <up>    <nop>
 noremap <down>  <nop>
+noremap <c-space>  <nop>
 inoremap <left>  <nop>
 inoremap <right> <nop>
 inoremap <up>    <nop>
 inoremap <down>  <nop>
+inoremap <c-space> <nop>
 
 " Alternar abas via tab no modo normal
 nnoremap <tab> gt
@@ -287,9 +289,6 @@ command! -bang -nargs=* Rg
   \   <bang>0 ? fzf#vim#with_preview('up:60%')
   \           : fzf#vim#with_preview('right:50%:hidden', '?'),
   \   <bang>0)
-command! -nargs=0 Format :call CocAction('format')
-command! -nargs=? Fold :call CocAction('fold', <f-args>)
-command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport')
 map <leader>m :Make<CR>
 
 " Plugins {{{1
@@ -298,15 +297,6 @@ map <leader>m :Make<CR>
 " nnoremap <silent> <leader>k :NERDTreeToggle<cr>
 " nnoremap <silent> <leader>y :NERDTreeFind<cr>
 nnoremap <silent> <leader>k :NERDTreeToggle<cr>
-nnoremap <leader>F :FZF<cr>
-nnoremap <leader><tab> <plug>(fzf-maps-n)
-xnoremap <leader><tab> <plug>(fzf-maps-x)
-onoremap <leader><tab> <plug>(fzf-maps-o)
-inoremap <c-x><c-k> <plug>(fzf-complete-word)
-inoremap <c-x><c-f> <plug>(fzf-complete-path)
-inoremap <c-x><c-j> <plug>(fzf-complete-file-ag)
-inoremap <c-x><c-l> <plug>(fzf-complete-line)
-nnoremap <silent> K :call <SID>show_documentation()<CR>
 " imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
 
 " Inicia interativamente o EasyAlign no modo visual (e.g. vipga)
@@ -317,32 +307,16 @@ nmap ga <Plug>(EasyAlign)
 
 nmap <F8> :TagbarToggle<CR>
 
-inoremap <silent><expr> <Tab>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<Tab>" :
-      \ coc#refresh()
-inoremap <silent><expr> <c-space> coc#refresh()
-
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
-nmap <silent> [c <Plug>(coc-diagnostic-prev)
-nmap <silent> ]c <Plug>(coc-diagnostic-next)
+if has('patch8.1.1068')
+  " Use `complete_info` if your (Neo)Vim version supports it.
+  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+else
+  imap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+endif
 
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-
-nmap <leader>rn <Plug>(coc-rename)
-
-xmap <leader>f <Plug>(coc-format-selected)
-nmap <leader>f <Plug>(coc-format)
-
-nmap <silent> <TAB> <Plug>(coc-range-select)
-xmap <silent> <TAB> <Plug>(coc-range-select)
-xmap <silent> <S-TAB> <Plug>(coc-range-select-backword)
 " }}}
 " Variáveis de plugins {{{2
 
@@ -370,17 +344,6 @@ if s:noamcore_wayland
 		\ }
 endif
 
-let g:coc_global_extensions = [
-	\ 'coc-snippets',
-  \ 'coc-rls',
-	\ 'coc-pairs',
-	\ 'coc-tsserver',
-	\ 'coc-eslint',
-	\ 'coc-tslint-plugin',
-	\ 'coc-prettier',
-	\ 'coc-json',
-	\ ]
-
 " let g:floaterm_width = float2nr(&columns * 0.8)
 " let g:floaterm_height = float2nr(&lines * 0.8)
 " let g:floaterm_position = 'center'
@@ -393,21 +356,9 @@ let g:limelight_conceal_guifg = '#777777'
 let g:mix_format_on_save = 0
 let g:mix_format_options = '--check-equivalent'
 let g:mix_format_silent_errors = 1
-let g:netrw_sort_by = 'name'
-let g:netrw_sort_direction = 'normal'
-let g:netrw_banner = 0
-" let g:netrw_liststyle = 3
-let g:netrw_browse_split = 3
-let g:netrw_fastbrowse = 1
-let g:netrw_winsize = -28
 let g:user_emmet_install_global = 0
 let g:fzf_layout = { 'window': '10split enew' }
 let g:fzf_buffers_jump = 1
-let g:NERDTreeIgnore = ['^node_modules$']
-let g:NERDTreeShowHidden=1
-let g:NERDTreeChDirMode=2
-let g:NERDTreeHijackNetrw=0
-let g:NERDTreeQuitOnOpen=1
 let g:lightline = {
 	\   'colorscheme': 'PaperColor',
 	\   'active': {
@@ -470,15 +421,16 @@ augroup Config
 	autocmd VimResized * exe 'normal! \<c-w>='
 	autocmd FileType vim setlocal fen fdm=marker
 
-	" autocmd FileType blade,html,css EmmetInstall
 	autocmd FileType c nnoremap <silent> <space>b :!cc -Wall % -o %:r && ./%:r<CR>
 	autocmd FileType cpp nnoremap <silent> <space>b :!g++ -Wall % -o %:r && ./%:r<CR>
-	autocmd FileType fzf tnoremap <buffer> <leader>q <c-c>
+	autocmd FileType fzf tnoremap <buffer> <esc> <c-c>
 	autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 
-	autocmd BufWritePre *.ts,*.js,*.tsx PrettierAsync
-
 	autocmd BufWritePost *.exs,*.ex silent! call ElixirFormat()
+
+  " Fix terminal bug glitch on every keypress
+  autocmd TermEnter * setlocal scrolloff=0
+  autocmd TermLeave * setlocal scrolloff=3
 
 	autocmd FileType typescript,javascript,json setl formatexpr=CocAction('formatSelected')
 
@@ -552,6 +504,67 @@ function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~ '\s'
 endfunction
+" }}}
+
+" {{{ NERDTree
+let g:NERDTreeIgnore = ['^node_modules$']
+let g:NERDTreeShowHidden=1
+let g:NERDTreeChDirMode=2
+let g:NERDTreeHijackNetrw=0
+let g:NERDTreeQuitOnOpen=1
+"}}}
+" {{{ Netrw
+let g:netrw_banner = 0
+let g:netrw_browse_split = 4
+let g:netrw_fastbrowse = 1
+let g:netrw_liststyle = 3
+let g:netrw_sort_by = 'name'
+let g:netrw_sort_direction = 'normal'
+let g:netrw_winsize = 20
+"}}}
+" {{{ coc.nvim
+let g:coc_global_extensions = [
+	\ 'coc-snippets',
+  \ 'coc-rls',
+	\ 'coc-pairs',
+	\ 'coc-tsserver',
+	\ 'coc-eslint',
+	\ 'coc-tslint-plugin',
+	\ 'coc-prettier',
+	\ 'coc-json',
+	\ ]
+
+let g:coc_snippet_next = '<tab>'
+
+command! -nargs=0 Format :call CocAction('format')
+command! -nargs=? Fold :call CocAction('fold', <f-args>)
+command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport')
+
+inoremap <silent><expr> <Tab>
+      \ pumvisible() ? coc#_select_confirm() :
+      \ coc#expandableOrJumpable() ? "\<c-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump', ''])\<cr>" :
+      \ <SID>check_back_space() ? "\<tab>" :
+      \ coc#refresh()
+inoremap <silent><expr> <c-space> coc#refresh()
+
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+nmap <silent> [c <Plug>(coc-diagnostic-prev)
+nmap <silent> ]c <Plug>(coc-diagnostic-next)
+
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+nmap <leader>rn <Plug>(coc-rename)
+
+xmap <leader>f <Plug>(coc-format-selected)
+nmap <leader>f <Plug>(coc-format)
+
+nmap <silent> <TAB> <Plug>(coc-range-select)
+xmap <silent> <TAB> <Plug>(coc-range-select)
+xmap <silent> <S-TAB> <Plug>(coc-range-select-backword)
 
 function! CocCurrentFunction()
     return get(b:, 'coc_current_function', '')
@@ -565,5 +578,23 @@ function! s:show_documentation()
   endif
 endfunction
 " }}}
+" {{{ fzf.vim
+let g:fzf_buffers_jump = 1
+
+nnoremap <leader>F :FZF<cr>
+nnoremap <leader>B :Buffers<cr>
+nnoremap <leader><tab> <plug>(fzf-maps-n)
+xnoremap <leader><tab> <plug>(fzf-maps-x)
+onoremap <leader><tab> <plug>(fzf-maps-o)
+inoremap <c-x><c-k> <plug>(fzf-complete-word)
+inoremap <c-x><c-f> <plug>(fzf-complete-path)
+inoremap <c-x><c-j> <plug>(fzf-complete-file-ag)
+inoremap <c-x><c-l> <plug>(fzf-complete-line)
+"}}}
+
+" lua << EOF
+" require'nvim_lsp'.tsserver.setup{}
+" require'nvim_lsp'.vimls.setup{}
+" EOF
 
 " vim: fdm=marker fdl=0

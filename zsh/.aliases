@@ -1,0 +1,59 @@
+# System
+alias l='ls'
+alias ll='ls --color=auto -lah'
+alias ls='exa --color-scale --sort=type --group-directories-first'
+alias con='ps -A --sort -rsz -o comm,pmem,pcpu|awk "NR<=15"'
+alias open='xdg-open'
+alias grep='rg'
+alias mail='neomutt'
+alias download='youtube-dl'
+alias recompile-world='doas emerge -avuDN --with-bdeps=y @world'
+alias dir-size='du -hxd1 2>/dev/null | sort -hr | less -FX'
+
+# Shortcuts
+alias ap='ansible-playbook'
+alias esync='doas emerge --sync'
+alias t='exa --tree --level=1'
+alias find='fd'
+alias vim='nvim'
+alias watch='mpv'
+alias clone='git clone'
+alias time='hyperfine'
+alias iftop='bandwhich'
+alias todo='nvim ~/todo'
+alias clock='tty-clock -cD -C 1'
+alias screenoff='xset dpms force off'
+# alias dots='git --git-dir=$HOME/src/ --work-tree=/'
+alias dots='cd ~/Projects/GitHub/dotfiles'
+alias docker-start='doas /etc/init.d/docker start'
+alias send-backup='rclone copyto ~/@Drive d:/ -P'
+alias docker-radar='DOCKER_HOST=ssh://iago@radar docker'
+alias ssh-nohost='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
+alias gui='startx -- vt1'
+alias top='ytop'
+alias https='http --default-scheme=https'
+
+alias sway='dbus-launch --sh-syntax --exit-with-session /usr/bin/sway -d'
+
+# Diretórios
+alias gd='cd ~/Downloads'
+alias gg='cd ~/Projects'
+
+# Gentoo
+alias compile-time="qlist -I | xargs doas qlop -t | awk '{ if (\$2 < 5400) secs += \$2} END { printf(\"%dh:%dm:%ds\\n\", secs / 3600, (secs % 3600) / 60, secs % 60); }'"
+
+alias gpg-photo='gpg --list-options show-photos --photo-viewer "sxiv %I" --fingerprint'
+
+alias load_func='. ~/.functions'
+alias load_secure_func='eval $(decrypt ~/.sec.functions 2>/dev/null)'
+alias dev='. ~/.dev.aliases'
+
+# Security
+alias encrypt='gpg -esqR iagosr@pm.me'
+alias encrypt-dir='ls | gpg --encrypt-files -R iagosr@pm.me -q'
+alias decrypt='gpg -d'
+
+
+# alias pbcopy='xsel -b'
+
+# vim: set ft=sh:
