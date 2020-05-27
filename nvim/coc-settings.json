@@ -1,5 +1,24 @@
 {
-	"eslint.enable": false,
-	"eslint.quiet": true,
-	"eslint.packageManager": "yarn"
+  "coc.preferences.bracketEnterImprove": true,
+  "coc.preferences.currentFunctionSymbolAutoUpdate": true,
+  "coc.preferences.enableFloatHighlight": true,
+  "coc.preferences.formatOnType": false,
+  "coc.preferences.hoverTarget": "float",
+  "coc.preferences.previewAutoClose": true,
+  "coc.preferences.snippets.enable": true,
+  "codeLens.enable": true,
+  "diagnostic.checkCurrentLine": true,
+  "diagnostic.errorSign": "✖",
+  "diagnostic.hintSign": "○",
+  "diagnostic.infoSign": "●",
+  "diagnostic.warningSign": "⚠",
+  "eslint.enable": false,
+  "eslint.packageManager": "yarn",
+  "eslint.quiet": true,
+  "suggest.enablePreselect": true,
+  "suggest.enablePreview": true,
+  "tsserver.trace.server": "verbose",
+  "vetur.trace.server": "verbose",
+  "vetur.useWorkspaceDependencies": true,
+  "languageserver": {}
 }

@@ -7,13 +7,15 @@ scriptencoding utf-8      " Seleciona utf8 como codificação padrão
 set path+=**
 set iminsert=0
 set imsearch=0
+set noshowmode
 
 let s:noamcore_bg_transparent=0
 let s:noamcore_wayland=0
+let s:gold_numbers = 0
+let g:python3_host_prog = '/usr/local/bin/python3'
 
 " Tema {{{2
 
-" colorscheme gruvbox
 " set background=dark " Permite temas escolherem cores para um fundo mais escuro
 set termguicolors
 " colorscheme base16-default-dark
@@ -34,6 +36,10 @@ set backspace=indent,eol,start " Compatibilidade com vim classico para backspace
 set clipboard=unnamedplus      " O registrador * vira unnamed, permite que os textos copiados pelo vim vão para o clipboard
 " set conceallevel=2             " Habilita uma especie de ligature, substitui por exemplo a palavra lambda no python pelo simbolo
 set shada="NONE"
+"{{{ Buffers
+set switchbuf="useopen"
+set bufhidden="unload"
+"}}}
 
 " Desativar 'press ENTER to continue' {{{2
 
@@ -47,13 +53,13 @@ set shortmess+=c
 
 set fillchars+=vert:\|
 set number            " Mostrar os números das linhas
-set relativenumber    " Mostrar os números relativos
+" set relativenumber    " Mostrar os números relativos
 set noequalalways
 set splitbelow        " Novas janelas serão colocadas em baixo da atual se o split for horizontal
 set splitright        " Novas janelas serão colocadas ao lado direito da atual se o split for vertical
 set listchars=tab:»\ ,eol:⤶,trail:·,extends:❯,precedes:❮,nbsp:␣
 " set listchars=tab:→\ ,eol:⤶¬,trail:·,extends:❯,precedes:❮,nbsp:␣
-set updatetime=300
+set updatetime=100
 set signcolumn=yes
 " set cursorline
 set lazyredraw
@@ -61,7 +67,10 @@ set lazyredraw
 " }}}
 
 " Disable cursor shape
-" set guicursor=
+set guicursor=
+" set guicursor=n-v-c:block
+" set guicursor=n-v-c:block
+"   \,a:blinkwait500-blinkoff200-blinkon5000-Cursor/lCursor
 " set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
 "        \,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor
 "        \,sm:block-blinkwait175-blinkoff150-blinkon175
@@ -157,16 +166,19 @@ if s:noamcore_bg_transparent
 	highlight SignColumn guibg=none
 endif
 
-highlight EndOfBuffer guifg=bg guibg=none
-highlight ErrorSign guibg=#3c3836 guifg=#fb4934
-highlight WarningSign guibg=#3c3836 guifg=#fabd2f
-highlight InfoSign guibg=#3c3836 guifg=#8ec07c
-highlight Search guifg=#282a2e
-highlight IncSearch guibg=none guifg=#282a2e
-highlight Child guifg=#fb4934 guibg=none cterm=bold gui=bold
-highlight LineNr guibg=none guifg=Gold
-highlight CursorLineNr gui=bold guifg=LightGoldenrod
-highlight Conceal ctermbg=NONE
+if s:gold_numbers
+  highlight LineNr guibg=none guifg=Gold
+  highlight CursorLineNr gui=bold guifg=LightGoldenrod
+endif
+
+" highlight EndOfBuffer guifg=bg guibg=none
+" highlight ErrorSign guibg=#3c3836 guifg=#fb4934
+" highlight WarningSign guibg=#3c3836 guifg=#fabd2f
+" highlight InfoSign guibg=#3c3836 guifg=#8ec07c
+" highlight Search guifg=#282a2e
+" highlight IncSearch guibg=none guifg=#282a2e
+" highlight Child guifg=#fb4934 guibg=none cterm=bold gui=bold
+" highlight Conceal ctermbg=NONE
 
 " highlight clear CursorLine
 " highlight CursorLine gui=underline cterm=underline
@@ -177,7 +189,7 @@ highlight Sneak guifg=black guibg=orange
 " Destaca conflitos do git
 match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
 "}}}
-" Mapeamento {{{1
+" Mapeamento {{{
 let mapleader = "," " O padrão é \, mas é mais fácil digitar o vírgula
 let g:mapleader = "," " Usado para os scripts
 
@@ -208,7 +220,7 @@ nnoremap <leader>tf :set foldenable!<cr>
 " Alterna entre mostrar ou não a linha onde o cursor está
 nnoremap <leader>cs :set cursorline!<cr>
 
-nnoremap <leader>sa :w<cr>
+nnoremap <leader><tab> :w<cr>
 
 " Mover através das linhas visíveis, não das linhas numeradas
 noremap j gj
@@ -219,7 +231,7 @@ vnoremap > >gv
 vnoremap < <gv
 
 " Fechar o buffer atual
-nmap <silent> <space>b :bw<cr>
+nmap <silent> <space>b :bun<cr>
 
 " Voltar para o modo normal com jw
 inoremap jw <esc>
@@ -279,10 +291,16 @@ if has('nvim')
 	tnoremap <silent><Esc> <C-\><C-n>
 endif
 
+" {{{ Commands
+"
+command! -nargs=0 Prettier :CocCommand prettier.formatFile
 command! -nargs=* Make make <args> | cwindow 3
+
 command! ConfigGinit tab drop ~/.config/nvim/ginit.vim
 command! ConfigInit tab drop ~/.config/nvim/init.vim
 command! ConfigPlugins tab drop ~/.config/nvim/plugins.vim
+
+command! -nargs=0 GG :cd ~/Projects
 command! -bang -nargs=* Rg
   \ call fzf#vim#grep(
   \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
@@ -290,13 +308,14 @@ command! -bang -nargs=* Rg
   \           : fzf#vim#with_preview('right:50%:hidden', '?'),
   \   <bang>0)
 map <leader>m :Make<CR>
+" }}}
 
 " Plugins {{{1
 " Mapeamento para plugins {{{2
 
-" nnoremap <silent> <leader>k :NERDTreeToggle<cr>
-" nnoremap <silent> <leader>y :NERDTreeFind<cr>
 nnoremap <silent> <leader>k :NERDTreeToggle<cr>
+" nnoremap <silent> <leader>y :NERDTreeFind<cr>
+" nnoremap <silent> <leader>k :Lexplore<cr>
 " imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
 
 " Inicia interativamente o EasyAlign no modo visual (e.g. vipga)
@@ -348,10 +367,10 @@ endif
 " let g:floaterm_height = float2nr(&lines * 0.8)
 " let g:floaterm_position = 'center'
 
-let g:limelight_conceal_ctermfg = 'gray'
-let g:limelight_conceal_ctermfg = 240
-let g:limelight_conceal_guifg = 'DarkGray'
-let g:limelight_conceal_guifg = '#777777'
+" let g:limelight_conceal_ctermfg = 'gray'
+" let g:limelight_conceal_ctermfg = 240
+" let g:limelight_conceal_guifg = 'DarkGray'
+" let g:limelight_conceal_guifg = '#777777'
 
 let g:mix_format_on_save = 0
 let g:mix_format_options = '--check-equivalent'
@@ -359,29 +378,6 @@ let g:mix_format_silent_errors = 1
 let g:user_emmet_install_global = 0
 let g:fzf_layout = { 'window': '10split enew' }
 let g:fzf_buffers_jump = 1
-let g:lightline = {
-	\   'colorscheme': 'PaperColor',
-	\   'active': {
-	\     'left':[ [ 'mode', 'paste' ],
-	\              [ 'gitbranch', 'cocstatus', 'currentfunction', 'readonly', 'filename', 'modified' ]
-	\     ],
-	\     'right': [ ['lineinfo'], ['percent'], ['pomodoro', 'fileformat', 'fileencoding', 'filetype'] ],
-	\   },
-	\   'component': {
-	\     'lineinfo': ' %3l:%-2v',
-	\   },
-	\   'component_function': {
-	\     'gitbranch': 'fugitive#head',
-	\     'cocstatus': 'coc#status',
-	\     'currentfunction': 'CocCurrentFunction',
-	\     'pomodoro': 'PomodoroStatus',
-	\   }
-	\ }
-let g:lightline.separator = { 'left': '', 'right': '' }
-let g:lightline.subseparator = { 'left': '', 'right': '' }
-" let g:lightline.tabline_separator = { 'left': "\ue0bc", 'right': "\ue0ba" }
-" let g:lightline.tabline_subseparator = { 'left': "\ue0bb", 'right': "\ue0bb" }
-let g:lightline.tabline = { 'left': [ ['tabs'] ], 'right': [ ['close'] ] }
 
 let g:rainbow_active = 1
 
@@ -411,26 +407,25 @@ augroup END
 augroup Config
 	autocmd!
 
-	autocmd BufWritePost .vimrc,.vimrc.local,init.vim,plugins.vim,ginit.vim source %
+	autocmd BufWritePost .vimrc,.vimrc.local,init.vim,plugins.vim,ginit.vim ++nested source %
 
 	" Disables automatic commenting on newline
-	autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+	" autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
 	autocmd CursorHold * silent call CocActionAsync('highlight')
 
 	autocmd VimResized * exe 'normal! \<c-w>='
 	autocmd FileType vim setlocal fen fdm=marker
 
-	autocmd FileType c nnoremap <silent> <space>b :!cc -Wall % -o %:r && ./%:r<CR>
-	autocmd FileType cpp nnoremap <silent> <space>b :!g++ -Wall % -o %:r && ./%:r<CR>
-	autocmd FileType fzf tnoremap <buffer> <esc> <c-c>
+	autocmd FileType skim tnoremap <buffer> <esc> <c-g>
 	autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 
 	autocmd BufWritePost *.exs,*.ex silent! call ElixirFormat()
 
-  " Fix terminal bug glitch on every keypress
-  autocmd TermEnter * setlocal scrolloff=0
-  autocmd TermLeave * setlocal scrolloff=3
+  if !has('nvim-0.5') " Fix terminal bug glitch on every keypress
+    autocmd TermEnter * setlocal scrolloff=0
+    autocmd TermLeave * setlocal scrolloff=3
+  endif
 
 	autocmd FileType typescript,javascript,json setl formatexpr=CocAction('formatSelected')
 
@@ -492,20 +487,18 @@ endfunction
 
 " }}}
 " Functions {{{
-function! PomodoroStatus() abort
-	if pomo#remaining_time() ==# '0'
-		return "\ue001"
-	else
-		return "\ue003 ".pomo#remaining_time()
-	endif
-endfunction
-
 function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~ '\s'
 endfunction
-" }}}
 
+function! LightlineReload(colorscheme)
+  let g:lightline.colorscheme = a:colorscheme
+  call lightline#init()
+  call lightline#colorscheme()
+  call lightline#update()
+endfunction
+" }}}
 " {{{ NERDTree
 let g:NERDTreeIgnore = ['^node_modules$']
 let g:NERDTreeShowHidden=1
@@ -517,6 +510,7 @@ let g:NERDTreeQuitOnOpen=1
 let g:netrw_banner = 0
 let g:netrw_browse_split = 4
 let g:netrw_fastbrowse = 1
+let g:netrw_altv = 1
 let g:netrw_liststyle = 3
 let g:netrw_sort_by = 'name'
 let g:netrw_sort_direction = 'normal'
@@ -540,12 +534,21 @@ command! -nargs=0 Format :call CocAction('format')
 command! -nargs=? Fold :call CocAction('fold', <f-args>)
 command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport')
 
-inoremap <silent><expr> <Tab>
-      \ pumvisible() ? coc#_select_confirm() :
-      \ coc#expandableOrJumpable() ? "\<c-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump', ''])\<cr>" :
-      \ <SID>check_back_space() ? "\<tab>" :
-      \ coc#refresh()
+inoremap <silent><expr> <tab>
+  \ pumvisible() ? "\<C-n>" :
+  \ <SID>check_back_space() ? "\<tab>" :
+  \ coc#refresh()
+inoremap <expr><s-tab> pumvisible() ? "\<C-p>" : "\<C-h>"
+" inoremap <silent><expr> <Tab>
+"       \ pumvisible() ? coc#_select_confirm() :
+"       \ coc#expandableOrJumpable() ? "\<c-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump', ''])\<cr>" :
+"       \ <SID>check_back_space() ? "\<cr>" :
+"       \ coc#refresh()
 inoremap <silent><expr> <c-space> coc#refresh()
+
+" Autoformat on enter
+" inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+" 				\: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 
@@ -580,10 +583,11 @@ endfunction
 " }}}
 " {{{ fzf.vim
 let g:fzf_buffers_jump = 1
+let g:fzf_preview_window = 'right:60%'
 
-nnoremap <leader>F :FZF<cr>
+nnoremap <leader>F :GFiles<cr>
 nnoremap <leader>B :Buffers<cr>
-nnoremap <leader><tab> <plug>(fzf-maps-n)
+" nnoremap <leader><tab> <plug>(fzf-maps-n)
 xnoremap <leader><tab> <plug>(fzf-maps-x)
 onoremap <leader><tab> <plug>(fzf-maps-o)
 inoremap <c-x><c-k> <plug>(fzf-complete-word)
@@ -591,10 +595,52 @@ inoremap <c-x><c-f> <plug>(fzf-complete-path)
 inoremap <c-x><c-j> <plug>(fzf-complete-file-ag)
 inoremap <c-x><c-l> <plug>(fzf-complete-line)
 "}}}
+" {{{notational-fzf-vim
+let g:nv_search_paths = ['~/.wiki']
+"}}}
+" {{{ rainbow.vim
+let g:rainbow_conf = {
+  \ 'separately': {
+  \   'vimwiki': 0
+  \ }
+\ }
+" }}}
+" {{{ lens.vim
+let g:lens#disabled_filetypes = ['NERDTree', 'FZF']
+" }}}
+" {{{vim-zettel
+let g:zettel_fzf_command = "rg --column --line-number --ignore-case --no-heading --color=always "
+" }}}
+" {{{lightline.vim
+command! -nargs=1 LightlineReload call LightlineReload(<args>)
 
+let g:lightline = {
+	\   'colorscheme': 'nord',
+	\   'active': {
+	\     'left':[ [ 'mode', 'paste' ],
+	\              [ 'gitbranch', 'cocstatus', 'currentfunction', 'readonly', 'filename', 'modified' ]
+	\     ],
+	\     'right': [ ['lineinfo'], ['percent'], ['fileformat', 'fileencoding', 'filetype'] ],
+	\   },
+	\   'component': {
+	\     'lineinfo': ' %3l:%-2v',
+	\   },
+	\   'component_function': {
+	\     'gitbranch': 'fugitive#head',
+	\     'cocstatus': 'coc#status',
+	\     'currentfunction': 'CocCurrentFunction',
+	\   }
+	\ }
+let g:lightline.separator = { 'left': "\ue0b4", 'right': "\ue0b6" }
+let g:lightline.subseparator = { 'left': ")", 'right': "(" }
+" let g:lightline.tabline_separator = { 'left': "\ue0bc", 'right': "\ue0ba" }
+" let g:lightline.tabline_subseparator = { 'left': "\ue0bb", 'right': "\ue0bb" }
+let g:lightline.tabline = { 'left': [ ['tabs'] ], 'right': [ ['close'] ] }
+" }}}
 " lua << EOF
 " require'nvim_lsp'.tsserver.setup{}
 " require'nvim_lsp'.vimls.setup{}
 " EOF
-
+"
+"
 " vim: fdm=marker fdl=0
