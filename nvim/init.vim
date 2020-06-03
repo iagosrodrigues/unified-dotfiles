@@ -53,7 +53,7 @@ set shortmess+=c
 
 set fillchars+=vert:\|
 set number            " Mostrar os números das linhas
-" set relativenumber    " Mostrar os números relativos
+set relativenumber    " Mostrar os números relativos
 set noequalalways
 set splitbelow        " Novas janelas serão colocadas em baixo da atual se o split for horizontal
 set splitright        " Novas janelas serão colocadas ao lado direito da atual se o split for vertical
@@ -180,8 +180,8 @@ endif
 " highlight Child guifg=#fb4934 guibg=none cterm=bold gui=bold
 " highlight Conceal ctermbg=NONE
 
-" highlight clear CursorLine
-" highlight CursorLine gui=underline cterm=underline
+highlight clear CursorLine
+highlight CursorLine gui=underline cterm=underline
 
 " vim-sneak
 highlight Sneak guifg=black guibg=orange
@@ -329,11 +329,13 @@ nmap <F8> :TagbarToggle<CR>
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
-if has('patch8.1.1068')
-  " Use `complete_info` if your (Neo)Vim version supports it.
-  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+if exists('*complete_info')
+  inoremap <silent><expr> <cr> complete_info()["selected"] != "-1" ? coc#_select_confirm()
+    \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 else
-  imap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+  inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+    \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+  " inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 endif
 
 " }}}
@@ -447,6 +449,12 @@ augroup CustomColors
 	autocmd ColorScheme gruvbox
 		\	let g:gruvbox_contrast_dark="hard"
 		\ | let g:gruvbox_italic=0
+
+	autocmd ColorScheme vim-colors-xcode hi Comment        cterm=italic gui=italic
+  autocmd ColorScheme vim-colors-xcode hi SpecialComment cterm=italic gui=italic
+  autocmd ColorScheme vim-colors-xcode hi Cursor ctermbg=#ff7ab2 guibg=#ff7ab2
+
+	"ff7ab2
 augroup END
 
 augroup Term
@@ -519,7 +527,7 @@ let g:netrw_winsize = 20
 " {{{ coc.nvim
 let g:coc_global_extensions = [
 	\ 'coc-snippets',
-  \ 'coc-rls',
+  \ 'coc-rust-analyzer',
 	\ 'coc-pairs',
 	\ 'coc-tsserver',
 	\ 'coc-eslint',
@@ -636,6 +644,12 @@ let g:lightline.subseparator = { 'left': ")", 'right': "(" }
 " let g:lightline.tabline_separator = { 'left': "\ue0bc", 'right': "\ue0ba" }
 " let g:lightline.tabline_subseparator = { 'left': "\ue0bb", 'right': "\ue0bb" }
 let g:lightline.tabline = { 'left': [ ['tabs'] ], 'right': [ ['close'] ] }
+" }}}
+" {{{sneak.vim
+map f <Plug>Sneak_f
+map F <Plug>Sneak_F
+map t <Plug>Sneak_t
+map T <Plug>Sneak_T
 " }}}
 " lua << EOF
 " require'nvim_lsp'.tsserver.setup{}
