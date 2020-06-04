@@ -1,5 +1,6 @@
 {
   "coc.preferences.formatOnType": false,
+  "coc.preferences.formatOnSaveFiletypes": ["typescript"],
   "coc.preferences.bracketEnterImprove": true,
   "highlight.document.enable": false,
   "codeLens.enable": false,

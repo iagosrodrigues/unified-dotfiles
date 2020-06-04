@@ -1,5 +1,11 @@
 " Configurações padrões {{{1
 
+let s:noamcore_bg_transparent=0
+let s:noamcore_wayland=0
+let g:pure=0
+let s:gold_numbers = 0
+let g:python3_host_prog = '/usr/local/bin/python3'
+
 source ~/.config/nvim/plugins.vim
 syntax on                 " Habilita sistema de destaques de código (highlighting)
 filetype plugin indent on " Habilita carregar plugins baseados em extensão
@@ -8,11 +14,6 @@ set path+=**
 set iminsert=0
 set imsearch=0
 set noshowmode
-
-let s:noamcore_bg_transparent=0
-let s:noamcore_wayland=0
-let s:gold_numbers = 0
-let g:python3_host_prog = '/usr/local/bin/python3'
 
 " Tema {{{2
 
@@ -63,7 +64,6 @@ set updatetime=100
 set signcolumn=yes
 " set cursorline
 set lazyredraw
-
 " }}}
 
 " Disable cursor shape
@@ -143,8 +143,8 @@ set foldnestmax=10     " Nível máximo de folding aninhado
 
 " }}}
 " Barra de status {{{1
-" set laststatus=2
-" set statusline=%#CursorColumn#%{fugitive#statusline()}%#LineNr#\ %f%m%r%=%#CursorColumn#\ %y\ %{&fileencoding?&fileencoding:&encoding}\[%{&fileformat}\]\ %p%%\ %l:%c
+set laststatus=2
+" set statusline=%#CursorColumn#%#LineNr#\ %f%m%r%=%#CursorColumn#\ %y\ %{&fileencoding?&fileencoding:&encoding}\[%{&fileformat}\]\ %p%%\ %l:%c
 " Esquemas customatizados {{{1
 
 highlight SpecialKey cterm=none guibg=none ctermfg=green guifg=green
@@ -180,8 +180,8 @@ endif
 " highlight Child guifg=#fb4934 guibg=none cterm=bold gui=bold
 " highlight Conceal ctermbg=NONE
 
-highlight clear CursorLine
-highlight CursorLine gui=underline cterm=underline
+" highlight clear CursorLine
+" highlight CursorLine gui=underline cterm=underline
 
 " vim-sneak
 highlight Sneak guifg=black guibg=orange
@@ -243,7 +243,7 @@ endif
 inoremap <esc> <nop>
 
 " Editar este arquivo
-nnoremap <leader>ev :tabedit $MYVIMRC<cr>
+nnoremap <leader>ev :e $MYVIMRC<cr>
 
 " Limpar pesquisas feitas
 nnoremap <space> :nohlsearch<cr>
@@ -285,9 +285,9 @@ nnoremap <silent> <leader><C-]> <C-W><C-]><C-W>T
 vnoremap <leader>su !awk '{ print length(), $0 \| "sort -n \| cut -d\\  -f2-" }'<cr>
 
 if has('nvim')
-	nnoremap <silent><M-t> :call TermToggle(10)<CR>
-	inoremap <silent><M-t> <Esc>:call TermToggle(10)<CR>
-	tnoremap <silent><M-t> <C-\><C-n>:call TermToggle(10)<CR>
+	nnoremap <silent><M-t> :FloatermToggle<CR>
+	inoremap <silent><M-t> <Esc>:FloatermToggle<CR>
+	tnoremap <silent><M-t> <C-\><C-n>:FloatermToggle<CR>
 	tnoremap <silent><Esc> <C-\><C-n>
 endif
 
@@ -307,15 +307,14 @@ command! -bang -nargs=* Rg
   \   <bang>0 ? fzf#vim#with_preview('up:60%')
   \           : fzf#vim#with_preview('right:50%:hidden', '?'),
   \   <bang>0)
-map <leader>m :Make<CR>
+nnoremap <silent> <leader>o :<C-u>CocList outline<CR>
 " }}}
 
 " Plugins {{{1
 " Mapeamento para plugins {{{2
+" nnoremap <expr><silent> <leader>k :NERDTreeToggle<cr>
+nnoremap <silent> <leader>k :Explore<CR>
 
-nnoremap <silent> <leader>k :NERDTreeToggle<cr>
-" nnoremap <silent> <leader>y :NERDTreeFind<cr>
-" nnoremap <silent> <leader>k :Lexplore<cr>
 " imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
 
 " Inicia interativamente o EasyAlign no modo visual (e.g. vipga)
@@ -335,7 +334,6 @@ if exists('*complete_info')
 else
   inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
     \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-  " inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 endif
 
 " }}}
@@ -369,10 +367,29 @@ endif
 " let g:floaterm_height = float2nr(&lines * 0.8)
 " let g:floaterm_position = 'center'
 
-" let g:limelight_conceal_ctermfg = 'gray'
-" let g:limelight_conceal_ctermfg = 240
-" let g:limelight_conceal_guifg = 'DarkGray'
-" let g:limelight_conceal_guifg = '#777777'
+let g:limelight_conceal_ctermfg = 'gray'
+let g:limelight_conceal_ctermfg = 240
+let g:limelight_conceal_guifg = 'DarkGray'
+let g:limelight_conceal_guifg = '#777777'
+"
+let g:lightline = {
+  \   'colorscheme': 'nord',
+  \   'active': {
+  \     'left':[ [ 'mode', 'paste' ],
+  \              [ 'gitbranch', 'cocstatus', 'currentfunction', 'readonly', 'filename', 'modified' ]
+  \     ],
+  \   },
+  \   'component': {
+  \     'lineinfo': ' %3l:%-2v',
+  \   },
+  \   'separator': { 'left': "\ue0b4", 'right': "\ue0b6" },
+  \   'subseparator': { 'left': ")", 'right': "(" },
+  \   'component_function': {
+  \     'gitbranch': 'FugitiveStatusline',
+  \     'cocstatus': 'coc#status',
+  \     'currentfunction': 'CocCurrentFunction',
+  \   }
+  \ }
 
 let g:mix_format_on_save = 0
 let g:mix_format_options = '--check-equivalent'
@@ -501,7 +518,9 @@ function! s:check_back_space() abort
 endfunction
 
 function! LightlineReload(colorscheme)
-  let g:lightline.colorscheme = a:colorscheme
+  if a:colorscheme
+    let g:lightline.colorscheme = a:colorscheme
+  endif
   call lightline#init()
   call lightline#colorscheme()
   call lightline#update()
@@ -511,22 +530,21 @@ endfunction
 let g:NERDTreeIgnore = ['^node_modules$']
 let g:NERDTreeShowHidden=1
 let g:NERDTreeChDirMode=2
-let g:NERDTreeHijackNetrw=0
+let g:NERDTreeHijackNetrw=1
 let g:NERDTreeQuitOnOpen=1
 "}}}
 " {{{ Netrw
 let g:netrw_banner = 0
-let g:netrw_browse_split = 4
-let g:netrw_fastbrowse = 1
 let g:netrw_altv = 1
-let g:netrw_liststyle = 3
+let g:netrw_liststyle = 0
 let g:netrw_sort_by = 'name'
 let g:netrw_sort_direction = 'normal'
-let g:netrw_winsize = 20
+let g:netrw_winsize = 25
 "}}}
 " {{{ coc.nvim
 let g:coc_global_extensions = [
 	\ 'coc-snippets',
+  \ 'coc-git',
   \ 'coc-rust-analyzer',
 	\ 'coc-pairs',
 	\ 'coc-tsserver',
@@ -563,12 +581,25 @@ nnoremap <silent> K :call <SID>show_documentation()<CR>
 nmap <silent> [c <Plug>(coc-diagnostic-prev)
 nmap <silent> ]c <Plug>(coc-diagnostic-next)
 
+" navigate chunks of current buffer
+nmap [g <Plug>(coc-git-prevchunk)
+nmap ]g <Plug>(coc-git-nextchunk)
+" show chunk diff at current position
+nmap gs <Plug>(coc-git-chunkinfo)
+" show commit contains current position
+" nmap gc <Plug>(coc-git-commit)
+" create text object for git chunks
+omap ig <Plug>(coc-git-chunk-inner)
+xmap ig <Plug>(coc-git-chunk-inner)
+omap ag <Plug>(coc-git-chunk-outer)
+xmap ag <Plug>(coc-git-chunk-outer)
+
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
-nmap <leader>rn <Plug>(coc-rename)
+nmap <F2> <Plug>(coc-rename)
 
 xmap <leader>f <Plug>(coc-format-selected)
 nmap <leader>f <Plug>(coc-format)
@@ -592,6 +623,8 @@ endfunction
 " {{{ fzf.vim
 let g:fzf_buffers_jump = 1
 let g:fzf_preview_window = 'right:60%'
+
+command! FZF FloatermNew fzf
 
 nnoremap <leader>F :GFiles<cr>
 nnoremap <leader>B :Buffers<cr>
@@ -622,39 +655,10 @@ let g:zettel_fzf_command = "rg --column --line-number --ignore-case --no-heading
 " {{{lightline.vim
 command! -nargs=1 LightlineReload call LightlineReload(<args>)
 
-let g:lightline = {
-	\   'colorscheme': 'nord',
-	\   'active': {
-	\     'left':[ [ 'mode', 'paste' ],
-	\              [ 'gitbranch', 'cocstatus', 'currentfunction', 'readonly', 'filename', 'modified' ]
-	\     ],
-	\     'right': [ ['lineinfo'], ['percent'], ['fileformat', 'fileencoding', 'filetype'] ],
-	\   },
-	\   'component': {
-	\     'lineinfo': ' %3l:%-2v',
-	\   },
-	\   'component_function': {
-	\     'gitbranch': 'fugitive#head',
-	\     'cocstatus': 'coc#status',
-	\     'currentfunction': 'CocCurrentFunction',
-	\   }
-	\ }
-let g:lightline.separator = { 'left': "\ue0b4", 'right': "\ue0b6" }
-let g:lightline.subseparator = { 'left': ")", 'right': "(" }
-" let g:lightline.tabline_separator = { 'left': "\ue0bc", 'right': "\ue0ba" }
-" let g:lightline.tabline_subseparator = { 'left': "\ue0bb", 'right': "\ue0bb" }
-let g:lightline.tabline = { 'left': [ ['tabs'] ], 'right': [ ['close'] ] }
-" }}}
 " {{{sneak.vim
 map f <Plug>Sneak_f
 map F <Plug>Sneak_F
 map t <Plug>Sneak_t
 map T <Plug>Sneak_T
 " }}}
-" lua << EOF
-" require'nvim_lsp'.tsserver.setup{}
-" require'nvim_lsp'.vimls.setup{}
-" EOF
-"
-"
 " vim: fdm=marker fdl=0

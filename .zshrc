@@ -114,8 +114,6 @@ source /usr/local/share/zsh/site-functions/key-bindings.zsh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
-
 # Created by `userpath` on 2020-03-23 02:25:47
 export PATH="$PATH:/Users/iago/.local/bin"
 

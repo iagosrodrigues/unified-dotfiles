@@ -9,28 +9,34 @@ endif
 
 call plug#begin(plugspath)
 
+if !g:pure
+  Plug 'ryanoasis/vim-devicons'
+  Plug 'luochen1990/rainbow'
+  Plug 'ehamberg/vim-cute-python', { 'for': 'py' }
+  Plug 'majutsushi/tagbar'
+  Plug 'preservim/nerdtree', { 'on':  'NERDTreeToggle' }
+endif
+
+Plug 'itchyny/lightline.vim'
 " Plug '~/Projects/vim-zettel-noam', { 'for': 'vimwiki' }
+"
+Plug 'voldikss/vim-floaterm'
 
 " Themes
 Plug 'arzg/vim-colors-xcode'
 
 " Languages
-Plug 'arzg/vim-rust-syntax-ext', { 'for': 'rust' }
 Plug 'sheerun/vim-polyglot'
+Plug 'arzg/vim-rust-syntax-ext', { 'for': 'rust' }
 Plug 'slashmili/alchemist.vim', { 'for': 'elixir' }
 Plug 'elzr/vim-json', { 'for': 'json' }
 Plug 'hail2u/vim-css3-syntax', { 'for' : 'css' }
 Plug 'othree/html5.vim', { 'for': 'html' }
 Plug 'hashivim/vim-terraform', { 'for': 'terraform' }
-" Plug 'pangloss/vim-javascript'
 
 " Extensions
-" Plug 'neovim/nvim-lsp' " Requires v0.5
+Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 Plug 'vimwiki/vimwiki'
-Plug 'itchyny/lightline.vim'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" Plug 'dense-analysis/ale'
-Plug 'ryanoasis/vim-devicons'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'dhruvasagar/vim-zoom' " Zoom like tmux
 Plug 'heavenshell/vim-jsdoc'
@@ -42,26 +48,13 @@ Plug 'mhinz/vim-mix-format', { 'for': ['elixir'] }
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'justinmk/vim-sneak'
-" if has("mac")
-"   Plug '/usr/local/opt/fzf'
-" elseif has("linux")
-"   Plug '/usr/bin/fzf'
-" endif
-" Plug 'junegunn/fzf.vim'
 Plug 'lotabout/skim', { 'dir': '~/.skim', 'do': './install' }
 Plug 'lotabout/skim.vim'
 Plug 'kshenoy/vim-signature' " Gerenciar marcações com o m
 Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
 Plug 'junegunn/limelight.vim'
-Plug 'majutsushi/tagbar'
-Plug 'preservim/nerdtree', { 'on':  'NERDTreeToggle' }
-Plug 'luochen1990/rainbow'
 Plug 'mattn/emmet-vim', { 'for': 'html' } " Escrever HTML como seletores CSS
-Plug 'ehamberg/vim-cute-python', { 'for': 'py' }
 Plug 'junegunn/vim-easy-align' " Plugin para alinhamento
-" Plug 'jiangmiao/auto-pairs'
-" Plug 'alvan/vim-closetag'
-" Plug 'camspiers/animate.vim'
-" Plug 'camspiers/lens.vim'
+Plug 'tpope/vim-fugitive'
 
 call plug#end()
