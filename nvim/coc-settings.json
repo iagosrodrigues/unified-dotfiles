@@ -1,8 +1,7 @@
 {
-  "coc.preferences.formatOnType": false,
-  "coc.preferences.formatOnSaveFiletypes": ["typescript"],
   "coc.preferences.bracketEnterImprove": true,
-  "highlight.document.enable": false,
+  "coc.preferences.formatOnSaveFiletypes": ["typescript"],
+  "coc.preferences.formatOnType": false,
   "codeLens.enable": false,
   "diagnostic.checkCurrentLine": true,
   "diagnostic.errorSign": "✖",
@@ -12,8 +11,13 @@
   "eslint.enable": false,
   "eslint.packageManager": "yarn",
   "eslint.quiet": true,
+  "git.addGBlameToBufferVar": true,
+  "rust-analyzer.serverPath": "rust-analyzer",
+  "rust-analyzer.updates.channel": "nightly",
   "tsserver.trace.server": "verbose",
+  "vetur.format.defaultFormatter.html": "prettier",
   "vetur.trace.server": "verbose",
   "vetur.useWorkspaceDependencies": true,
+  "tsserver.implicitProjectConfig.experimentalDecorators": true,
   "languageserver": {}
 }

@@ -1,41 +1,37 @@
 " Configurações padrões {{{1
-
+" Global variables {{{
+let g:lsp='coc' " nvim or coc
+let g:neovide_cursor_vfx_mode = 'torpedo'
+let g:pure=0
+let g:python3_host_prog = '/usr/local/bin/python3'
+let s:gold_numbers = 0
 let s:noamcore_bg_transparent=0
 let s:noamcore_wayland=0
-let g:pure=0
-let s:gold_numbers = 0
-let g:python3_host_prog = '/usr/local/bin/python3'
-
-source ~/.config/nvim/plugins.vim
-syntax on                 " Habilita sistema de destaques de código (highlighting)
-filetype plugin indent on " Habilita carregar plugins baseados em extensão
-scriptencoding utf-8      " Seleciona utf8 como codificação padrão
-set path+=**
-set iminsert=0
-set imsearch=0
-set noshowmode
-
-" Tema {{{2
-
-" set background=dark " Permite temas escolherem cores para um fundo mais escuro
-set termguicolors
-" colorscheme base16-default-dark
-colorscheme xcodedark
-
 if executable('tmux') && $TMUX !=# ''
 	let g:tmux = 1
 else
 	let g:tmux = 0
 endif
-
 " }}}
 
+source ~/.config/nvim/plugins.vim
+syntax on
+filetype plugin indent on
+scriptencoding utf-8
+set path+=**
+set iminsert=0
+set imsearch=0
+set noshowmode
+" Tema {{{2
+set termguicolors
+colorscheme xcodedark
+" }}}
 set hidden
-set nojoinspaces               " Apenas insere um único espaço depois de '.', '!' e '?'
-" set report=0                   " Sempre exibir o número de linhas copiados ou apagados na linha de mensagem
-set backspace=indent,eol,start " Compatibilidade com vim classico para backspace
-set clipboard=unnamedplus      " O registrador * vira unnamed, permite que os textos copiados pelo vim vão para o clipboard
-" set conceallevel=2             " Habilita uma especie de ligature, substitui por exemplo a palavra lambda no python pelo simbolo
+set nojoinspaces
+set report=0
+set backspace=indent,eol,start
+set clipboard=unnamedplus
+set conceallevel=2
 set shada="NONE"
 "{{{ Buffers
 set switchbuf="useopen"
@@ -43,11 +39,8 @@ set bufhidden="unload"
 "}}}
 
 " Desativar 'press ENTER to continue' {{{2
-
 set cmdheight=2  " Número de linhas para a linha de comando.
-" set shortmess+=atc " Trunca quase todos os textos de comandos evitando o pressione ENTER para continuar
 set shortmess+=c
-
 " }}}
 
 " Visual {{{2
@@ -56,18 +49,22 @@ set fillchars+=vert:\|
 set number            " Mostrar os números das linhas
 set relativenumber    " Mostrar os números relativos
 set noequalalways
-set splitbelow        " Novas janelas serão colocadas em baixo da atual se o split for horizontal
-set splitright        " Novas janelas serão colocadas ao lado direito da atual se o split for vertical
-set listchars=tab:»\ ,eol:⤶,trail:·,extends:❯,precedes:❮,nbsp:␣
+set splitbelow
+set splitright
+set listchars=tab:»\ ,eol:¬,trail:·,extends:❯,precedes:❮,nbsp:␣
 " set listchars=tab:→\ ,eol:⤶¬,trail:·,extends:❯,precedes:❮,nbsp:␣
-set updatetime=100
-set signcolumn=yes
-" set cursorline
+set updatetime=300
+if has("patch-8.1.1564")
+  set signcolumn=number
+else
+  set signcolumn=yes
+endif
+set cursorline
 set lazyredraw
 " }}}
 
 " Disable cursor shape
-set guicursor=
+" set guicursor=
 " set guicursor=n-v-c:block
 " set guicursor=n-v-c:block
 "   \,a:blinkwait500-blinkoff200-blinkon5000-Cursor/lCursor
@@ -76,8 +73,8 @@ set guicursor=
 "        \,sm:block-blinkwait175-blinkoff150-blinkon175
 
 set nocompatible
-" set completeopt+=noselect " TODO
-" set completeopt-=preview " Desativa o scratch no autocomplete
+set completeopt+=noselect " TODO
+set completeopt-=preview " Desativa o scratch no autocomplete
 set diffopt+=context:4,vertical " TODO
 " set equalprg=par\ -r " Nome do programa externo que será utilizado para formatar linhas usando o operator =
 
@@ -103,7 +100,7 @@ set linebreak " Quebra simples de texto, não insere nova linha
 set matchtime=0 " Quantos décimos de segundos ele demora para mostrar o parenteses correspondente
 set scrolloff=3 " Número mínimo de linhas à manter acima ou abaixo do cursor
 set showbreak=↪ " Mostra o caractere quando quebra a linha
-"set textwidth=120 " Tamanho máximo do texto que deve ser inserido. Uma linha maior será quebrada depois do primeiro espaço em branco
+set textwidth=120 " Tamanho máximo do texto que deve ser inserido. Uma linha maior será quebrada depois do primeiro espaço em branco
 set timeout
 set ttimeoutlen=50
 set timeoutlen=200 " Tempo em milisegundos à esperar para uma sequência mapeada para completar
@@ -134,7 +131,7 @@ set copyindent    " Copia as linhas com indentação
 " Configurações de folding {{{1
 
 set nofoldenable       " Desabilita o folding por padrão
-set foldmethod=indent  " Método padrão do fold é indentação
+set foldmethod=manual  " Método padrão do fold é indentação
 set foldmarker={{{,}}} " Marcadores do fold
 set foldclose=all      " Permite o folding automaticamente quando não está no cursor ou o nível é maior do que o folding level
 set foldlevelstart=20  " Abrir o maior fold por padrão
@@ -154,9 +151,9 @@ highlight SpecialKey ctermbg=none gui=none ctermfg=8 guifg=8
 highlight NonText ctermbg=none gui=none ctermfg=8 guifg=8
 
 " Comentários e atributos HTML sempre em itálico
-" highlight Comment cterm=italic
-" highlight htmlArg cterm=italic
-" highlight xmlAttrib cterm=italic
+highlight Comment cterm=italic
+highlight htmlArg cterm=italic
+highlight xmlAttrib cterm=italic
 
 " Remover cor de fundo
 if s:noamcore_bg_transparent
@@ -248,9 +245,6 @@ nnoremap <leader>ev :e $MYVIMRC<cr>
 " Limpar pesquisas feitas
 nnoremap <space> :nohlsearch<cr>
 
-" Remover espaços em branco (trailing spaces)
-nnoremap <leader><space> :%s/\s\+$<cr>
-
 " Remover linhas extras
 nnoremap <leader><space><space> :%s/\n\{2,}/\r\r/g<cr>
 
@@ -293,7 +287,6 @@ endif
 
 " {{{ Commands
 "
-command! -nargs=0 Prettier :CocCommand prettier.formatFile
 command! -nargs=* Make make <args> | cwindow 3
 
 command! ConfigGinit tab drop ~/.config/nvim/ginit.vim
@@ -307,7 +300,6 @@ command! -bang -nargs=* Rg
   \   <bang>0 ? fzf#vim#with_preview('up:60%')
   \           : fzf#vim#with_preview('right:50%:hidden', '?'),
   \   <bang>0)
-nnoremap <silent> <leader>o :<C-u>CocList outline<CR>
 " }}}
 
 " Plugins {{{1
@@ -323,30 +315,13 @@ xmap ga <Plug>(EasyAlign)
 " Inicia interativamente o EasyAlign para um texto ou objeto movimentação (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
 
-nmap <F8> :TagbarToggle<CR>
-
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-
-if exists('*complete_info')
-  inoremap <silent><expr> <cr> complete_info()["selected"] != "-1" ? coc#_select_confirm()
-    \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-else
-  inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-    \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-endif
 
 " }}}
 " Variáveis de plugins {{{2
 
 let $FZF_DEFAULT_COMMAND='fd'
-set omnifunc=ale#completion#OmniFunc
-let g:ale_fix_on_save = 1
-let g:ale_sign_column_always = 1
-" let g:ale_completion_enabled = 1
-let g:ale_fixers = ['prettier', 'eslint']
-let g:ale_completion_tsserver_autoimport = 1
-let g:indentLine_char = '┊'
 
 if s:noamcore_wayland
 	let g:clipboard = {
@@ -376,15 +351,20 @@ let g:lightline = {
   \   'colorscheme': 'nord',
   \   'active': {
   \     'left':[ [ 'mode', 'paste' ],
-  \              [ 'gitbranch', 'cocstatus', 'currentfunction', 'readonly', 'filename', 'modified' ]
+  \              [ 'git', 'diagnostic', 'gitbranch', 'cocstatus', 'currentfunction', 'readonly', 'filename', 'method', 'modified' ]
   \     ],
-  \   },
-  \   'component': {
-  \     'lineinfo': ' %3l:%-2v',
+  \     'right':[
+  \       [ 'filetype', 'fileencoding', 'lineinfo', 'percent' ],
+  \       [ 'blame' ]
+  \   ]
   \   },
   \   'separator': { 'left': "\ue0b4", 'right': "\ue0b6" },
   \   'subseparator': { 'left': ")", 'right': "(" },
+  \   'component': {
+  \     'lineinfo': ' %3l:%-2v',
+  \   },
   \   'component_function': {
+  \     'blame': 'LightlineGitBlame',
   \     'gitbranch': 'FugitiveStatusline',
   \     'cocstatus': 'coc#status',
   \     'currentfunction': 'CocCurrentFunction',
@@ -431,13 +411,10 @@ augroup Config
 	" Disables automatic commenting on newline
 	" autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
-	autocmd CursorHold * silent call CocActionAsync('highlight')
-
 	autocmd VimResized * exe 'normal! \<c-w>='
 	autocmd FileType vim setlocal fen fdm=marker
 
 	autocmd FileType skim tnoremap <buffer> <esc> <c-g>
-	autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 
 	autocmd BufWritePost *.exs,*.ex silent! call ElixirFormat()
 
@@ -445,8 +422,6 @@ augroup Config
     autocmd TermEnter * setlocal scrolloff=0
     autocmd TermLeave * setlocal scrolloff=3
   endif
-
-	autocmd FileType typescript,javascript,json setl formatexpr=CocAction('formatSelected')
 
 	autocmd FocusLost * silent! wa
 
@@ -525,6 +500,11 @@ function! LightlineReload(colorscheme)
   call lightline#colorscheme()
   call lightline#update()
 endfunction
+
+function! LightlineGitBlame() abort
+  let blame = get(b:, 'coc_git_blame', '')
+  return winwidth(0) > 120 ? blame : ''
+endfunction
 " }}}
 " {{{ NERDTree
 let g:NERDTreeIgnore = ['^node_modules$']
@@ -542,83 +522,111 @@ let g:netrw_sort_direction = 'normal'
 let g:netrw_winsize = 25
 "}}}
 " {{{ coc.nvim
-let g:coc_global_extensions = [
-	\ 'coc-snippets',
-  \ 'coc-git',
-  \ 'coc-rust-analyzer',
-	\ 'coc-pairs',
-	\ 'coc-tsserver',
-	\ 'coc-eslint',
-	\ 'coc-tslint-plugin',
-	\ 'coc-prettier',
-	\ 'coc-json',
-	\ ]
+if g:lsp == 'coc'
+  let g:coc_global_extensions = [
+    \ 'coc-git',
+    \ 'coc-rust-analyzer',
+    \ 'coc-pairs',
+    \ 'coc-tsserver',
+    \ 'coc-eslint',
+    \ 'coc-tslint-plugin',
+    \ 'coc-prettier',
+    \ 'coc-json',
+    \ ]
 
-let g:coc_snippet_next = '<tab>'
+  let g:coc_snippet_next = '<tab>'
 
-command! -nargs=0 Format :call CocAction('format')
-command! -nargs=? Fold :call CocAction('fold', <f-args>)
-command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport')
+  " {{{ Commands
+  command! -nargs=0 Prettier :CocCommand prettier.formatFile
+  command! -nargs=0 Format :call CocAction('format')
+  command! -nargs=? Fold :call CocAction('fold', <f-args>)
+  command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport')
+  " }}}
 
-inoremap <silent><expr> <tab>
-  \ pumvisible() ? "\<C-n>" :
-  \ <SID>check_back_space() ? "\<tab>" :
-  \ coc#refresh()
-inoremap <expr><s-tab> pumvisible() ? "\<C-p>" : "\<C-h>"
-" inoremap <silent><expr> <Tab>
-"       \ pumvisible() ? coc#_select_confirm() :
-"       \ coc#expandableOrJumpable() ? "\<c-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump', ''])\<cr>" :
-"       \ <SID>check_back_space() ? "\<cr>" :
-"       \ coc#refresh()
-inoremap <silent><expr> <c-space> coc#refresh()
-
-" Autoformat on enter
-" inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-" 				\: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-
-nnoremap <silent> K :call <SID>show_documentation()<CR>
-
-nmap <silent> [c <Plug>(coc-diagnostic-prev)
-nmap <silent> ]c <Plug>(coc-diagnostic-next)
-
-" navigate chunks of current buffer
-nmap [g <Plug>(coc-git-prevchunk)
-nmap ]g <Plug>(coc-git-nextchunk)
-" show chunk diff at current position
-nmap gs <Plug>(coc-git-chunkinfo)
-" show commit contains current position
-" nmap gc <Plug>(coc-git-commit)
-" create text object for git chunks
-omap ig <Plug>(coc-git-chunk-inner)
-xmap ig <Plug>(coc-git-chunk-inner)
-omap ag <Plug>(coc-git-chunk-outer)
-xmap ag <Plug>(coc-git-chunk-outer)
-
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-
-nmap <F2> <Plug>(coc-rename)
-
-xmap <leader>f <Plug>(coc-format-selected)
-nmap <leader>f <Plug>(coc-format)
-
-nmap <silent> <TAB> <Plug>(coc-range-select)
-xmap <silent> <TAB> <Plug>(coc-range-select)
-xmap <silent> <S-TAB> <Plug>(coc-range-select-backword)
-
-function! CocCurrentFunction()
-    return get(b:, 'coc_current_function', '')
-endfunction
-
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
+  if exists('*complete_info')
+    inoremap <silent><expr> <cr> complete_info()["selected"] != "-1" ? coc#_select_confirm()
+      \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
   else
-    call CocAction('doHover')
+    inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+      \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
   endif
-endfunction
+
+  inoremap <silent><expr> <tab>
+    \ pumvisible() ? "\<C-n>" :
+    \ <SID>check_back_space() ? "\<tab>" :
+    \ coc#refresh()
+  inoremap <expr><s-tab> pumvisible() ? "\<C-p>" : "\<C-h>"
+  inoremap <silent><expr> <c-space> coc#refresh()
+
+  nmap <silent> K :call <SID>show_documentation()<CR>
+  nmap <silent><nowait> <leader>o :<C-u>CocList outline<CR>
+
+  nmap <silent> [c <Plug>(coc-diagnostic-prev)
+  nmap <silent> ]c <Plug>(coc-diagnostic-next)
+
+  " navigate chunks of current buffer
+  nmap [g <Plug>(coc-git-prevchunk)
+  nmap ]g <Plug>(coc-git-nextchunk)
+  " show chunk diff at current position
+  nmap gs <Plug>(coc-git-chunkinfo)
+  " show commit contains current position
+  " nmap gc <Plug>(coc-git-commit)
+  " create text object for git chunks
+  omap ig <Plug>(coc-git-chunk-inner)
+  xmap ig <Plug>(coc-git-chunk-inner)
+  omap ag <Plug>(coc-git-chunk-outer)
+  xmap ag <Plug>(coc-git-chunk-outer)
+
+  xmap <leader>a <Plug>(coc-codeaction-selected)
+
+  xmap if <Plug>(coc-funcobj-i)
+  omap if <Plug>(coc-funcobj-i)
+  xmap af <Plug>(coc-funcobj-a)
+  omap af <Plug>(coc-funcobj-a)
+  xmap ic <Plug>(coc-classobj-i)
+  omap ic <Plug>(coc-classobj-i)
+  xmap ac <Plug>(coc-classobj-a)
+  omap ac <Plug>(coc-classobj-a)
+
+  nmap <silent> <C-s> <Plug>(coc-range-select)
+  xmap <silent> <C-s> <Plug>(coc-range-select)
+
+  nmap <leader>a <Plug>(coc-codeaction-selected)
+  nmap <leader>ac <Plug>(coc-codeaction)
+  nmap <leader>qf <Plug>(coc-fix-current)
+
+  nmap <silent> gd <Plug>(coc-definition)
+  nmap <silent> gy <Plug>(coc-type-definition)
+  nmap <silent> gi <Plug>(coc-implementation)
+  nmap <silent> gr <Plug>(coc-references)
+
+  nmap <F2> <Plug>(coc-rename)
+
+  xmap <leader>f <Plug>(coc-format-selected)
+  nmap <leader>f <Plug>(coc-format)
+
+  nmap <silent> <Tab> <Plug>(coc-range-select)
+  xmap <silent> <Tab> <Plug>(coc-range-select)
+  xmap <silent> <S-Tab> <Plug>(coc-range-select-backword)
+
+  function! CocCurrentFunction()
+      return get(b:, 'coc_current_function', '')
+  endfunction
+
+  function! s:show_documentation()
+    if (index(['vim','help'], &filetype) >= 0)
+      execute 'h '.expand('<cword>')
+    else
+      call CocAction('doHover')
+    endif
+  endfunction
+
+  augroup Config
+    autocmd CursorHold * silent call CocActionAsync('highlight')
+    autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+    autocmd FileType typescript,javascript,json setl formatexpr=CocAction('formatSelected')
+  augroup END
+endif
 " }}}
 " {{{ fzf.vim
 let g:fzf_buffers_jump = 1
@@ -628,7 +636,6 @@ command! FZF FloatermNew fzf
 
 nnoremap <leader>F :GFiles<cr>
 nnoremap <leader>B :Buffers<cr>
-" nnoremap <leader><tab> <plug>(fzf-maps-n)
 xnoremap <leader><tab> <plug>(fzf-maps-x)
 onoremap <leader><tab> <plug>(fzf-maps-o)
 inoremap <c-x><c-k> <plug>(fzf-complete-word)
@@ -654,11 +661,28 @@ let g:zettel_fzf_command = "rg --column --line-number --ignore-case --no-heading
 " }}}
 " {{{lightline.vim
 command! -nargs=1 LightlineReload call LightlineReload(<args>)
-
+" }}}
 " {{{sneak.vim
 map f <Plug>Sneak_f
 map F <Plug>Sneak_F
 map t <Plug>Sneak_t
 map T <Plug>Sneak_T
+" }}}
+" {{{nvim-lsp
+if g:lsp == 'nvim'
+set omnifunc=v:lua.vim.lsp.omnifunc
+lua << EOF
+require'nvim_lsp'.tsserver.setup{}
+require'nvim_lsp'.rust_analyzer.setup{}
+EOF
+  noremap <silent> gd <cmd>lua vim.lsp.buf.declaration()<CR>
+  noremap <silent> K :call <cmd>lua vim.lsp.buf.hover()<CR>
+  noremap <silent> gy <cmd>lua vim.lsp.buf.type_definition()<CR>
+  noremap <silent> gi <cmd>lua vim.lsp.buf.implementation()<CR>
+  noremap <silent> gr <cmd>lua vim.lsp.buf.references()<CR>
+  noremap <F2> <cmd>lua vim.lsp.buf.rename()<CR>
+
+  noremap <leader>f <cmd>lua vim.lsp.buf.formatting()<CR>
+endif
 " }}}
 " vim: fdm=marker fdl=0

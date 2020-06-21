@@ -17,6 +17,12 @@ if !g:pure
   Plug 'preservim/nerdtree', { 'on':  'NERDTreeToggle' }
 endif
 
+if g:lsp == 'nvim'
+  Plug 'neovim/nvim-lsp'
+else
+  Plug 'neoclide/coc.nvim', { 'branch': 'release' }
+endif
+
 Plug 'itchyny/lightline.vim'
 " Plug '~/Projects/vim-zettel-noam', { 'for': 'vimwiki' }
 "
@@ -35,7 +41,6 @@ Plug 'othree/html5.vim', { 'for': 'html' }
 Plug 'hashivim/vim-terraform', { 'for': 'terraform' }
 
 " Extensions
-Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 Plug 'vimwiki/vimwiki'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'dhruvasagar/vim-zoom' " Zoom like tmux

@@ -1,7 +1,9 @@
 " Configurações do neovim em modo não-console {{{
+set guifont=JetbrainsMono\ Nerd\ Font:h14
 if exists('g:GuiLoaded')
   " set guifont="JetBrainsMono Nerd Font:h14"
-  set guifont=JetBrainsMono\ Nerd\ Font:h14
+  let g:neovide_cursor_vfx_mode = "railgun"
+  set guifont=SF\ Mono:h12
     " Tema {{{
     " colorscheme PaperColor
     " }}}
