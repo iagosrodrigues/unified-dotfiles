@@ -14,10 +14,12 @@ else
 endif
 " }}}
 
-source ~/.config/nvim/plugins.vim
 syntax on
 filetype plugin indent on
 scriptencoding utf-8
+
+source ~/.config/nvim/plugins.vim
+
 set path+=**
 set iminsert=0
 set imsearch=0
@@ -57,7 +59,7 @@ set updatetime=300
 if has("patch-8.1.1564")
   set signcolumn=number
 else
-  set signcolumn=yes
+  set signcolumn=auto
 endif
 set cursorline
 set lazyredraw
@@ -76,7 +78,8 @@ set nocompatible
 set completeopt+=noselect " TODO
 set completeopt-=preview " Desativa o scratch no autocomplete
 set diffopt+=context:4,vertical " TODO
-" set equalprg=par\ -r " Nome do programa externo que será utilizado para formatar linhas usando o operator =
+set ssop-=options    " do not store global and local values in a session
+set ssop-=folds      " do not store folds
 
 " Visual {{{2
 
@@ -149,11 +152,6 @@ highlight SpecialKey cterm=none guibg=none ctermfg=green guifg=green
 " Faz tabs e outros caracteres não-texto menos chatos
 highlight SpecialKey ctermbg=none gui=none ctermfg=8 guifg=8
 highlight NonText ctermbg=none gui=none ctermfg=8 guifg=8
-
-" Comentários e atributos HTML sempre em itálico
-highlight Comment cterm=italic
-highlight htmlArg cterm=italic
-highlight xmlAttrib cterm=italic
 
 " Remover cor de fundo
 if s:noamcore_bg_transparent
@@ -439,12 +437,15 @@ augroup CustomColors
 		\ | highlight VertSplit ctermfg=4 ctermbg=10
 
 	autocmd ColorScheme gruvbox
-		\	let g:gruvbox_contrast_dark="hard"
-		\ | let g:gruvbox_italic=0
+		\	let g:gruvbox_contrast_dark="medium"
+		\ | let g:gruvbox_italic=1
+	  \ | let g:gruvbox_improved_strings=1
+	  \ | let g:gruvbox_improved_warnings=1
 
-	autocmd ColorScheme vim-colors-xcode hi Comment        cterm=italic gui=italic
-  autocmd ColorScheme vim-colors-xcode hi SpecialComment cterm=italic gui=italic
-  autocmd ColorScheme vim-colors-xcode hi Cursor ctermbg=#ff7ab2 guibg=#ff7ab2
+	autocmd ColorScheme xcodedark
+	  \ hi Comment        cterm=italic gui=italic
+    \ | hi SpecialComment cterm=italic gui=italic
+    \ | hi Cursor guibg=#ff7ab2
 
 	"ff7ab2
 augroup END
