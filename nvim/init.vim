@@ -1,9 +1,13 @@
-" Configurações padrões {{{1
-" Global variables {{{
-let g:lsp='coc' " nvim or coc
-let g:neovide_cursor_vfx_mode = 'torpedo'
-let g:pure=0
+syntax on
+filetype plugin indent on
+scriptencoding utf-8
+
+set pyxversion=3
 let g:python3_host_prog = '/usr/local/bin/python3'
+let g:loaded_python_provider = 0
+let g:loaded_perl_provider = 0
+let g:loaded_ruby_provider = 0
+
 let s:gold_numbers = 0
 let s:noamcore_bg_transparent=0
 let s:noamcore_wayland=0
@@ -12,22 +16,34 @@ if executable('tmux') && $TMUX !=# ''
 else
 	let g:tmux = 0
 endif
-" }}}
-
-syntax on
-filetype plugin indent on
-scriptencoding utf-8
 
 source ~/.config/nvim/plugins.vim
 
-set path+=**
-set iminsert=0
-set imsearch=0
+set pumblend=20
+
+set mouse=a
+
+let g:airline#extensions#fzf#enabled = 0
+
 set noshowmode
-" Tema {{{2
+set noshowmatch
+set nohlsearch
+set cmdheight=2
+set shortmess+=c
+
+set undodir=~/.config/nvim/undodir
+set undofile
+
+set switchbuf="useopen"
+set bufhidden="unload"
+
 set termguicolors
-colorscheme xcodedark
-" }}}
+let g:gruvbox_contrast_dark="medium"
+let g:gruvbox_italic=1
+let g:gruvbox_invert_selection='0'
+let g:xcodedark_match_paren_style = 1
+colorscheme gruvbox
+
 set hidden
 set nojoinspaces
 set report=0
@@ -35,45 +51,23 @@ set backspace=indent,eol,start
 set clipboard=unnamedplus
 set conceallevel=2
 set shada="NONE"
-"{{{ Buffers
-set switchbuf="useopen"
-set bufhidden="unload"
-"}}}
-
-" Desativar 'press ENTER to continue' {{{2
-set cmdheight=2  " Número de linhas para a linha de comando.
-set shortmess+=c
-" }}}
-
 " Visual {{{2
-
 set fillchars+=vert:\|
-set number            " Mostrar os números das linhas
-set relativenumber    " Mostrar os números relativos
+set number
+set relativenumber
 set noequalalways
 set splitbelow
 set splitright
-set listchars=tab:»\ ,eol:¬,trail:·,extends:❯,precedes:❮,nbsp:␣
-" set listchars=tab:→\ ,eol:⤶¬,trail:·,extends:❯,precedes:❮,nbsp:␣
-set updatetime=300
+set listchars=tab:→\ ,eol:¬,trail:·,extends:❯,precedes:❮,nbsp:␣
+set nolist
+set updatetime=50
 if has("patch-8.1.1564")
   set signcolumn=number
 else
-  set signcolumn=auto
+  set signcolumn=yes
 endif
 set cursorline
 set lazyredraw
-" }}}
-
-" Disable cursor shape
-" set guicursor=
-" set guicursor=n-v-c:block
-" set guicursor=n-v-c:block
-"   \,a:blinkwait500-blinkoff200-blinkon5000-Cursor/lCursor
-" set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
-"        \,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor
-"        \,sm:block-blinkwait175-blinkoff150-blinkon175
-
 set nocompatible
 set completeopt+=noselect " TODO
 set completeopt-=preview " Desativa o scratch no autocomplete
@@ -82,7 +76,6 @@ set ssop-=options    " do not store global and local values in a session
 set ssop-=folds      " do not store folds
 
 " Visual {{{2
-
 set magic      " Ativa magic para expressões regulares
 set gdefault   " Pesquisa e substituição são globais por linha
 set autoread   " Detecta quando um arquivo é editado
@@ -90,10 +83,10 @@ set incsearch  " Mostra enquanto digita
 set smartcase  " Se a busca contiver letras maiúsculas, a pesqusa passa a ser case-sensitive
 set ignorecase " As pesquisas viram case-insensitive
 
+set noerrorbells
 set nobackup   " Desabilita backups
 set nowritebackup " Desativa backups
 set noswapfile " Desabilita swaps
-set noundofile " Desabilita arquivos de undo
 set fileencoding=utf-8 " Arquivos serão no formato utf-8
 set fileformat=unix " Novas linhas no formato LF apenas
 " set formatprg=par\ -r " Nome do programa externo que será utilizado para formatar linhas usando o operador gc
@@ -103,7 +96,6 @@ set linebreak " Quebra simples de texto, não insere nova linha
 set matchtime=0 " Quantos décimos de segundos ele demora para mostrar o parenteses correspondente
 set scrolloff=3 " Número mínimo de linhas à manter acima ou abaixo do cursor
 set showbreak=↪ " Mostra o caractere quando quebra a linha
-set textwidth=120 " Tamanho máximo do texto que deve ser inserido. Uma linha maior será quebrada depois do primeiro espaço em branco
 set timeout
 set ttimeoutlen=50
 set timeoutlen=200 " Tempo em milisegundos à esperar para uma sequência mapeada para completar
@@ -111,10 +103,10 @@ set title " Permite alterar o título do terminal
 set wildignore=*\\tmp\\*,*.swp,*.zip,*.exe,*.tmp,.DS_Store " Lista de padrões para ignorar no autocomplete
 set wildmode=longest,list,full " Completa arquivos como um terminal
 set wildmenu " Habilita o menu
+set wildoptions=pum
+set nowrap
 " set wrapmargin=8 " Número de caracteres à borda direita onde será inserido um caracter de nova linha caso ultrapasse
-
 " Indentação {{{
-
 set autoindent    " Indentação automática
 set smartindent   " Indentação inteligente ao iniciar uma nova linha
 
@@ -122,17 +114,14 @@ set shiftround    " Arredonda os tabs para um múltiplo do shiftwidth
 set smarttab      " Tab respeita o 'shiftwidth'
 set expandtab     " Espaço em branco no lugar de tabs
 
-set tabstop=2     " Tamanho visível de um tab
-set shiftwidth=2  " Número de espaços usados na hora da indentação. Usado nos comandos cindent, >>, <<
-set softtabstop=2 " Edita como se os espaços em branco fossem tabs de tamanho de 4 caracteres
+set tabstop=4     " Tamanho visível de um tab
+set shiftwidth=4  " Número de espaços usados na hora da indentação. Usado nos comandos cindent, >>, <<
+set softtabstop=4 " Edita como se os espaços em branco fossem tabs de tamanho de 4 caracteres
 
 set breakindent   " Linhas quebradas continuam indentadas visualmente
 set copyindent    " Copia as linhas com indentação
-
 " }}}
-
 " Configurações de folding {{{1
-
 set nofoldenable       " Desabilita o folding por padrão
 set foldmethod=manual  " Método padrão do fold é indentação
 set foldmarker={{{,}}} " Marcadores do fold
@@ -140,43 +129,40 @@ set foldclose=all      " Permite o folding automaticamente quando não está no 
 set foldlevelstart=20  " Abrir o maior fold por padrão
 set foldnestmax=10     " Nível máximo de folding aninhado
 " set foldcolumn=3       " Número de colunas para mostrar o folding
-
 " }}}
 " Barra de status {{{1
 set laststatus=2
-" set statusline=%#CursorColumn#%#LineNr#\ %f%m%r%=%#CursorColumn#\ %y\ %{&fileencoding?&fileencoding:&encoding}\[%{&fileformat}\]\ %p%%\ %l:%c
 " Esquemas customatizados {{{1
 
-highlight SpecialKey cterm=none guibg=none ctermfg=green guifg=green
-
-" Faz tabs e outros caracteres não-texto menos chatos
-highlight SpecialKey ctermbg=none gui=none ctermfg=8 guifg=8
-highlight NonText ctermbg=none gui=none ctermfg=8 guifg=8
-
-" Remover cor de fundo
 if s:noamcore_bg_transparent
-	highlight Normal guibg=none
-	highlight FoldColumn guibg=none
-	highlight Folded guifg=black guibg=none
-	highlight SignColumn guibg=none
+    highlight Normal guibg=none
+    highlight FoldColumn guibg=none
+    highlight SignColumn guibg=none
+    highlight EndOfBuffer guifg=bg guibg=none
+    highlight CursorLineNr guibg=none
+    highlight LineNr guibg=none
+
+    highlight SpecialKey ctermbg=none gui=none ctermfg=8 guifg=8
+    highlight NonText ctermbg=none gui=none ctermfg=8 guifg=8
+
+    highlight ErrorSign guibg=#3c3836 guifg=#fb4934
+    highlight WarningSign guibg=#3c3836 guifg=#fabd2f
+    highlight InfoSign guibg=#3c3836 guifg=#8ec07c
+    highlight Search guifg=#282a2e
+    highlight DiffAdd guibg=none
+    highlight DiffChange guibg=none
+    highlight DiffDelete guibg=none
+    highlight DiffText guibg=none
+    highlight IncSearch guibg=none guifg=#282a2e
+    highlight Child guifg=#fb4934 guibg=none cterm=bold gui=bold
+    highlight Conceal ctermbg=NONE
+    highlight Folded guifg=#838991 guibg=none
 endif
 
 if s:gold_numbers
   highlight LineNr guibg=none guifg=Gold
   highlight CursorLineNr gui=bold guifg=LightGoldenrod
 endif
-
-" highlight EndOfBuffer guifg=bg guibg=none
-" highlight ErrorSign guibg=#3c3836 guifg=#fb4934
-" highlight WarningSign guibg=#3c3836 guifg=#fabd2f
-" highlight InfoSign guibg=#3c3836 guifg=#8ec07c
-" highlight Search guifg=#282a2e
-" highlight IncSearch guibg=none guifg=#282a2e
-" highlight Child guifg=#fb4934 guibg=none cterm=bold gui=bold
-" highlight Conceal ctermbg=NONE
-
-" highlight clear CursorLine
-" highlight CursorLine gui=underline cterm=underline
 
 " vim-sneak
 highlight Sneak guifg=black guibg=orange
@@ -185,20 +171,18 @@ highlight Sneak guifg=black guibg=orange
 match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
 "}}}
 " Mapeamento {{{
-let mapleader = "," " O padrão é \, mas é mais fácil digitar o vírgula
-let g:mapleader = "," " Usado para os scripts
+let mapleader = " " " O padrão é \, mas é mais fácil digitar o vírgula
+let g:mapleader = " " " Usado para os scripts
 
 " Desabilitar as setinhas
 noremap <left>  <nop>
 noremap <right> <nop>
 noremap <up>    <nop>
 noremap <down>  <nop>
-noremap <c-space>  <nop>
 inoremap <left>  <nop>
 inoremap <right> <nop>
 inoremap <up>    <nop>
 inoremap <down>  <nop>
-inoremap <c-space> <nop>
 
 " Alternar abas via tab no modo normal
 nnoremap <tab> gt
@@ -215,8 +199,6 @@ nnoremap <leader>tf :set foldenable!<cr>
 " Alterna entre mostrar ou não a linha onde o cursor está
 nnoremap <leader>cs :set cursorline!<cr>
 
-nnoremap <leader><tab> :w<cr>
-
 " Mover através das linhas visíveis, não das linhas numeradas
 noremap j gj
 noremap k gk
@@ -225,32 +207,18 @@ noremap k gk
 vnoremap > >gv
 vnoremap < <gv
 
-" Fechar o buffer atual
-nmap <silent> <space>b :bun<cr>
+vnoremap K :m '<-2<CR>gv=gv
+vnoremap J :m '>+1<CR>gv=gv
 
 " Voltar para o modo normal com jw
-inoremap jw <esc>
-if has('nvim')
-	tnoremap <Esc> <C-\><C-n>
-endif
-
-" Desabilita o esc para sair do modo de inserção, forçando o uso do jk
-inoremap <esc> <nop>
+" inoremap jw <esc>
+tnoremap <Esc> <C-\><C-n>
 
 " Editar este arquivo
 nnoremap <leader>ev :e $MYVIMRC<cr>
 
-" Limpar pesquisas feitas
-nnoremap <space> :nohlsearch<cr>
-
-" Remover linhas extras
-nnoremap <leader><space><space> :%s/\n\{2,}/\r\r/g<cr>
-
-" Alternar entre exibir ou não os símbolos
-nnoremap <leader>l :set list!<cr>
-
 " Indentação estilo textmate
-vnoremap <leader>[ <gv
+vnoremap <leader>[ <gv <leader>
 vnoremap <leader>] >gv
 nnoremap <leader>[ <<
 nnoremap <leader>] >>
@@ -267,21 +235,35 @@ if has('nvim')
 	tnoremap <M-l> <C-\><C-n><C-w>l
 endif
 
-" Alternar entre o buffer atual e o anterior
-nnoremap <leader>. <c-^>
-
 " Abrir tags em uma nova aba
 nnoremap <silent> <leader><C-]> <C-W><C-]><C-W>T
 
-" Possibilita ordernar por comprimento da linha
-vnoremap <leader>su !awk '{ print length(), $0 \| "sort -n \| cut -d\\  -f2-" }'<cr>
+" vnoremap <leader>su !awk '{ print length(), $0 \| "sort -n \| cut -d\\  -f2-" }'<cr>
+vnoremap <leader>su :call SortByLineLength()<CR>
 
-if has('nvim')
-	nnoremap <silent><M-t> :FloatermToggle<CR>
-	inoremap <silent><M-t> <Esc>:FloatermToggle<CR>
-	tnoremap <silent><M-t> <C-\><C-n>:FloatermToggle<CR>
-	tnoremap <silent><Esc> <C-\><C-n>
-endif
+function! Cmp(first, second)
+    return strlen(a:first) - strlen(a:second)
+endfunction
+
+function! SortByLineLength() range abort
+    let content = getline(a:firstline, a:lastline)
+    call setline(a:firstline, sort(content, "Cmp"))
+endfunction
+
+nnoremap <silent><M-t> :FloatermToggle<CR>
+inoremap <silent><M-t> <Esc>:FloatermToggle<CR>
+tnoremap <silent><M-t> <C-\><C-n>:FloatermToggle<CR>
+tnoremap <silent><Esc> <C-\><C-n>
+
+nnoremap <leader>u :UndotreeShow<CR>
+
+nmap <leader>ws <plug>VimwikiSplitLink
+nmap <leader>wv <plug>VimwikiVSplitLink
+
+map f <Plug>Sneak_f
+map F <Plug>Sneak_F
+map t <Plug>Sneak_t
+map T <Plug>Sneak_T
 
 " {{{ Commands
 "
@@ -290,6 +272,11 @@ command! -nargs=* Make make <args> | cwindow 3
 command! ConfigGinit tab drop ~/.config/nvim/ginit.vim
 command! ConfigInit tab drop ~/.config/nvim/init.vim
 command! ConfigPlugins tab drop ~/.config/nvim/plugins.vim
+" Run jest for current project
+command! -nargs=0 Jest :call  CocAction('runCommand', 'jest.projectTest')
+
+" Run jest for current file
+command! -nargs=0 JestCurrent :call  CocAction('runCommand', 'jest.fileTest', ['%'])
 
 command! -nargs=0 GG :cd ~/Projects
 command! -bang -nargs=* Rg
@@ -301,22 +288,16 @@ command! -bang -nargs=* Rg
 " }}}
 
 " Plugins {{{1
-" Mapeamento para plugins {{{2
-" nnoremap <expr><silent> <leader>k :NERDTreeToggle<cr>
 nnoremap <silent> <leader>k :Explore<CR>
 
-" imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
-
-" Inicia interativamente o EasyAlign no modo visual (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
 
-" Inicia interativamente o EasyAlign para um texto ou objeto movimentação (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
 
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
-" }}}
+nnoremap <leader>te :call CocAction('runCommand', 'jest.singleTest')<CR>
 " Variáveis de plugins {{{2
 
 let $FZF_DEFAULT_COMMAND='fd'
@@ -340,35 +321,6 @@ endif
 " let g:floaterm_height = float2nr(&lines * 0.8)
 " let g:floaterm_position = 'center'
 
-let g:limelight_conceal_ctermfg = 'gray'
-let g:limelight_conceal_ctermfg = 240
-let g:limelight_conceal_guifg = 'DarkGray'
-let g:limelight_conceal_guifg = '#777777'
-"
-let g:lightline = {
-  \   'colorscheme': 'nord',
-  \   'active': {
-  \     'left':[ [ 'mode', 'paste' ],
-  \              [ 'git', 'diagnostic', 'gitbranch', 'cocstatus', 'currentfunction', 'readonly', 'filename', 'method', 'modified' ]
-  \     ],
-  \     'right':[
-  \       [ 'filetype', 'fileencoding', 'lineinfo', 'percent' ],
-  \       [ 'blame' ]
-  \   ]
-  \   },
-  \   'separator': { 'left': "\ue0b4", 'right': "\ue0b6" },
-  \   'subseparator': { 'left': ")", 'right': "(" },
-  \   'component': {
-  \     'lineinfo': ' %3l:%-2v',
-  \   },
-  \   'component_function': {
-  \     'blame': 'LightlineGitBlame',
-  \     'gitbranch': 'FugitiveStatusline',
-  \     'cocstatus': 'coc#status',
-  \     'currentfunction': 'CocCurrentFunction',
-  \   }
-  \ }
-
 let g:mix_format_on_save = 0
 let g:mix_format_options = '--check-equivalent'
 let g:mix_format_silent_errors = 1
@@ -379,8 +331,8 @@ let g:fzf_buffers_jump = 1
 let g:rainbow_active = 1
 
 let g:sneak#label = 1
-let g:vimwiki_ext2syntax = {'.md': 'markdown', '.markdown': 'markdown', '.mdown': 'markdown'}
-let g:vimwiki_list=[{'path': '$HOME/.wiki', 'syntax': 'markdown', 'ext': '.md'}, {'path': '$HOME/.cheat', 'syntax': 'markdown', 'ext': '.md'}]
+" let g:vimwiki_ext2syntax = {'.md': 'markdown', '.markdown': 'markdown', '.mdown': 'markdown'}
+let g:vimwiki_list=[{'path': '$HOME/.wiki', 'syntax': 'default', 'ext': '.md'}, {'path': '$HOME/.cheat', 'syntax': 'default', 'ext': '.md'}]
 
 let g:prettier#exec_cmd_async = 1
 " let g:prettier#quickfix_enabled = 1
@@ -401,6 +353,11 @@ augroup Trailing
 	autocmd BufWritePre * %s/\s\+$//e
 augroup END
 
+augroup highlight_yank
+    autocmd!
+    autocmd TextYankPost * silent! lua require'vim.highlight'.on_yank("IncSearch", 50)
+augroup END
+
 augroup Config
 	autocmd!
 
@@ -409,7 +366,7 @@ augroup Config
 	" Disables automatic commenting on newline
 	" autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
-	autocmd VimResized * exe 'normal! \<c-w>='
+	" autocmd VimResized * exe 'normal! \<c-w>='
 	autocmd FileType vim setlocal fen fdm=marker
 
 	autocmd FileType skim tnoremap <buffer> <esc> <c-g>
@@ -426,28 +383,6 @@ augroup Config
 	" Goyo
 	autocmd User GoyoEnter Limelight
 	autocmd User GoyoLeave Limelight!
-augroup END
-
-augroup CustomColors
-	autocmd!
-
-	" Para Gotham
-	autocmd ColorScheme gotham
-		\ highlight Folded ctermbg=green ctermfg=blue
-		\ | highlight VertSplit ctermfg=4 ctermbg=10
-
-	autocmd ColorScheme gruvbox
-		\	let g:gruvbox_contrast_dark="medium"
-		\ | let g:gruvbox_italic=1
-	  \ | let g:gruvbox_improved_strings=1
-	  \ | let g:gruvbox_improved_warnings=1
-
-	autocmd ColorScheme xcodedark
-	  \ hi Comment        cterm=italic gui=italic
-    \ | hi SpecialComment cterm=italic gui=italic
-    \ | hi Cursor guibg=#ff7ab2
-
-	"ff7ab2
 augroup END
 
 augroup Term
@@ -502,150 +437,140 @@ function! LightlineReload(colorscheme)
   call lightline#update()
 endfunction
 
-function! LightlineGitBlame() abort
-  let blame = get(b:, 'coc_git_blame', '')
-  return winwidth(0) > 120 ? blame : ''
+function GitBlame()
+  let buf = nvim_create_buf(v:false, v:true)
+  call nvim_buf_set_lines(buf, 0, -1, v:true, ["test", "text"])
+  let opts = {'relative': 'cursor', 'width': 10, 'height': 2, 'col': 0,
+      \ 'row': 1, 'anchor': 'NW', 'style': 'minimal'}
+  let win = nvim_open_win(buf, 0, opts)
+  call nvim_win_set_option(win, 'winhl', 'Normal:MyHighlight')
 endfunction
+
 " }}}
-" {{{ NERDTree
-let g:NERDTreeIgnore = ['^node_modules$']
-let g:NERDTreeShowHidden=1
-let g:NERDTreeChDirMode=2
-let g:NERDTreeHijackNetrw=1
-let g:NERDTreeQuitOnOpen=1
-"}}}
 " {{{ Netrw
 let g:netrw_banner = 0
 let g:netrw_altv = 1
+let g:netrw_altfile = 1
 let g:netrw_liststyle = 0
+let g:netrw_keepdir = 1
 let g:netrw_sort_by = 'name'
 let g:netrw_sort_direction = 'normal'
 let g:netrw_winsize = 25
 "}}}
 " {{{ coc.nvim
-if g:lsp == 'coc'
-  let g:coc_global_extensions = [
-    \ 'coc-git',
-    \ 'coc-rust-analyzer',
-    \ 'coc-pairs',
-    \ 'coc-tsserver',
-    \ 'coc-eslint',
-    \ 'coc-tslint-plugin',
-    \ 'coc-prettier',
-    \ 'coc-json',
-    \ ]
+let g:coc_global_extensions = [
+  \ 'coc-rust-analyzer',
+  \ 'coc-pairs',
+  \ 'coc-tsserver',
+  \ 'coc-eslint',
+  \ 'coc-prettier',
+  \ 'coc-json',
+  \ ]
 
-  let g:coc_snippet_next = '<tab>'
+let g:coc_snippet_next = '<tab>'
 
-  " {{{ Commands
-  command! -nargs=0 Prettier :CocCommand prettier.formatFile
-  command! -nargs=0 Format :call CocAction('format')
-  command! -nargs=? Fold :call CocAction('fold', <f-args>)
-  command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport')
-  " }}}
+" {{{ Commands
+command! -nargs=0 Prettier :CocCommand prettier.formatFile
+command! -nargs=0 Format :call CocAction('format')
+command! -nargs=? Fold :call CocAction('fold', <f-args>)
+command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport')
+" }}}
 
-  if exists('*complete_info')
-    inoremap <silent><expr> <cr> complete_info()["selected"] != "-1" ? coc#_select_confirm()
-      \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-  else
-    inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-      \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-  endif
-
-  inoremap <silent><expr> <tab>
-    \ pumvisible() ? "\<C-n>" :
-    \ <SID>check_back_space() ? "\<tab>" :
-    \ coc#refresh()
-  inoremap <expr><s-tab> pumvisible() ? "\<C-p>" : "\<C-h>"
-  inoremap <silent><expr> <c-space> coc#refresh()
-
-  nmap <silent> K :call <SID>show_documentation()<CR>
-  nmap <silent><nowait> <leader>o :<C-u>CocList outline<CR>
-
-  nmap <silent> [c <Plug>(coc-diagnostic-prev)
-  nmap <silent> ]c <Plug>(coc-diagnostic-next)
-
-  " navigate chunks of current buffer
-  nmap [g <Plug>(coc-git-prevchunk)
-  nmap ]g <Plug>(coc-git-nextchunk)
-  " show chunk diff at current position
-  nmap gs <Plug>(coc-git-chunkinfo)
-  " show commit contains current position
-  " nmap gc <Plug>(coc-git-commit)
-  " create text object for git chunks
-  omap ig <Plug>(coc-git-chunk-inner)
-  xmap ig <Plug>(coc-git-chunk-inner)
-  omap ag <Plug>(coc-git-chunk-outer)
-  xmap ag <Plug>(coc-git-chunk-outer)
-
-  xmap <leader>a <Plug>(coc-codeaction-selected)
-
-  xmap if <Plug>(coc-funcobj-i)
-  omap if <Plug>(coc-funcobj-i)
-  xmap af <Plug>(coc-funcobj-a)
-  omap af <Plug>(coc-funcobj-a)
-  xmap ic <Plug>(coc-classobj-i)
-  omap ic <Plug>(coc-classobj-i)
-  xmap ac <Plug>(coc-classobj-a)
-  omap ac <Plug>(coc-classobj-a)
-
-  nmap <silent> <C-s> <Plug>(coc-range-select)
-  xmap <silent> <C-s> <Plug>(coc-range-select)
-
-  nmap <leader>a <Plug>(coc-codeaction-selected)
-  nmap <leader>ac <Plug>(coc-codeaction)
-  nmap <leader>qf <Plug>(coc-fix-current)
-
-  nmap <silent> gd <Plug>(coc-definition)
-  nmap <silent> gy <Plug>(coc-type-definition)
-  nmap <silent> gi <Plug>(coc-implementation)
-  nmap <silent> gr <Plug>(coc-references)
-
-  nmap <F2> <Plug>(coc-rename)
-
-  xmap <leader>f <Plug>(coc-format-selected)
-  nmap <leader>f <Plug>(coc-format)
-
-  nmap <silent> <Tab> <Plug>(coc-range-select)
-  xmap <silent> <Tab> <Plug>(coc-range-select)
-  xmap <silent> <S-Tab> <Plug>(coc-range-select-backword)
-
-  function! CocCurrentFunction()
-      return get(b:, 'coc_current_function', '')
-  endfunction
-
-  function! s:show_documentation()
-    if (index(['vim','help'], &filetype) >= 0)
-      execute 'h '.expand('<cword>')
-    else
-      call CocAction('doHover')
-    endif
-  endfunction
-
-  augroup Config
-    autocmd CursorHold * silent call CocActionAsync('highlight')
-    autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-    autocmd FileType typescript,javascript,json setl formatexpr=CocAction('formatSelected')
-  augroup END
+if exists('*complete_info')
+  inoremap <silent><expr> <cr> complete_info()["selected"] != "-1" ? coc#_select_confirm()
+    \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+else
+  inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+    \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 endif
+
+inoremap <silent><expr> <tab>
+  \ pumvisible() ? "\<C-n>" :
+  \ <SID>check_back_space() ? "\<tab>" :
+  \ coc#refresh()
+inoremap <expr><s-tab> pumvisible() ? "\<C-p>" : "\<C-h>"
+inoremap <silent><expr> <c-space> coc#refresh()
+
+nmap <silent> K :call <SID>show_documentation()<CR>
+nmap <silent><nowait> <leader>o :<C-u>CocList outline<CR>
+
+nmap <silent> [c <Plug>(coc-diagnostic-prev)
+nmap <silent> ]c <Plug>(coc-diagnostic-next)
+
+nmap [g <Plug>(coc-git-prevchunk)
+nmap ]g <Plug>(coc-git-nextchunk)
+" show chunk diff at current position
+nmap gs <Plug>(coc-git-chunkinfo)
+omap ig <Plug>(coc-git-chunk-inner)
+xmap ig <Plug>(coc-git-chunk-inner)
+omap ag <Plug>(coc-git-chunk-outer)
+xmap ag <Plug>(coc-git-chunk-outer)
+
+xmap <leader>a <Plug>(coc-codeaction-selected)
+
+xmap if <Plug>(coc-funcobj-i)
+omap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap af <Plug>(coc-funcobj-a)
+xmap ic <Plug>(coc-classobj-i)
+omap ic <Plug>(coc-classobj-i)
+xmap ac <Plug>(coc-classobj-a)
+omap ac <Plug>(coc-classobj-a)
+
+nmap <silent> <C-s> <Plug>(coc-range-select)
+xmap <silent> <C-s> <Plug>(coc-range-select)
+
+nmap <leader>a <Plug>(coc-codeaction-selected)
+nmap <leader>ac <Plug>(coc-codeaction)
+nmap <leader>qf <Plug>(coc-fix-current)
+
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+nmap <F2> <Plug>(coc-rename)
+
+xmap <leader>f <Plug>(coc-format-selected)
+nmap <leader>f <Plug>(coc-format)
+
+nmap <silent> <Tab> <Plug>(coc-range-select)
+xmap <silent> <Tab> <Plug>(coc-range-select)
+xmap <silent> <S-Tab> <Plug>(coc-range-select-backword)
+
+nmap <leader>h <Plug>(coc-float-hide)
+
+function! CocCurrentFunction()
+    return get(b:, 'coc_current_function', '')
+endfunction
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+augroup Config
+  autocmd CursorHold * silent call CocActionAsync('highlight')
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+  autocmd FileType typescript,javascript,json setl formatexpr=CocAction('formatSelected')
+augroup END
 " }}}
 " {{{ fzf.vim
 let g:fzf_buffers_jump = 1
 let g:fzf_preview_window = 'right:60%'
 
-command! FZF FloatermNew fzf
-
-nnoremap <leader>F :GFiles<cr>
-nnoremap <leader>B :Buffers<cr>
+nnoremap <C-p> :GFiles<cr>
+nnoremap <leader>pf :Files<cr>
+nnoremap <leader>b :Buffers<cr>
 xnoremap <leader><tab> <plug>(fzf-maps-x)
 onoremap <leader><tab> <plug>(fzf-maps-o)
 inoremap <c-x><c-k> <plug>(fzf-complete-word)
 inoremap <c-x><c-f> <plug>(fzf-complete-path)
 inoremap <c-x><c-j> <plug>(fzf-complete-file-ag)
 inoremap <c-x><c-l> <plug>(fzf-complete-line)
-"}}}
-" {{{notational-fzf-vim
-let g:nv_search_paths = ['~/.wiki']
 "}}}
 " {{{ rainbow.vim
 let g:rainbow_conf = {
@@ -654,36 +579,6 @@ let g:rainbow_conf = {
   \ }
 \ }
 " }}}
-" {{{ lens.vim
-let g:lens#disabled_filetypes = ['NERDTree', 'FZF']
-" }}}
-" {{{vim-zettel
-let g:zettel_fzf_command = "rg --column --line-number --ignore-case --no-heading --color=always "
-" }}}
-" {{{lightline.vim
-command! -nargs=1 LightlineReload call LightlineReload(<args>)
-" }}}
-" {{{sneak.vim
-map f <Plug>Sneak_f
-map F <Plug>Sneak_F
-map t <Plug>Sneak_t
-map T <Plug>Sneak_T
-" }}}
-" {{{nvim-lsp
-if g:lsp == 'nvim'
-set omnifunc=v:lua.vim.lsp.omnifunc
-lua << EOF
-require'nvim_lsp'.tsserver.setup{}
-require'nvim_lsp'.rust_analyzer.setup{}
-EOF
-  noremap <silent> gd <cmd>lua vim.lsp.buf.declaration()<CR>
-  noremap <silent> K :call <cmd>lua vim.lsp.buf.hover()<CR>
-  noremap <silent> gy <cmd>lua vim.lsp.buf.type_definition()<CR>
-  noremap <silent> gi <cmd>lua vim.lsp.buf.implementation()<CR>
-  noremap <silent> gr <cmd>lua vim.lsp.buf.references()<CR>
-  noremap <F2> <cmd>lua vim.lsp.buf.rename()<CR>
 
-  noremap <leader>f <cmd>lua vim.lsp.buf.formatting()<CR>
-endif
-" }}}
+lua require('aniseed.dotfiles')
 " vim: fdm=marker fdl=0
