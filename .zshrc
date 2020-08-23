@@ -19,6 +19,7 @@ export ZSH="/Users/iago/.oh-my-zsh"
 # oxide
 # ZSH_THEME="wezm"
 ZSH_THEME="powerlevel10k/powerlevel10k"
+# ZSH_THEME="hyperzsh"
 # ZSH_THEME="oxide"
 
 # Set list of themes to pick from when loading at random
@@ -117,6 +118,8 @@ source /usr/local/share/zsh/site-functions/key-bindings.zsh
 
 # Created by `userpath` on 2020-03-23 02:25:47
 export PATH="$PATH:/Users/iago/.local/bin"
+
+export SKIM_DEFAULT_COMMAND='rg --files'
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
