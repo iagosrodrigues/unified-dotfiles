@@ -16,12 +16,42 @@ My unified dotfiles from Gentoo and macOS
 
 # Softwares used on Gentoo
 
+- lz4
+- neovim
+- pip
+- git
+- zsh
 - Exa
 - ripgrep
-- Google Chrome
-- VSCode
-- Spotify
-- Alacritty
+- fontawesome
+- jetbrains-mono
+- noto-emoji
+- roboto
+- pulsemixer
+- mpv
+- telegram-desktop
+- nodejs
+- dhcpcd
+- wpa_supplicant
+- parted
+- gcc
+- intel-microcode
+- dosfstools
+- libfat
+- gentoo-sources
+- linux-firmware
+- rust
+- firefox
+- alacritty
+
+## Sway
+- bemenu
+- grim
+- slurp
+- waybar
+- wl-clipboard
+- sway
+
 
 ## Vim plugins
 
