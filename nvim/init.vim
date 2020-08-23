@@ -12,9 +12,9 @@ let s:gold_numbers = 0
 let s:noamcore_bg_transparent=0
 let s:noamcore_wayland=0
 if executable('tmux') && $TMUX !=# ''
-	let g:tmux = 1
+    let g:tmux = 1
 else
-	let g:tmux = 0
+    let g:tmux = 0
 endif
 
 source ~/.config/nvim/plugins.vim
@@ -62,11 +62,11 @@ set listchars=tab:→\ ,eol:¬,trail:·,extends:❯,precedes:❮,nbsp:␣
 set nolist
 set updatetime=50
 if has("patch-8.1.1564")
-  set signcolumn=number
+    set signcolumn=number
 else
-  set signcolumn=yes
+    set signcolumn=yes
 endif
-set cursorline
+" set cursorline
 set lazyredraw
 set nocompatible
 set completeopt+=noselect " TODO
@@ -160,8 +160,8 @@ if s:noamcore_bg_transparent
 endif
 
 if s:gold_numbers
-  highlight LineNr guibg=none guifg=Gold
-  highlight CursorLineNr gui=bold guifg=LightGoldenrod
+    highlight LineNr guibg=none guifg=Gold
+    highlight CursorLineNr gui=bold guifg=LightGoldenrod
 endif
 
 " vim-sneak
@@ -186,15 +186,6 @@ inoremap <down>  <nop>
 
 " Alternar abas via tab no modo normal
 nnoremap <tab> gt
-
-" Alterna a numeração das linhas para relativo
-nnoremap <leader>tn :set relativenumber!<cr>
-
-" Alterna o modo de colar
-nnoremap <leader>tp :set paste!<cr>
-
-" Alterna o modo de indentação
-nnoremap <leader>tf :set foldenable!<cr>
 
 " Alterna entre mostrar ou não a linha onde o cursor está
 nnoremap <leader>cs :set cursorline!<cr>
@@ -229,10 +220,10 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 if has('nvim')
-	tnoremap <M-h> <C-\><C-n><C-w>h
-	tnoremap <M-j> <C-\><C-n><C-w>j
-	tnoremap <M-k> <C-\><C-n><C-w>k
-	tnoremap <M-l> <C-\><C-n><C-w>l
+    tnoremap <M-h> <C-\><C-n><C-w>h
+    tnoremap <M-j> <C-\><C-n><C-w>j
+    tnoremap <M-k> <C-\><C-n><C-w>k
+    tnoremap <M-l> <C-\><C-n><C-w>l
 endif
 
 " Abrir tags em uma nova aba
@@ -250,9 +241,9 @@ function! SortByLineLength() range abort
     call setline(a:firstline, sort(content, "Cmp"))
 endfunction
 
-nnoremap <silent><M-t> :FloatermToggle<CR>
-inoremap <silent><M-t> <Esc>:FloatermToggle<CR>
-tnoremap <silent><M-t> <C-\><C-n>:FloatermToggle<CR>
+nnoremap <F5> :FloatermToggle<CR>
+inoremap <F5> <Esc>:FloatermToggle<CR>
+tnoremap <F5> <C-\><C-n>:FloatermToggle<CR>
 tnoremap <silent><Esc> <C-\><C-n>
 
 nnoremap <leader>u :UndotreeShow<CR>
@@ -280,11 +271,11 @@ command! -nargs=0 JestCurrent :call  CocAction('runCommand', 'jest.fileTest', ['
 
 command! -nargs=0 GG :cd ~/Projects
 command! -bang -nargs=* Rg
-  \ call fzf#vim#grep(
-  \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
-  \   <bang>0 ? fzf#vim#with_preview('up:60%')
-  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
-  \   <bang>0)
+            \ call fzf#vim#grep(
+            \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
+            \   <bang>0 ? fzf#vim#with_preview('up:60%')
+            \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+            \   <bang>0)
 " }}}
 
 " Plugins {{{1
@@ -301,20 +292,21 @@ nnoremap <leader>te :call CocAction('runCommand', 'jest.singleTest')<CR>
 " Variáveis de plugins {{{2
 
 let $FZF_DEFAULT_COMMAND='fd'
+let $SKIM_DEFAULT_COMMAND='rg'
 
 if s:noamcore_wayland
-	let g:clipboard = {
-		\ 'name': 'wl-clipboard',
-		\ 'copy': {
-		\   '+': 'wl-copy',
-		\   '*': 'wl-copy',
-		\  },
-		\ 'paste': {
-		\   '+': 'wl-paste -n',
-		\   '*': 'wl-paste -n',
-		\  },
-		\ 'cache_enabled': 1,
-		\ }
+    let g:clipboard = {
+                \ 'name': 'wl-clipboard',
+                \ 'copy': {
+                \   '+': 'wl-copy',
+                \   '*': 'wl-copy',
+                \  },
+                \ 'paste': {
+                \   '+': 'wl-paste -n',
+                \   '*': 'wl-paste -n',
+                \  },
+                \ 'cache_enabled': 1,
+                \ }
 endif
 
 " let g:floaterm_width = float2nr(&columns * 0.8)
@@ -347,10 +339,10 @@ let g:tex_conceal="ags"
 " Configurações automáticas baseado em eventos {{{
 
 augroup Trailing
-	autocmd!
+    autocmd!
 
-	" Automatically deletes all trailing whitespace on save
-	autocmd BufWritePre * %s/\s\+$//e
+    " Automatically deletes all trailing whitespace on save
+    autocmd BufWritePre * %s/\s\+$//e
 augroup END
 
 augroup highlight_yank
@@ -359,36 +351,36 @@ augroup highlight_yank
 augroup END
 
 augroup Config
-	autocmd!
+    autocmd!
 
-	autocmd BufWritePost .vimrc,.vimrc.local,init.vim,plugins.vim,ginit.vim ++nested source %
+    autocmd BufWritePost .vimrc,.vimrc.local,init.vim,plugins.vim,ginit.vim ++nested source %
 
-	" Disables automatic commenting on newline
-	" autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+    " Disables automatic commenting on newline
+    " autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
-	" autocmd VimResized * exe 'normal! \<c-w>='
-	autocmd FileType vim setlocal fen fdm=marker
+    " autocmd VimResized * exe 'normal! \<c-w>='
+    autocmd FileType vim setlocal fen fdm=marker
 
-	autocmd FileType skim tnoremap <buffer> <esc> <c-g>
+    autocmd FileType skim tnoremap <buffer> <esc> <c-g>
 
-	autocmd BufWritePost *.exs,*.ex silent! call ElixirFormat()
+    autocmd BufWritePost *.exs,*.ex silent! call ElixirFormat()
 
-  if !has('nvim-0.5') " Fix terminal bug glitch on every keypress
-    autocmd TermEnter * setlocal scrolloff=0
-    autocmd TermLeave * setlocal scrolloff=3
-  endif
+    if !has('nvim-0.5') " Fix terminal bug glitch on every keypress
+        autocmd TermEnter * setlocal scrolloff=0
+        autocmd TermLeave * setlocal scrolloff=3
+    endif
 
-	autocmd FocusLost * silent! wa
+    autocmd FocusLost * silent! wa
 
-	" Goyo
-	autocmd User GoyoEnter Limelight
-	autocmd User GoyoLeave Limelight!
+    " Goyo
+    autocmd User GoyoEnter Limelight
+    autocmd User GoyoLeave Limelight!
 augroup END
 
 augroup Term
-	autocmd!
-	autocmd TermOpen * setlocal nonu nornu signcolumn=no
-	autocmd TermOpen * startinsert
+    autocmd!
+    autocmd TermOpen * setlocal nonu nornu signcolumn=no
+    autocmd TermOpen * startinsert
 augroup END
 
 " }}}
@@ -398,52 +390,52 @@ let s:term_buf = 0
 let s:term_win = 0
 
 function! TermToggle(height)
-	if win_gotoid(s:term_win)
-		hide
-	else
-		new terminal
-		exec "resize ".a:height
-		try
-			exec "buffer ".s:term_buf
-			exec "bd terminal"
-		catch
-			call termopen($SHELL, {"detach": 0})
-			let s:term_buf = bufnr("")
-			setlocal nonu nornu scl=no nocul
-		endtry
-		startinsert!
-		let s:term_win = win_getid()
-	endif
+    if win_gotoid(s:term_win)
+        hide
+    else
+        new terminal
+        exec "resize ".a:height
+        try
+            exec "buffer ".s:term_buf
+            exec "bd terminal"
+        catch
+            call termopen($SHELL, {"detach": 0})
+            let s:term_buf = bufnr("")
+            setlocal nonu nornu scl=no nocul
+        endtry
+        startinsert!
+        let s:term_win = win_getid()
+    endif
 endfunction
 
 function! ElixirFormat() abort
-	!mix format %
-	e!
+    !mix format %
+    e!
 endfunction
 
 " }}}
 " Functions {{{
 function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~ '\s'
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~ '\s'
 endfunction
 
 function! LightlineReload(colorscheme)
-  if a:colorscheme
-    let g:lightline.colorscheme = a:colorscheme
-  endif
-  call lightline#init()
-  call lightline#colorscheme()
-  call lightline#update()
+    if a:colorscheme
+        let g:lightline.colorscheme = a:colorscheme
+    endif
+    call lightline#init()
+    call lightline#colorscheme()
+    call lightline#update()
 endfunction
 
 function GitBlame()
-  let buf = nvim_create_buf(v:false, v:true)
-  call nvim_buf_set_lines(buf, 0, -1, v:true, ["test", "text"])
-  let opts = {'relative': 'cursor', 'width': 10, 'height': 2, 'col': 0,
-      \ 'row': 1, 'anchor': 'NW', 'style': 'minimal'}
-  let win = nvim_open_win(buf, 0, opts)
-  call nvim_win_set_option(win, 'winhl', 'Normal:MyHighlight')
+    let buf = nvim_create_buf(v:false, v:true)
+    call nvim_buf_set_lines(buf, 0, -1, v:true, ["test", "text"])
+    let opts = {'relative': 'cursor', 'width': 10, 'height': 2, 'col': 0,
+                \ 'row': 1, 'anchor': 'NW', 'style': 'minimal'}
+    let win = nvim_open_win(buf, 0, opts)
+    call nvim_win_set_option(win, 'winhl', 'Normal:MyHighlight')
 endfunction
 
 " }}}
@@ -459,13 +451,13 @@ let g:netrw_winsize = 25
 "}}}
 " {{{ coc.nvim
 let g:coc_global_extensions = [
-  \ 'coc-rust-analyzer',
-  \ 'coc-pairs',
-  \ 'coc-tsserver',
-  \ 'coc-eslint',
-  \ 'coc-prettier',
-  \ 'coc-json',
-  \ ]
+            \ 'coc-rust-analyzer',
+            \ 'coc-pairs',
+            \ 'coc-tsserver',
+            \ 'coc-eslint',
+            \ 'coc-prettier',
+            \ 'coc-json',
+            \ ]
 
 let g:coc_snippet_next = '<tab>'
 
@@ -477,17 +469,17 @@ command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport
 " }}}
 
 if exists('*complete_info')
-  inoremap <silent><expr> <cr> complete_info()["selected"] != "-1" ? coc#_select_confirm()
-    \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+    inoremap <silent><expr> <cr> complete_info()["selected"] != "-1" ? coc#_select_confirm()
+                \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 else
-  inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-    \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+    inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+                \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 endif
 
 inoremap <silent><expr> <tab>
-  \ pumvisible() ? "\<C-n>" :
-  \ <SID>check_back_space() ? "\<tab>" :
-  \ coc#refresh()
+            \ pumvisible() ? "\<C-n>" :
+            \ <SID>check_back_space() ? "\<tab>" :
+            \ coc#refresh()
 inoremap <expr><s-tab> pumvisible() ? "\<C-p>" : "\<C-h>"
 inoremap <silent><expr> <c-space> coc#refresh()
 
@@ -545,17 +537,17 @@ function! CocCurrentFunction()
 endfunction
 
 function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
+    if (index(['vim','help'], &filetype) >= 0)
+        execute 'h '.expand('<cword>')
+    else
+        call CocAction('doHover')
+    endif
 endfunction
 
 augroup Config
-  autocmd CursorHold * silent call CocActionAsync('highlight')
-  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-  autocmd FileType typescript,javascript,json setl formatexpr=CocAction('formatSelected')
+    autocmd CursorHold * silent call CocActionAsync('highlight')
+    autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+    autocmd FileType typescript,javascript,json setl formatexpr=CocAction('formatSelected')
 augroup END
 " }}}
 " {{{ fzf.vim
@@ -574,10 +566,10 @@ inoremap <c-x><c-l> <plug>(fzf-complete-line)
 "}}}
 " {{{ rainbow.vim
 let g:rainbow_conf = {
-  \ 'separately': {
-  \   'vimwiki': 0
-  \ }
-\ }
+            \ 'separately': {
+            \   'vimwiki': 0
+            \ }
+            \ }
 " }}}
 
 lua require('aniseed.dotfiles')
