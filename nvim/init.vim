@@ -1,12 +1,15 @@
-syntax on
 filetype plugin indent on
 scriptencoding utf-8
 
-set pyxversion=3
-let g:python3_host_prog = '/usr/local/bin/python3'
+" set pyxversion=3
+if has('mac')
+    let g:python3_host_prog = '/usr/local/bin/python3'
+endif
 let g:loaded_python_provider = 0
 let g:loaded_perl_provider = 0
 let g:loaded_ruby_provider = 0
+
+let g:netrw_cursor=0
 
 let s:gold_numbers = 0
 let s:noamcore_bg_transparent=0
@@ -20,8 +23,6 @@ endif
 source ~/.config/nvim/plugins.vim
 
 set pumblend=20
-
-set mouse=a
 
 let g:airline#extensions#fzf#enabled = 0
 
@@ -37,12 +38,12 @@ set undofile
 set switchbuf="useopen"
 set bufhidden="unload"
 
-set termguicolors
+" set termguicolors
 let g:gruvbox_contrast_dark="medium"
 let g:gruvbox_italic=1
 let g:gruvbox_invert_selection='0'
 let g:xcodedark_match_paren_style = 1
-colorscheme gruvbox
+" colorscheme challenger_deep
 
 set hidden
 set nojoinspaces
@@ -124,6 +125,7 @@ set copyindent    " Copia as linhas com indentação
 " Configurações de folding {{{1
 set nofoldenable       " Desabilita o folding por padrão
 set foldmethod=manual  " Método padrão do fold é indentação
+set foldexpr=nvim_treesitter#foldexpr()
 set foldmarker={{{,}}} " Marcadores do fold
 set foldclose=all      " Permite o folding automaticamente quando não está no cursor ou o nível é maior do que o folding level
 set foldlevelstart=20  " Abrir o maior fold por padrão
@@ -263,6 +265,7 @@ command! -nargs=* Make make <args> | cwindow 3
 command! ConfigGinit tab drop ~/.config/nvim/ginit.vim
 command! ConfigInit tab drop ~/.config/nvim/init.vim
 command! ConfigPlugins tab drop ~/.config/nvim/plugins.vim
+command! ConfigFnl tab drop ~/.config/nvim/fnl/dotfiles/init.fnl
 " Run jest for current project
 command! -nargs=0 Jest :call  CocAction('runCommand', 'jest.projectTest')
 
@@ -292,7 +295,7 @@ nnoremap <leader>te :call CocAction('runCommand', 'jest.singleTest')<CR>
 " Variáveis de plugins {{{2
 
 let $FZF_DEFAULT_COMMAND='fd'
-let $SKIM_DEFAULT_COMMAND='rg'
+let $SKIM_DEFAULT_COMMAND='fd'
 
 if s:noamcore_wayland
     let g:clipboard = {
@@ -545,7 +548,6 @@ function! s:show_documentation()
 endfunction
 
 augroup Config
-    autocmd CursorHold * silent call CocActionAsync('highlight')
     autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
     autocmd FileType typescript,javascript,json setl formatexpr=CocAction('formatSelected')
 augroup END
@@ -572,5 +574,90 @@ let g:rainbow_conf = {
             \ }
 " }}}
 
-lua require('aniseed.dotfiles')
+lua <<EOF
+require'aniseed.dotfiles'
+-- require'nvim_lsp'.tsserver.setup{}
+-- require'nvim_lsp'.vimls.setup{}
+-- require'nvim_lsp'.rls.setup{}
+require'nvim-treesitter.configs'.setup {
+    ensure_installed = "all",
+    highlight = {
+        enable = true,
+    },
+    incremental_selection = {
+        enable = true,
+        keymaps = {
+            init_selection = "gnn",
+            node_incremental = "grn",
+            scope_incremental = "grc",
+            node_decremental = "grm",
+        }
+    },
+    refactor = {
+        highlight_definitions = { enable = true },
+        highlight_current_scope = { enable = false },
+        smart_rename = {
+            enable = true,
+            keymaps = {
+                smart_rename = "grr",
+            }
+        },
+        navigation = {
+            enable = true,
+            keymaps = {
+                goto_definition = "gnd",
+                list_definitions = "gnD",
+                goto_next_usage = "<a-*>",
+                goto_previous_usage = "<a-#>",
+            }
+        }
+    },
+    textobjects = {
+        select = {
+            enable = true,
+            keymaps = {
+                ["af"] = "@fuction.outer",
+                ["if"] = "@fuction.inner",
+                ["ac"] = "@class.outer",
+                ["ic"] = "@class.inner",
+
+                ["IF"] = {
+                    python = "(function_definition) @function",
+                    cpp = "(function_definition) @function",
+                    c = "(function_definition) @function",
+                    java = "(method_declaration) @function",
+                }
+            }
+        },
+        swap = {
+            enable = true,
+            swap_next = {
+                ["<leader>a"] = "@parameter.inner",
+            },
+            swap_previous = {
+                ["<leader>A"] = "@parameter.inner",
+            },
+        },
+        move = {
+            enable = true,
+            goto_next_start = {
+                ["]m"] = "@function.outer",
+                ["]]"] = "@class.outer",
+            },
+            goto_next_end = {
+                ["]M"] = "@function.outer",
+                ["]["] = "@class.outer",
+            },
+            goto_previous_start = {
+                ["[m"] = "@function.outer",
+                ["[["] = "@class.outer",
+            },
+            goto_previous_end = {
+                ["[M"] = "@function.outer",
+                ["[]"] = "@class.outer",
+            },
+        },
+    }
+}
+EOF
 " vim: fdm=marker fdl=0
