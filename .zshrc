@@ -119,7 +119,14 @@ source /usr/local/share/zsh/site-functions/key-bindings.zsh
 # Created by `userpath` on 2020-03-23 02:25:47
 export PATH="$PATH:/Users/iago/.local/bin"
 
-export SKIM_DEFAULT_COMMAND='rg --files'
+# export SKIM_DEFAULT_COMMAND='rg --files'
+
+function break_your_neck() {
+    sudo sysctl -w kern.maxfiles=10485760
+    sudo sysctl -w kern.maxfilesperproc=1048576
+}
+
+alias explode_ios=break_your_neck
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
