@@ -1,7 +1,7 @@
 filetype plugin indent on
 scriptencoding utf-8
 
-" set pyxversion=3
+set pyxversion=3
 if has('mac')
     let g:python3_host_prog = '/usr/local/bin/python3'
 endif
@@ -67,7 +67,7 @@ if has("patch-8.1.1564")
 else
     set signcolumn=yes
 endif
-" set cursorline
+set cursorline
 set lazyredraw
 set nocompatible
 set completeopt+=noselect " TODO
@@ -271,6 +271,9 @@ command! -nargs=0 Jest :call  CocAction('runCommand', 'jest.projectTest')
 
 " Run jest for current file
 command! -nargs=0 JestCurrent :call  CocAction('runCommand', 'jest.fileTest', ['%'])
+
+" Run test for current elixir function
+command! -nargs=0 MixTest execute "!mix test %:" . line(".")
 
 command! -nargs=0 GG :cd ~/Projects
 command! -bang -nargs=* Rg
@@ -579,85 +582,85 @@ require'aniseed.dotfiles'
 -- require'nvim_lsp'.tsserver.setup{}
 -- require'nvim_lsp'.vimls.setup{}
 -- require'nvim_lsp'.rls.setup{}
-require'nvim-treesitter.configs'.setup {
-    ensure_installed = "all",
-    highlight = {
-        enable = true,
-    },
-    incremental_selection = {
-        enable = true,
-        keymaps = {
-            init_selection = "gnn",
-            node_incremental = "grn",
-            scope_incremental = "grc",
-            node_decremental = "grm",
-        }
-    },
-    refactor = {
-        highlight_definitions = { enable = true },
-        highlight_current_scope = { enable = false },
-        smart_rename = {
-            enable = true,
-            keymaps = {
-                smart_rename = "grr",
-            }
-        },
-        navigation = {
-            enable = true,
-            keymaps = {
-                goto_definition = "gnd",
-                list_definitions = "gnD",
-                goto_next_usage = "<a-*>",
-                goto_previous_usage = "<a-#>",
-            }
-        }
-    },
-    textobjects = {
-        select = {
-            enable = true,
-            keymaps = {
-                ["af"] = "@fuction.outer",
-                ["if"] = "@fuction.inner",
-                ["ac"] = "@class.outer",
-                ["ic"] = "@class.inner",
-
-                ["IF"] = {
-                    python = "(function_definition) @function",
-                    cpp = "(function_definition) @function",
-                    c = "(function_definition) @function",
-                    java = "(method_declaration) @function",
-                }
-            }
-        },
-        swap = {
-            enable = true,
-            swap_next = {
-                ["<leader>a"] = "@parameter.inner",
-            },
-            swap_previous = {
-                ["<leader>A"] = "@parameter.inner",
-            },
-        },
-        move = {
-            enable = true,
-            goto_next_start = {
-                ["]m"] = "@function.outer",
-                ["]]"] = "@class.outer",
-            },
-            goto_next_end = {
-                ["]M"] = "@function.outer",
-                ["]["] = "@class.outer",
-            },
-            goto_previous_start = {
-                ["[m"] = "@function.outer",
-                ["[["] = "@class.outer",
-            },
-            goto_previous_end = {
-                ["[M"] = "@function.outer",
-                ["[]"] = "@class.outer",
-            },
-        },
-    }
-}
+-- require'nvim-treesitter.configs'.setup {
+--     ensure_installed = "all",
+--     highlight = {
+--         enable = true,
+--     },
+--     incremental_selection = {
+--         enable = true,
+--         keymaps = {
+--             init_selection = "gnn",
+--             node_incremental = "grn",
+--             scope_incremental = "grc",
+--             node_decremental = "grm",
+--         }
+--     },
+--     refactor = {
+--         highlight_definitions = { enable = true },
+--         highlight_current_scope = { enable = false },
+--         smart_rename = {
+--             enable = true,
+--             keymaps = {
+--                 smart_rename = "grr",
+--             }
+--         },
+--         navigation = {
+--             enable = true,
+--             keymaps = {
+--                 goto_definition = "gnd",
+--                 list_definitions = "gnD",
+--                 goto_next_usage = "<a-*>",
+--                 goto_previous_usage = "<a-#>",
+--             }
+--         }
+--     },
+--     textobjects = {
+--         select = {
+--             enable = true,
+--             keymaps = {
+--                 ["af"] = "@fuction.outer",
+--                 ["if"] = "@fuction.inner",
+--                 ["ac"] = "@class.outer",
+--                 ["ic"] = "@class.inner",
+--
+--                 ["IF"] = {
+--                     python = "(function_definition) @function",
+--                     cpp = "(function_definition) @function",
+--                     c = "(function_definition) @function",
+--                     java = "(method_declaration) @function",
+--                 }
+--             }
+--         },
+--         swap = {
+--             enable = true,
+--             swap_next = {
+--                 ["<leader>a"] = "@parameter.inner",
+--             },
+--             swap_previous = {
+--                 ["<leader>A"] = "@parameter.inner",
+--             },
+--         },
+--         move = {
+--             enable = true,
+--             goto_next_start = {
+--                 ["]m"] = "@function.outer",
+--                 ["]]"] = "@class.outer",
+--             },
+--             goto_next_end = {
+--                 ["]M"] = "@function.outer",
+--                 ["]["] = "@class.outer",
+--             },
+--             goto_previous_start = {
+--                 ["[m"] = "@function.outer",
+--                 ["[["] = "@class.outer",
+--             },
+--             goto_previous_end = {
+--                 ["[M"] = "@function.outer",
+--                 ["[]"] = "@class.outer",
+--             },
+--         },
+--     }
+-- }
 EOF
 " vim: fdm=marker fdl=0

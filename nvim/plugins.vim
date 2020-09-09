@@ -8,6 +8,9 @@ endif
 
 call plug#begin(plugspath)
 
+" Plug 'nvim-treesitter/nvim-treesitter'
+Plug 'neovim/nvim-lsp'
+
 " Plug '~/Projects/vim-zettel-noam', { 'for': 'vimwiki' }
 "
 Plug 'voldikss/vim-floaterm'
@@ -15,10 +18,9 @@ Plug 'mbbill/undotree'
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 
 " Themes
-Plug 'chriskempson/base16-vim'
+" Plug 'chriskempson/base16-vim'
 Plug 'gruvbox-community/gruvbox'
 Plug 'arzg/vim-colors-xcode'
-Plug 'neovim/nvim-lsp'
 Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
 
 Plug 'Olical/aniseed', { 'tag': 'v3.6.0' }
@@ -57,7 +59,6 @@ Plug 'mattn/emmet-vim', { 'for': 'html' } " Escrever HTML como seletores CSS
 Plug 'tpope/vim-fugitive'
 Plug 'lervag/vimtex', { 'for': 'tex' }
 
-Plug 'nvim-treesitter/nvim-treesitter'
 Plug 'sakhnik/nvim-gdb', { 'do': ':!./install.sh' }
 
 call plug#end()
