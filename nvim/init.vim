@@ -1,5 +1,11 @@
+luafile ~/.config/nvim/init.lua
+syntax enable
 filetype plugin indent on
 scriptencoding utf-8
+
+" set omnifunc=v:lua.vim.lsp.omnifunc
+
+set signcolumn=yes
 
 set pyxversion=3
 if has('mac')
@@ -8,6 +14,8 @@ endif
 let g:loaded_python_provider = 0
 let g:loaded_perl_provider = 0
 let g:loaded_ruby_provider = 0
+
+let g:coc = 1
 
 let g:netrw_cursor=0
 
@@ -21,6 +29,12 @@ else
 endif
 
 source ~/.config/nvim/plugins.vim
+
+if exists('g:vscode')
+    " VSCode extension
+else
+    " ordinary neovim
+endif
 
 set pumblend=20
 
@@ -38,12 +52,47 @@ set undofile
 set switchbuf="useopen"
 set bufhidden="unload"
 
-" set termguicolors
+set termguicolors
 let g:gruvbox_contrast_dark="medium"
 let g:gruvbox_italic=1
 let g:gruvbox_invert_selection='0'
 let g:xcodedark_match_paren_style = 1
-" colorscheme challenger_deep
+colorscheme gruvbox
+let g:airline_theme='gruvbox'
+" let g:airline_section_c = '%{LspStatus()}'
+"
+lua << EOF
+local coc_status = function()
+    local status = vim.call('coc#status')
+    local fn = vim.b['coc_current_function'] or ''
+
+    return ' ' .. status .. ' ' .. fn
+end
+
+local generator = function(win_id)
+    local el_segments = {}
+    local extensions = require'el.extensions'
+    local helper = require'el.helper'
+
+    table.insert(el_segments, extensions.mode)
+    table.insert(el_segments, coc_status)
+    table.insert(el_segments, '%f%m%r%=%#CursorColumn# %y %{&fileencoding?&fileencoding:&encoding} [%{&fileformat}] %p%% %l:%c')
+
+    table.insert(el_segments, helper.async_buf_setter(
+        win_id,
+        'el_git_stat',
+        extensions.git_changes,
+        5000
+     ))
+
+    return el_segments
+end
+
+require('el').setup { generator = generator }
+EOF
+
+" set statusline=%#CursorColumn#%#LineNr#\ %f%m%r%=%#CursorColumn#\ %y\ %{&fileencoding?&fileencoding:&encoding}\[%{&fileformat}\]\ %p%%\ %l:%c
+" set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
 set hidden
 set nojoinspaces
@@ -55,28 +104,24 @@ set shada="NONE"
 " Visual {{{2
 set fillchars+=vert:\|
 set number
-set relativenumber
+" set relativenumber
 set noequalalways
 set splitbelow
 set splitright
 set listchars=tab:→\ ,eol:¬,trail:·,extends:❯,precedes:❮,nbsp:␣
 set nolist
-set updatetime=50
-if has("patch-8.1.1564")
-    set signcolumn=number
-else
-    set signcolumn=yes
-endif
+set updatetime=300
 set cursorline
 set lazyredraw
 set nocompatible
-set completeopt+=noselect " TODO
-set completeopt-=preview " Desativa o scratch no autocomplete
+set completeopt=menuone,noinsert,noselect
 set diffopt+=context:4,vertical " TODO
 set ssop-=options    " do not store global and local values in a session
 set ssop-=folds      " do not store folds
+set mouse="a"
 
 " Visual {{{2
+set guicursor=
 set magic      " Ativa magic para expressões regulares
 set gdefault   " Pesquisa e substituição são globais por linha
 set autoread   " Detecta quando um arquivo é editado
@@ -166,6 +211,9 @@ if s:gold_numbers
     highlight CursorLineNr gui=bold guifg=LightGoldenrod
 endif
 
+" Comment Italic
+highlight Comment cterm=italic gui=italic
+
 " vim-sneak
 highlight Sneak guifg=black guibg=orange
 
@@ -200,12 +248,8 @@ noremap k gk
 vnoremap > >gv
 vnoremap < <gv
 
-vnoremap K :m '<-2<CR>gv=gv
-vnoremap J :m '>+1<CR>gv=gv
-
-" Voltar para o modo normal com jw
-" inoremap jw <esc>
-tnoremap <Esc> <C-\><C-n>
+" vnoremap K :m '<-2<CR>gv=gv
+" vnoremap J :m '>+1<CR>gv=gv
 
 " Editar este arquivo
 nnoremap <leader>ev :e $MYVIMRC<cr>
@@ -246,9 +290,10 @@ endfunction
 nnoremap <F5> :FloatermToggle<CR>
 inoremap <F5> <Esc>:FloatermToggle<CR>
 tnoremap <F5> <C-\><C-n>:FloatermToggle<CR>
-tnoremap <silent><Esc> <C-\><C-n>
 
 nnoremap <leader>u :UndotreeShow<CR>
+nnoremap <leader>h :diffget 1<CR>
+nnoremap <leader>l :diffget 2<CR>
 
 nmap <leader>ws <plug>VimwikiSplitLink
 nmap <leader>wv <plug>VimwikiVSplitLink
@@ -266,11 +311,6 @@ command! ConfigGinit tab drop ~/.config/nvim/ginit.vim
 command! ConfigInit tab drop ~/.config/nvim/init.vim
 command! ConfigPlugins tab drop ~/.config/nvim/plugins.vim
 command! ConfigFnl tab drop ~/.config/nvim/fnl/dotfiles/init.fnl
-" Run jest for current project
-command! -nargs=0 Jest :call  CocAction('runCommand', 'jest.projectTest')
-
-" Run jest for current file
-command! -nargs=0 JestCurrent :call  CocAction('runCommand', 'jest.fileTest', ['%'])
 
 " Run test for current elixir function
 command! -nargs=0 MixTest execute "!mix test %:" . line(".")
@@ -290,34 +330,19 @@ nnoremap <silent> <leader>k :Explore<CR>
 xmap ga <Plug>(EasyAlign)
 
 nmap ga <Plug>(EasyAlign)
-
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-
-nnoremap <leader>te :call CocAction('runCommand', 'jest.singleTest')<CR>
 " Variáveis de plugins {{{2
 
 let $FZF_DEFAULT_COMMAND='fd'
 let $SKIM_DEFAULT_COMMAND='fd'
 
-if s:noamcore_wayland
-    let g:clipboard = {
-                \ 'name': 'wl-clipboard',
-                \ 'copy': {
-                \   '+': 'wl-copy',
-                \   '*': 'wl-copy',
-                \  },
-                \ 'paste': {
-                \   '+': 'wl-paste -n',
-                \   '*': 'wl-paste -n',
-                \  },
-                \ 'cache_enabled': 1,
-                \ }
-endif
-
 " let g:floaterm_width = float2nr(&columns * 0.8)
+let g:floaterm_width = float2nr(&columns)
 " let g:floaterm_height = float2nr(&lines * 0.8)
-" let g:floaterm_position = 'center'
+let g:floaterm_height = float2nr(&lines * 0.5)
+" let g:floaterm_wintype = 'normal'
+let g:floaterm_title = ''
+let g:floaterm_borderchars = ['', '', '', '', '', '', '', '']
+let g:floaterm_position = 'bottom'
 
 let g:mix_format_on_save = 0
 let g:mix_format_options = '--check-equivalent'
@@ -369,7 +394,7 @@ augroup Config
 
     autocmd FileType skim tnoremap <buffer> <esc> <c-g>
 
-    autocmd BufWritePost *.exs,*.ex silent! call ElixirFormat()
+    " autocmd BufWritePost *.exs,*.ex silent! call ElixirFormat()
 
     if !has('nvim-0.5') " Fix terminal bug glitch on every keypress
         autocmd TermEnter * setlocal scrolloff=0
@@ -455,7 +480,9 @@ let g:netrw_sort_by = 'name'
 let g:netrw_sort_direction = 'normal'
 let g:netrw_winsize = 25
 "}}}
+if g:coc
 " {{{ coc.nvim
+" {{{ Variables
 let g:coc_global_extensions = [
             \ 'coc-rust-analyzer',
             \ 'coc-pairs',
@@ -466,21 +493,15 @@ let g:coc_global_extensions = [
             \ ]
 
 let g:coc_snippet_next = '<tab>'
-
-" {{{ Commands
-command! -nargs=0 Prettier :CocCommand prettier.formatFile
-command! -nargs=0 Format :call CocAction('format')
-command! -nargs=? Fold :call CocAction('fold', <f-args>)
-command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport')
 " }}}
+" {{{ Remaps
+nnoremap <leader>te :call CocAction('runCommand', 'jest.singleTest')<CR>
 
-if exists('*complete_info')
-    inoremap <silent><expr> <cr> complete_info()["selected"] != "-1" ? coc#_select_confirm()
-                \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-else
-    inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-                \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-endif
+" inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+" inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+inoremap <silent><expr> <cr> complete_info()["selected"] != "-1" ? coc#_select_confirm()
+            \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 inoremap <silent><expr> <tab>
             \ pumvisible() ? "\<C-n>" :
@@ -535,9 +556,20 @@ nmap <leader>f <Plug>(coc-format)
 nmap <silent> <Tab> <Plug>(coc-range-select)
 xmap <silent> <Tab> <Plug>(coc-range-select)
 xmap <silent> <S-Tab> <Plug>(coc-range-select-backword)
+" }}}
+" {{{ Commands
+command! -nargs=0 Prettier :CocCommand prettier.formatFile
+command! -nargs=0 Format :call CocAction('format')
+command! -nargs=? Fold :call CocAction('fold', <f-args>)
+command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport')
 
-nmap <leader>h <Plug>(coc-float-hide)
+" Run jest for current project
+command! -nargs=0 Jest :call  CocAction('runCommand', 'jest.projectTest')
 
+" Run jest for current file
+command! -nargs=0 JestCurrent :call  CocAction('runCommand', 'jest.fileTest', ['%'])
+" }}}
+" {{{ Functions
 function! CocCurrentFunction()
     return get(b:, 'coc_current_function', '')
 endfunction
@@ -549,12 +581,81 @@ function! s:show_documentation()
         call CocAction('doHover')
     endif
 endfunction
+" }}}
+" {{{ Auto commands
+" augroup Config
+"     autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+"     autocmd FileType typescript,javascript,json setl formatexpr=CocAction('formatSelected')
+" augroup END
+" }}}
+" }}}
+else
+" {{{ Vim-lspconfig
+" {{{ Remaps
+nnoremap <silent> <c-]> <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> K     <cmd>lua vim.lsp.buf.hover()<CR>
+nnoremap <silent> gi    <cmd>lua vim.lsp.buf.implementation()<CR>
+nnoremap <silent> <c-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
+nnoremap <silent> gy   <cmd>lua vim.lsp.buf.type_definition()<CR>
+nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
+nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
+nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
+nnoremap <silent> gd    <cmd>lua vim.lsp.buf.declaration()<CR>
+nnoremap <silent> g[    <cmd>PrevDiagnosticCycle<CR>
+nnoremap <silent> g]    <cmd>NextDiagnosticCycle<CR>
+nnoremap <silent> <leader>f <cmd>lua vim.lsp.buf.formatting()<CR>
 
-augroup Config
-    autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-    autocmd FileType typescript,javascript,json setl formatexpr=CocAction('formatSelected')
+inoremap <silent><expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <silent><expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+" }}}
+" {{{ Variables
+let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']
+let g:diagnostic_enable_virtual_text = 1
+let g:diagnostic_virtual_text_prefix = ' '
+let g:diagnostic_trimmed_virtual_text = '40'
+let g:diagnostic_insert_delay = 1
+" }}}
+" {{{ Lua
+lua <<EOF
+local nvim_lsp = require'nvim_lsp'
+
+local on_attach = function(client)
+    require'completion'.on_attach(client)
+    require'diagnostic'.on_attach(client)
+end
+
+nvim_lsp.tsserver.setup({
+    on_attach=on_attach,
+})
+nvim_lsp.vimls.setup({
+    on_attach=on_attach,
+})
+nvim_lsp.rls.setup({
+    on_attach=on_attach,
+})
+nvim_lsp.elixirls.setup({
+    on_attach=on_attach,
+})
+EOF
+" }}}
+" {{{ Functions
+function! LspStatus() abort
+    if luaeval('#vim.lsp.buf_get_clients() > 0')
+        return luaeval("require('lsp-status').status()")
+    endif
+
+    return ''
+endfunction
+" }}}
+" {{{ Auto commands
+augroup Lsp
+    autocmd!
+
+    autocmd CursorHold * lua vim.lsp.util.show_line_diagnostics()
 augroup END
 " }}}
+" }}}
+endif
 " {{{ fzf.vim
 let g:fzf_buffers_jump = 1
 let g:fzf_preview_window = 'right:60%'
@@ -576,91 +677,89 @@ let g:rainbow_conf = {
             \ }
             \ }
 " }}}
-
+" {{{lua
 lua <<EOF
-require'aniseed.dotfiles'
--- require'nvim_lsp'.tsserver.setup{}
--- require'nvim_lsp'.vimls.setup{}
--- require'nvim_lsp'.rls.setup{}
--- require'nvim-treesitter.configs'.setup {
---     ensure_installed = "all",
---     highlight = {
---         enable = true,
---     },
---     incremental_selection = {
---         enable = true,
---         keymaps = {
---             init_selection = "gnn",
---             node_incremental = "grn",
---             scope_incremental = "grc",
---             node_decremental = "grm",
---         }
---     },
---     refactor = {
---         highlight_definitions = { enable = true },
---         highlight_current_scope = { enable = false },
---         smart_rename = {
---             enable = true,
---             keymaps = {
---                 smart_rename = "grr",
---             }
---         },
---         navigation = {
---             enable = true,
---             keymaps = {
---                 goto_definition = "gnd",
---                 list_definitions = "gnD",
---                 goto_next_usage = "<a-*>",
---                 goto_previous_usage = "<a-#>",
---             }
---         }
---     },
---     textobjects = {
---         select = {
---             enable = true,
---             keymaps = {
---                 ["af"] = "@fuction.outer",
---                 ["if"] = "@fuction.inner",
---                 ["ac"] = "@class.outer",
---                 ["ic"] = "@class.inner",
---
---                 ["IF"] = {
---                     python = "(function_definition) @function",
---                     cpp = "(function_definition) @function",
---                     c = "(function_definition) @function",
---                     java = "(method_declaration) @function",
---                 }
---             }
---         },
---         swap = {
---             enable = true,
---             swap_next = {
---                 ["<leader>a"] = "@parameter.inner",
---             },
---             swap_previous = {
---                 ["<leader>A"] = "@parameter.inner",
---             },
---         },
---         move = {
---             enable = true,
---             goto_next_start = {
---                 ["]m"] = "@function.outer",
---                 ["]]"] = "@class.outer",
---             },
---             goto_next_end = {
---                 ["]M"] = "@function.outer",
---                 ["]["] = "@class.outer",
---             },
---             goto_previous_start = {
---                 ["[m"] = "@function.outer",
---                 ["[["] = "@class.outer",
---             },
---             goto_previous_end = {
---                 ["[M"] = "@function.outer",
---                 ["[]"] = "@class.outer",
---             },
---         },
---     }
--- }
+-- require'aniseed.dotfiles'
+require'nvim-treesitter.configs'.setup {
+    ensure_installed = "all",
+    highlight = {
+        enable = true,
+    },
+    incremental_selection = {
+        enable = true,
+        keymaps = {
+            init_selection = "gnn",
+            node_incremental = "grn",
+            scope_incremental = "grc",
+            node_decremental = "grm",
+        }
+    },
+    refactor = {
+        highlight_definitions = { enable = true },
+        highlight_current_scope = { enable = false },
+        smart_rename = {
+            enable = true,
+            keymaps = {
+                smart_rename = "grr",
+            }
+        },
+        navigation = {
+            enable = true,
+            keymaps = {
+                goto_definition = "gnd",
+                list_definitions = "gnD",
+                goto_next_usage = "<a-*>",
+                goto_previous_usage = "<a-#>",
+            }
+        }
+    },
+    textobjects = {
+        select = {
+            enable = true,
+            keymaps = {
+                ["af"] = "@fuction.outer",
+                ["if"] = "@fuction.inner",
+                ["ac"] = "@class.outer",
+                ["ic"] = "@class.inner",
+
+                ["IF"] = {
+                    python = "(function_definition) @function",
+                    cpp = "(function_definition) @function",
+                    c = "(function_definition) @function",
+                    java = "(method_declaration) @function",
+                }
+            }
+        },
+        swap = {
+            enable = true,
+            swap_next = {
+                ["<leader>a"] = "@parameter.inner",
+            },
+            swap_previous = {
+                ["<leader>A"] = "@parameter.inner",
+            },
+        },
+        move = {
+            enable = true,
+            goto_next_start = {
+                ["]m"] = "@function.outer",
+                ["]]"] = "@class.outer",
+            },
+            goto_next_end = {
+                ["]M"] = "@function.outer",
+                ["]["] = "@class.outer",
+            },
+            goto_previous_start = {
+                ["[m"] = "@function.outer",
+                ["[["] = "@class.outer",
+            },
+            goto_previous_end = {
+                ["[M"] = "@function.outer",
+                ["[]"] = "@class.outer",
+            },
+        },
+    }
+}
 EOF
+" }}}
 " vim: fdm=marker fdl=0

@@ -8,45 +8,45 @@ endif
 
 call plug#begin(plugspath)
 
-" Plug 'nvim-treesitter/nvim-treesitter'
-Plug 'neovim/nvim-lsp'
+Plug 'nvim-treesitter/nvim-treesitter'
+Plug 'nvim-treesitter/completion-treesitter'
+if g:coc
+  Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
+else
+  Plug 'neovim/nvim-lspconfig'
+  " Plug 'nvim-lua/lsp-status.nvim'
+  Plug 'nvim-lua/completion-nvim'
+  Plug 'nvim-lua/diagnostic-nvim'
+endif
 
 " Plug '~/Projects/vim-zettel-noam', { 'for': 'vimwiki' }
 "
 Plug 'voldikss/vim-floaterm'
 Plug 'mbbill/undotree'
-Plug 'neoclide/coc.nvim', { 'branch': 'release' }
+
+" Plenty lua scripts
+Plug 'nvim-lua/plenary.nvim'
+Plug 'tjdevries/express_line.nvim'
 
 " Themes
 " Plug 'chriskempson/base16-vim'
 Plug 'gruvbox-community/gruvbox'
-Plug 'arzg/vim-colors-xcode'
-Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
-
-Plug 'Olical/aniseed', { 'tag': 'v3.6.0' }
-Plug 'bakpakin/fennel.vim'
+Plug 'axvr/photon.vim'
 
 " Languages
 Plug 'sheerun/vim-polyglot'
 Plug 'slashmili/alchemist.vim', { 'for': 'elixir' }
-Plug 'othree/html5.vim', { 'for': 'html' }
+" Plug 'othree/html5.vim', { 'for': 'html' }
 Plug 'hashivim/vim-terraform', { 'for': 'terraform' }
+Plug 'bakpakin/fennel.vim', { 'for': 'fennel' }
 
 " Extensions
 Plug 'vimwiki/vimwiki'
 Plug 'editorconfig/editorconfig-vim'
-" Plug 'dhruvasagar/vim-zoom' " Zoom like tmux
-" Plug 'heavenshell/vim-jsdoc'
 
-Plug 'mhinz/vim-mix-format', { 'for': ['elixir'] }
-" Plug 'ryanoasis/vim-devicons'
+" Plug 'mhinz/vim-mix-format', { 'for': ['elixir'] }
 " Plug 'luochen1990/rainbow'
-Plug 'ehamberg/vim-cute-python', { 'for': 'py' }
-" Plug 'itchyny/lightline.vim'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
 
-" Plug 'gregsexton/MatchTag', { 'for': 'html' }
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'justinmk/vim-sneak'
@@ -55,10 +55,7 @@ Plug 'lotabout/skim.vim'
 Plug 'kshenoy/vim-signature' " Gerenciar marcações com o m
 Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
 Plug 'junegunn/limelight.vim'
-Plug 'mattn/emmet-vim', { 'for': 'html' } " Escrever HTML como seletores CSS
 Plug 'tpope/vim-fugitive'
 Plug 'lervag/vimtex', { 'for': 'tex' }
-
-Plug 'sakhnik/nvim-gdb', { 'do': ':!./install.sh' }
 
 call plug#end()
