@@ -1,5 +1,6 @@
 {
   "coc-actions.showActionKind": true,
+  "coc.preferences.snippets.enable": false,
   "coc.preferences.bracketEnterImprove": true,
   "coc.preferences.formatOnInsertLeave": false,
   "coc.preferences.formatOnSaveFiletypes": ["typescript"],
@@ -19,9 +20,9 @@
   "diagnostic.messageDelay": 0,
   "diagnostic.refreshOnInsertMode": true,
   "diagnostic.enableMessage": "always",
-  "diagnostic.virtualText": false,
+  "diagnostic.virtualText": true,
   "diagnostic.virtualTextCurrentLineOnly": false,
-  "diagnostic.virtualTextLines": 1,
+  "diagnostic.virtualTextLines": 3,
   "diagnostic.warningSign": "»",
   "eslint.autoFixOnSave": true,
   "eslint.quiet": true,
@@ -79,5 +80,6 @@
   "vetur.useWorkspaceDependencies": true,
   "vimlsp.indexes.count": 3,
   "vimlsp.indexes.gap": 10,
-  "vimlsp.suggest.fromVimruntime": true
+  "vimlsp.suggest.fromVimruntime": true,
+  "rust-analyzer.completion.postfix.enable": false
 }

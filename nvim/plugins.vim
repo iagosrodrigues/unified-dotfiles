@@ -10,11 +10,14 @@ call plug#begin(plugspath)
 
 Plug 'nvim-treesitter/nvim-treesitter'
 Plug 'nvim-treesitter/completion-treesitter'
+Plug 'nvim-treesitter/nvim-treesitter-refactor'
+Plug 'nvim-treesitter/nvim-treesitter-textobjects'
+Plug 'nvim-lua/lsp-status.nvim'
+
 if g:coc
   Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
 else
   Plug 'neovim/nvim-lspconfig'
-  " Plug 'nvim-lua/lsp-status.nvim'
   Plug 'nvim-lua/completion-nvim'
   Plug 'nvim-lua/diagnostic-nvim'
 endif
@@ -34,8 +37,8 @@ Plug 'gruvbox-community/gruvbox'
 Plug 'axvr/photon.vim'
 
 " Languages
-Plug 'sheerun/vim-polyglot'
-Plug 'slashmili/alchemist.vim', { 'for': 'elixir' }
+" Plug 'sheerun/vim-polyglot'
+" Plug 'slashmili/alchemist.vim', { 'for': 'elixir' }
 " Plug 'othree/html5.vim', { 'for': 'html' }
 Plug 'hashivim/vim-terraform', { 'for': 'terraform' }
 Plug 'bakpakin/fennel.vim', { 'for': 'fennel' }
@@ -57,5 +60,6 @@ Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
 Plug 'junegunn/limelight.vim'
 Plug 'tpope/vim-fugitive'
 Plug 'lervag/vimtex', { 'for': 'tex' }
+" Plug 'alvan/vim-closetag'
 
 call plug#end()
