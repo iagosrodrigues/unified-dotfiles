@@ -14,13 +14,13 @@ Plug 'nvim-treesitter/nvim-treesitter-refactor'
 Plug 'nvim-treesitter/nvim-treesitter-textobjects'
 Plug 'nvim-lua/lsp-status.nvim'
 
-if g:coc
+" if g:coc
   Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
-else
-  Plug 'neovim/nvim-lspconfig'
-  Plug 'nvim-lua/completion-nvim'
-  Plug 'nvim-lua/diagnostic-nvim'
-endif
+" else
+"   Plug 'neovim/nvim-lspconfig'
+"   Plug 'nvim-lua/completion-nvim'
+"   " Plug 'nvim-lua/diagnostic-nvim'
+" endif
 
 " Plug '~/Projects/vim-zettel-noam', { 'for': 'vimwiki' }
 "
@@ -60,6 +60,9 @@ Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
 Plug 'junegunn/limelight.vim'
 Plug 'tpope/vim-fugitive'
 Plug 'lervag/vimtex', { 'for': 'tex' }
+Plug 'justinmk/vim-dirvish'
+Plug 'takac/vim-hardtime'
+" Plug 'vim-airline/vim-airline'
 " Plug 'alvan/vim-closetag'
 
 call plug#end()

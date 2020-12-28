@@ -6,8 +6,11 @@ scriptencoding utf-8
 
 set signcolumn=yes
 
+set shell=/usr/local/bin/fish
+
 " let g:closetag_filenames = '*.html,*.xhtml,*.phtml'
 let g:closetag_filetypes = 'html,xhtml,phtml,javascriptreact,typescriptreact'
+let g:netrw_bufsettings='noma nomod nonu nobl nowrap ro rnu'
 " let g:closetag_xhtml_filenames = '*.xhtml,*.jsx,*.tsx'
 " let g:closetag_xhtml_filetypes = 'xhtml,jsx,typescriptreact'
 
@@ -63,6 +66,7 @@ let g:gruvbox_contrast_dark="medium"
 let g:gruvbox_italic=1
 let g:gruvbox_invert_selection='0'
 let g:xcodedark_match_paren_style = 1
+let g:airline_powerline_fonts = 1
 colorscheme gruvbox
 let g:airline_theme='gruvbox'
 " let g:airline_section_c = '%{LspStatus()}'
@@ -85,7 +89,7 @@ local generator = function(win_id)
     table.insert(el_segments, extensions.mode)
     table.insert(el_segments, coc_status)
     -- table.insert(el_segments, lsp_status)
-    -- table.insert(el_segments, '%f%m%r%=%#CursorColumn# %y %{&fileencoding?&fileencoding:&encoding} [%{&fileformat}] %p%% %l:%c')
+    table.insert(el_segments, '%f%m%r%=%#CursorColumn# %y %{&fileencoding?&fileencoding:&encoding} [%{&fileformat}] %p%% %l:%c')
 
     -- table.insert(el_segments, helper.async_buf_setter(
     --     win_id,
@@ -122,6 +126,7 @@ set nolist
 set updatetime=300
 set cursorline
 set lazyredraw
+set synmaxcol=128
 set nocompatible
 set completeopt=menuone,noinsert,noselect
 set diffopt+=context:4,vertical " TODO
@@ -169,9 +174,9 @@ set shiftround    " Arredonda os tabs para um múltiplo do shiftwidth
 set smarttab      " Tab respeita o 'shiftwidth'
 set expandtab     " Espaço em branco no lugar de tabs
 
-set tabstop=4     " Tamanho visível de um tab
-set shiftwidth=4  " Número de espaços usados na hora da indentação. Usado nos comandos cindent, >>, <<
-set softtabstop=4 " Edita como se os espaços em branco fossem tabs de tamanho de 4 caracteres
+set tabstop=2     " Tamanho visível de um tab
+set shiftwidth=2  " Número de espaços usados na hora da indentação. Usado nos comandos cindent, >>, <<
+set softtabstop=2 " Edita como se os espaços em branco fossem tabs de tamanho de 4 caracteres
 
 set breakindent   " Linhas quebradas continuam indentadas visualmente
 set copyindent    " Copia as linhas com indentação
@@ -298,7 +303,7 @@ endfunction
 nnoremap <F5> :FloatermToggle<CR>
 inoremap <F5> <Esc>:FloatermToggle<CR>
 tnoremap <F5> <C-\><C-n>:FloatermToggle<CR>
-tnoremap <Esc> <C-\><C-n>
+" tnoremap <Esc> <C-\><C-n>
 
 nnoremap <leader>u :UndotreeShow<CR>
 nnoremap <leader>h :diffget 1<CR>
@@ -334,7 +339,7 @@ command! -bang -nargs=* Rg
 " }}}
 
 " Plugins {{{1
-nnoremap <silent> <leader>k :Explore<CR>
+nnoremap <silent> <leader>k :Dirvish<CR>
 
 xmap ga <Plug>(EasyAlign)
 
@@ -630,13 +635,12 @@ local nvim_lsp = require'nvim_lsp'
 
 local on_attach = function(client)
     require'completion'.on_attach(client)
-    require'diagnostic'.on_attach(client)
 end
 
 local servers = {
     'tsserver',
     'vimls',
-    'rls',
+    'rust_analyzer',
     'elixirls',
     'clangd',
     'cmake',
@@ -674,7 +678,7 @@ let g:fzf_preview_window = ''
 
 nnoremap <C-p> :GFiles<cr>
 nnoremap <leader>pf :Files<cr>
-nnoremap <leader>b :Buffers<cr>
+nnoremap <leader>b :CocList buffers<cr>
 xnoremap <leader><tab> <plug>(fzf-maps-x)
 onoremap <leader><tab> <plug>(fzf-maps-o)
 inoremap <c-x><c-k> <plug>(fzf-complete-word)
