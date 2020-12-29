@@ -1,4 +1,3 @@
-lua <<EOF
 vim.cmd('syntax enable')
 vim.cmd('filetype plugin indent on')
 
@@ -212,6 +211,12 @@ for k, v in pairs(global) do
   vim.g[k] = v
 end
 
+function check_back_space()
+  local col = vim.fn.col('.') - 1
+
+  return not col or vim.regex('\\s'):match_str(vim.fn.getline('.'):sub(col, col))
+end
+
 vim.api.nvim_exec([[
 source ~/.config/nvim/plugins.vim
 
@@ -244,17 +249,12 @@ command! -nargs=0 Jest :call  CocAction('runCommand', 'jest.projectTest')
 
 command! -nargs=0 JestCurrent :call  CocAction('runCommand', 'jest.fileTest', ['%'])
 
-function! s:show_documentation()
+function! Show_documentation()
     if (index(['vim','help'], &filetype) >= 0)
         execute 'h '.expand('<cword>')
     else
         call CocAction('doHover')
     endif
-endfunction
-
-function! s:check_back_space() abort
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~ '\s'
 endfunction
 
 function! ElixirFormat() abort
@@ -378,7 +378,7 @@ maps = {
     {'<leader>wv', '<Plug>VimwikiVSplitLink', false, false},
 
     -- coc
-    {'K', ':call <SID>show_documentation()<CR>', false, true},
+    {'K', ':call Show_documentation()<CR>', false, true},
     {'<leader>te', ':call CocAction("runCommand", "jest.singleTest")<CR>', true, false},
 
     {'<c-s>', '<Plug>(coc-range-select)', false, true},
@@ -438,7 +438,7 @@ maps = {
 
     {'gs', '<Plug>(coc-git-chunkinfo)', false, false},
 
-    {'<tab>', 'pumvisible() ? "<C-n>" : <SID>check_back_space() ? "<tab>" : coc#refresh()', true, true, true},
+    {'<tab>', 'pumvisible() ? "<C-n>" : v:lua.check_back_space() ? "<tab>" : coc#refresh()', true, true, true},
     {'<s-tab>', 'pumvisible() ? "<C-p>" : "<c-h>"', true, true, true},
     {'<c-space>', 'coc#refresh()', true, true, true},
 
@@ -717,7 +717,3 @@ require'nvim-treesitter.configs'.setup {
         },
     }
 }
-EOF
-
-scriptencoding utf-8
-" vim: fdm=marker fdl=0
