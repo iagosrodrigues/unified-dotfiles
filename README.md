@@ -1,6 +1,8 @@
 # unified-dotfiles
 My unified dotfiles from Gentoo and macOS
 
+![nvim screenshot](screenshot.png "Neovim Screenshot")
+
 # Softwares used on macOS
 
 - Homebrew
