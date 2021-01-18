@@ -9,11 +9,15 @@ local maps = config.maps
 global.coc = true
 
 -- Some settings are not set in current window, reflecting only on new windows
-vim.wo.cursorline = true
+-- vim.wo.cursorline = true
 vim.wo.list = true
 vim.wo.number = true
 vim.wo.relativenumber = true
 vim.wo.wrap = false
+vim.bo.shiftwidth = 2
+vim.bo.softtabstop = 2
+vim.bo.tabstop = 2
+vim.bo.expandtab = true
 
 for key, value in pairs(config.options) do
   vim.o[key] = value
@@ -21,8 +25,9 @@ end
 
 function check_back_space()
   local col = vim.fn.col('.')
+  local char = vim.fn.getline('.'):sub(col - 1, col - 1)
 
-  return not col or (vim.regex('\\s'):match_str(vim.fn.getline('.'):sub(col, col)) ~= nil)
+  return (col - 1 == 0) or (vim.regex('\\s'):match_str(char) ~= nil)
 end
 
 function extend_config(config)
@@ -68,7 +73,7 @@ end
 vim.api.nvim_exec([[
 source ~/.config/nvim/plugins.vim
 
-colorscheme xcodedarkhc
+colorscheme gruvbox
 
 match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
 
@@ -144,8 +149,6 @@ endfunction
 vim.env.FZF_DEFAULT_COMMAND = 'fd'
 vim.env.SKIM_DEFAULT_COMMAND = 'fd'
 
-gold_numbers = false
-
 noamcore_bg_transparent = false
 noamcore_wayland = false
 
@@ -157,11 +160,6 @@ if vim.fn.executable('tmux') and vim.env.TMUX ~= '' then
   vim.g.tmux = 1
 else
   vim.g.tmux = 0
-end
-
-if gold_numbers then
-  vim.cmd('highlight LineNr guibg=none guifg=Gold')
-  vim.cmd('highlight CursorLineNr gui=bold guifg=LightGoldenrod')
 end
 
 if noamcore_bg_transparent then
