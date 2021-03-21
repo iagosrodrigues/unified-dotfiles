@@ -7,7 +7,7 @@ augroup END
 
 augroup highlight_yank
     autocmd!
-    autocmd TextYankPost * silent! lua require'vim.highlight'.on_yank("IncSearch", 50)
+    au TextYankPost * silent! lua vim.highlight.on_yank {higroup="IncSearch", timeout=50}
 augroup END
 
 augroup Config
@@ -40,7 +40,7 @@ augroup Config
     autocmd User GoyoEnter Limelight
     autocmd User GoyoLeave Limelight!
 
-    autocmd CursorMoved * lua vim.lsp.diagnostic.show_line_diagnostics()
+    " autocmd CursorHold * lua vim.lsp.diagnostic.show_line_diagnostics()
 augroup END
 
 augroup Term

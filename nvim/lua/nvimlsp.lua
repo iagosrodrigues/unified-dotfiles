@@ -1,9 +1,5 @@
 local global = {
     completion_matching_strategy_list = {'exact', 'substring', 'fuzzy'},
-    diagnostic_enable_virtual_text = 1,
-    diagnostic_virtual_text_prefix = ' ',
-    diagnostic_trimmed_virtual_text = '40',
-    diagnostic_insert_delay = 1,
     airline_section_c = "%<%<%{airline#extensions#fugitiveline#bufname()}%m %#__accent_red#%{airline#util#wrap(airline#parts#readonly(),0)}%#__restore__#%#__accent_bold#%{airline#util#wrap(v:lua.lsp_progress(),0)}%#__restore__#%#__accent_bold#%#__restore__#",
 }
 

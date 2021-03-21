@@ -9,7 +9,8 @@ local maps = config.maps
 global.coc = true
 
 -- Some settings are not set in current window, reflecting only on new windows
--- vim.wo.cursorline = true
+vim.wo.cursorline = false
+vim.o.cursorline = false
 vim.wo.list = true
 vim.wo.number = true
 vim.wo.relativenumber = true
@@ -73,7 +74,7 @@ end
 vim.api.nvim_exec([[
 source ~/.config/nvim/plugins.vim
 
-colorscheme gruvbox
+colorscheme gruvbox-material
 
 match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
 
@@ -115,11 +116,6 @@ function! ElixirFormat() abort
     e!
 endfunction
 
-function! Check_back_space() abort
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~ '\s'
-endfunction
-
 function! Cmp(first, second)
     return strlen(a:first) - strlen(a:second)
 endfunction
@@ -154,6 +150,8 @@ noamcore_wayland = false
 
 if vim.fn.has('mac') then
   vim.g.python3_host_prog = '/usr/local/bin/python3'
+else
+  vim.g.python3_host_prog = '/usr/bin/python3'
 end
 
 if vim.fn.executable('tmux') and vim.env.TMUX ~= '' then
@@ -162,33 +160,35 @@ else
   vim.g.tmux = 0
 end
 
-if noamcore_bg_transparent then
-  vim.cmd('highlight Normal guibg=none')
-  vim.cmd('highlight FoldColumn guibg=none')
-  vim.cmd('highlight SignColumn guibg=none')
-  vim.cmd('highlight EndOfBuffer guifg=bg guibg=none')
-  vim.cmd('highlight CursorLineNr guibg=none')
-  vim.cmd('highlight LineNr guibg=none')
+-- if noamcore_bg_transparent then
+--   print('true')
+--   vim.cmd('highlight Normal guibg=none')
+--   vim.cmd('highlight FoldColumn guibg=none')
+--   vim.cmd('highlight SignColumn guibg=none')
+--   vim.cmd('highlight EndOfBuffer guifg=bg guibg=none')
+--   vim.cmd('highlight CursorLineNr guibg=none')
+--   vim.cmd('highlight LineNr guibg=none')
 
-  vim.cmd('highlight SpecialKey ctermbg=none gui=none ctermfg=8 guifg=8')
-  vim.cmd('highlight NonText ctermbg=none gui=none ctermfg=8 guifg=8')
+--   vim.cmd('highlight SpecialKey ctermbg=none gui=none ctermfg=8 guifg=8')
+--   vim.cmd('highlight NonText ctermbg=none gui=none ctermfg=8 guifg=8')
 
-  vim.cmd('highlight ErrorSign guibg=#3c3836 guifg=#fb4934')
-  vim.cmd('highlight WarningSign guibg=#3c3836 guifg=#fabd2f')
-  vim.cmd('highlight InfoSign guibg=#3c3836 guifg=#8ec07c')
-  vim.cmd('highlight Search guifg=#282a2e')
-  vim.cmd('highlight DiffAdd guibg=none')
-  vim.cmd('highlight DiffChange guibg=none')
-  vim.cmd('highlight DiffDelete guibg=none')
-  vim.cmd('highlight DiffText guibg=none')
-  vim.cmd('highlight IncSearch guibg=none guifg=#282a2e')
-  vim.cmd('highlight Child guifg=#fb4934 guibg=none cterm=bold gui=bold')
-  vim.cmd('highlight Conceal ctermbg=NONE')
-  vim.cmd('highlight Folded guifg=#838991 guibg=none')
-end
+--   vim.cmd('highlight ErrorSign guibg=#3c3836 guifg=#fb4934')
+--   vim.cmd('highlight WarningSign guibg=#3c3836 guifg=#fabd2f')
+--   vim.cmd('highlight InfoSign guibg=#3c3836 guifg=#8ec07c')
+--   vim.cmd('highlight Search guifg=#282a2e')
+--   vim.cmd('highlight DiffAdd guibg=none')
+--   vim.cmd('highlight DiffChange guibg=none')
+--   vim.cmd('highlight DiffDelete guibg=none')
+--   vim.cmd('highlight DiffText guibg=none')
+--   vim.cmd('highlight IncSearch guibg=none guifg=#282a2e')
+--   vim.cmd('highlight Child guifg=#fb4934 guibg=none cterm=bold gui=bold')
+--   vim.cmd('highlight Conceal ctermbg=NONE')
+--   vim.cmd('highlight Folded guifg=#838991 guibg=none')
+-- end
 
 if not global.coc then
   require'lsp'
 end
 
+require'statusline'
 require'treesitter'

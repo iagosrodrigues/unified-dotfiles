@@ -12,7 +12,7 @@ local options = {
   completeopt = 'menuone,noinsert,noselect',
   conceallevel = 2,
   copyindent = true,
-  cursorline = true,
+  cursorline = false,
   diffopt = 'internal,filler,closeoff,context:4,vertical',
   equalalways = false,
   errorbells = false,
@@ -91,6 +91,9 @@ local global = {
   ['airline#extensions#fzf#enabled'] = 0,
   ['airline#extensions#nvimlsp#enabled'] = 1,
 
+  lightline = {colorscheme = 'horizon'},
+  -- vimspector_enable_mappings = 'HUMAN',
+
   vimsyn_embed = 'lp',
 
   loaded_perl_provider = 0,
@@ -166,10 +169,10 @@ local global = {
   netrw_sort_direction = 'normal',
   netrw_winsize = 25,
 
-  floaterm_width = vim.o.columns,
-  floaterm_height = vim.o.lines * 0.5,
-  floaterm_title = '',
-  floaterm_borderchars = {'', '', '', '', '', '', '', ''},
+  -- floaterm_width = vim.o.columns,
+  -- floaterm_height = vim.o.lines * 0.5,
+  -- floaterm_title = '',
+  -- floaterm_borderchars = {'', '', '', '', '', '', '', ''},
   floaterm_position = 'bottom',
 
   mix_format_on_save = 0,
@@ -224,8 +227,8 @@ local maps = {
     -- {'<leader>k', ':Dirvish<CR>', true, true},
     {'<leader>k', ':Explore<CR>', 3},
 
-    {'<C-p>', ':GFiles<cr>', 1},
-    {'<leader>pf', ':Files<cr>', 1},
+    {'<C-p>', ':Telescope git_files<cr>', 1},
+    {'<leader>pf', ':Telescope find_files<cr>', 1},
 
     {'<leader>ws', '<Plug>VimwikiSplitLink', 0},
     {'<leader>wv', '<Plug>VimwikiVSplitLink', 0},

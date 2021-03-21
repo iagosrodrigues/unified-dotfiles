@@ -1,4 +1,3 @@
-echo "PLUGINS"
 let plugspath = '~/.local/share/nvim/plugged'
 
 if empty(glob(plugspath))
@@ -9,6 +8,7 @@ endif
 
 call plug#begin(plugspath)
 
+Plug 'takac/vim-hardtime'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'nvim-treesitter/completion-treesitter'
 Plug 'nvim-treesitter/nvim-treesitter-refactor'
@@ -19,14 +19,15 @@ Plug 'nvim-lua/plenary.nvim'
 if g:coc
   Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
 else
-  Plug 'nvim-lua/lsp-status.nvim'
+  " Plug 'nvim-lua/lsp-status.nvim'
   Plug 'tjdevries/nlua.nvim'
   Plug 'neovim/nvim-lspconfig'
   Plug 'nvim-lua/completion-nvim'
 
   " Plenty lua scripts
-  Plug 'tjdevries/express_line.nvim'
+  " Plug 'tjdevries/express_line.nvim'
   Plug 'nvim-lua/lsp_extensions.nvim'
+  " Plug 'glepnir/galaxyline.nvim' , {'branch': 'main'}
 endif
 
 " Debugger
@@ -40,19 +41,20 @@ Plug 'mbbill/undotree'
 " Themes
 " Plug 'chriskempson/base16-vim'
 Plug 'gruvbox-community/gruvbox'
-Plug 'axvr/photon.vim'
-Plug 'colepeters/spacemacs-theme.vim'
+" Plug 'ntk148v/vim-horizon'
+" Plug 'axvr/photon.vim'
+" Plug 'colepeters/spacemacs-theme.vim'
 Plug 'sainnhe/gruvbox-material'
-Plug 'flazz/vim-colorschemes'
+" Plug 'flazz/vim-colorschemes'
 Plug 'chriskempson/base16-vim'
-Plug 'arzg/vim-colors-xcode'
-Plug 'arzg/vim-rust-syntax-ext'
-Plug 'dracula/vim', { 'as': 'dracula' }
+" Plug 'arzg/vim-colors-xcode'
+" Plug 'arzg/vim-rust-syntax-ext'
+" Plug 'dracula/vim', { 'as': 'dracula' }
 
 " Languages
 Plug 'rust-lang/rust.vim'
-" Plug 'sheerun/vim-polyglot'
-" Plug 'slashmili/alchemist.vim', { 'for': 'elixir' }
+Plug 'sheerun/vim-polyglot'
+Plug 'slashmili/alchemist.vim', { 'for': 'elixir' }
 " Plug 'othree/html5.vim', { 'for': 'html' }
 Plug 'hashivim/vim-terraform', { 'for': 'terraform' }
 Plug 'bakpakin/fennel.vim', { 'for': 'fennel' }
@@ -79,9 +81,12 @@ Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
 Plug 'junegunn/limelight.vim'
 Plug 'tpope/vim-fugitive'
 Plug 'lervag/vimtex', { 'for': 'tex' }
-" Plug 'justinmk/vim-dirvish'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
+" Plug 'itchyny/lightline.vim'
+Plug 'justinmk/vim-dirvish'
+Plug 'kyazdani42/nvim-web-devicons' " lua
+Plug 'ryanoasis/vim-devicons' " vimscript
+" Plug 'vim-airline/vim-airline'
+" Plug 'vim-airline/vim-airline-themes'
 " Plug 'alvan/vim-closetag'
 
 call plug#end()
