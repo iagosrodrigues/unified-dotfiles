@@ -73,10 +73,11 @@ for mode, mappings in pairs(maps) do
   end
 end
 
+-- iago sousa
 vim.api.nvim_exec([[
 source ~/.config/nvim/plugins.vim
 
-colorscheme edge
+colorscheme gruvbox-material
 
 match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
 
@@ -142,6 +143,10 @@ endfunction
 "   autocmd FileType dirvish nnoremap <silent><buffer> % :execute('e ' . expand('%') . input('Enter filename: '))<CR>
 "   autocmd FileType dirvish nnoremap <silent><buffer><nowait> d :call mkdir(expand('%') . input('Enter directory: '), 'p') <bar> :e<CR>
 " augroup END
+
+" vim-matchup
+highlight MatchWord cterm=italic gui=italic
+highlight MatchWordCur cterm=italic gui=italic
 ]], false)
 
 vim.env.FZF_DEFAULT_COMMAND = 'fd'
@@ -187,6 +192,7 @@ if noamcore_bg_transparent then
   vim.cmd('highlight Folded guifg=#838991 guibg=none')
 end
 
+-- Need to be here
 if not global.coc then
   require'lsp'
 end
