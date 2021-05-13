@@ -152,7 +152,7 @@ highlight MatchWordCur cterm=italic gui=italic
 vim.env.FZF_DEFAULT_COMMAND = 'fd'
 vim.env.SKIM_DEFAULT_COMMAND = 'fd'
 
-noamcore_bg_transparent = false
+noamcore_bg_transparent = vim.fn.has('unix') == 1 and true or false
 noamcore_wayland = false
 
 if vim.fn.has('mac') == 1 then
