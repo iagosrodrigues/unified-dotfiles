@@ -6,7 +6,7 @@ local config = require'config'
 local global = config.global
 local maps = config.maps
 
-global.coc = true
+global.coc = false
 
 -- Some settings are not set in current window, reflecting only on new windows
 vim.wo.cursorline = false
@@ -96,15 +96,6 @@ command! -nargs=0 MixTest execute "!mix test %:" . line(".")
 
 command! -nargs=0 GG :cd ~/Projects
 command! -bang -nargs=* Rg call fzf#vim#grep('rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1, <bang>0 ? fzf#vim#with_preview('up:60%') : fzf#vim#with_preview('right:50%:hidden', '?'), <bang>0)
-
-" command! -nargs=0 Prettier :CocCommand prettier.formatFile
-" command! -nargs=0 Format :call CocAction('format')
-" command! -nargs=? Fold :call CocAction('fold', <f-args>)
-" command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport')
-"
-" command! -nargs=0 Jest :call  CocAction('runCommand', 'jest.projectTest')
-"
-" command! -nargs=0 JestCurrent :call  CocAction('runCommand', 'jest.fileTest', ['%'])
 
 function! Show_documentation()
     if (index(['vim','help'], &filetype) >= 0)
