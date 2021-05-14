@@ -24,6 +24,7 @@ return require('packer').startup(function(use)
 
   -- Colorschemes
   use 'sainnhe/gruvbox-material'
+  use { 'tjdevries/gruvbuddy.nvim', requires = {{'tjdevries/colorbuddy.vim'}} }
 
   -- Programming languages
   use 'rust-lang/rust.vim'
@@ -42,6 +43,8 @@ return require('packer').startup(function(use)
   use 'nvim-lua/plenary.nvim'
   use 'nvim-telescope/telescope.nvim'
   use 'nvim-telescope/telescope-fzy-native.nvim'
+
+  use 'elixir-editors/vim-elixir'
 
   use 'tpope/vim-commentary'
   use 'tpope/vim-surround'

@@ -9,9 +9,9 @@ local maps = config.maps
 global.coc = false
 
 -- Some settings are not set in current window, reflecting only on new windows
-vim.wo.cursorline = false
-vim.o.cursorline = false
--- vim.wo.list = false
+vim.wo.cursorline = true
+vim.o.cursorline = true
+vim.wo.list = true
 vim.wo.number = true
 vim.wo.relativenumber = true
 vim.wo.wrap = false
@@ -75,11 +75,13 @@ end
 
 require'plugins'
 
+require'colorbuddy'.colorscheme('gruvbuddy')
+
 -- iago sousa
 vim.api.nvim_exec([[
 " source ~/.config/nvim/plugins.vim
 
-colorscheme gruvbox-material
+" colorscheme gruvbox-material
 
 match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
 

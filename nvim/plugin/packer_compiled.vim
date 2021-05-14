@@ -81,6 +81,10 @@ _G.packer_plugins = {
     needs_bufread = true,
     path = "/Users/iago/.local/share/nvim/site/pack/packer/opt/alchemist.vim"
   },
+  ["colorbuddy.vim"] = {
+    loaded = true,
+    path = "/Users/iago/.local/share/nvim/site/pack/packer/start/colorbuddy.vim"
+  },
   ["completion-treesitter"] = {
     loaded = true,
     path = "/Users/iago/.local/share/nvim/site/pack/packer/start/completion-treesitter"
@@ -103,6 +107,10 @@ _G.packer_plugins = {
   ["gruvbox-material"] = {
     loaded = true,
     path = "/Users/iago/.local/share/nvim/site/pack/packer/start/gruvbox-material"
+  },
+  ["gruvbuddy.nvim"] = {
+    loaded = true,
+    path = "/Users/iago/.local/share/nvim/site/pack/packer/start/gruvbuddy.nvim"
   },
   ["gv.vim"] = {
     loaded = true,
@@ -184,6 +192,10 @@ _G.packer_plugins = {
     loaded = true,
     path = "/Users/iago/.local/share/nvim/site/pack/packer/start/vim-dispatch"
   },
+  ["vim-elixir"] = {
+    loaded = true,
+    path = "/Users/iago/.local/share/nvim/site/pack/packer/start/vim-elixir"
+  },
   ["vim-floaterm"] = {
     loaded = true,
     path = "/Users/iago/.local/share/nvim/site/pack/packer/start/vim-floaterm"
@@ -247,10 +259,10 @@ vim.cmd [[augroup packer_load_aucmds]]
 vim.cmd [[au!]]
   -- Filetype lazy-loads
 time("Defining lazy-load filetype autocommands", true)
-vim.cmd [[au FileType tex ++once lua require("packer.load")({'vimtex'}, { ft = "tex" }, _G.packer_plugins)]]
-vim.cmd [[au FileType fennel ++once lua require("packer.load")({'fennel.vim'}, { ft = "fennel" }, _G.packer_plugins)]]
 vim.cmd [[au FileType elixir ++once lua require("packer.load")({'alchemist.vim'}, { ft = "elixir" }, _G.packer_plugins)]]
 vim.cmd [[au FileType terraform ++once lua require("packer.load")({'vim-terraform'}, { ft = "terraform" }, _G.packer_plugins)]]
+vim.cmd [[au FileType tex ++once lua require("packer.load")({'vimtex'}, { ft = "tex" }, _G.packer_plugins)]]
+vim.cmd [[au FileType fennel ++once lua require("packer.load")({'fennel.vim'}, { ft = "fennel" }, _G.packer_plugins)]]
 time("Defining lazy-load filetype autocommands", false)
 vim.cmd("augroup END")
 vim.cmd [[augroup filetypedetect]]
