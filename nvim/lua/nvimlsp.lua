@@ -1,8 +1,10 @@
 local global = {
-    completion_matching_strategy_list = {'exact', 'substring', 'fuzzy'},
+    completion_matching_strategy_list = {'exact', 'substring', 'fuzzy', 'all'},
     airline_section_c = "%<%<%{airline#extensions#fugitiveline#bufname()}%m %#__accent_red#%{airline#util#wrap(airline#parts#readonly(),0)}%#__restore__#%#__accent_bold#%{airline#util#wrap(v:lua.lsp_progress(),0)}%#__restore__#%#__accent_bold#%#__restore__#",
 }
 
+-- {lhs, rhs, options}
+-- options: noremap = 1, silent = 2, expr = 4, nowait = 8
 local maps = {
   n = {
     {'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', 3},
@@ -13,15 +15,21 @@ local maps = {
     {'g0', '<cmd>lua vim.lsp.buf.document_symbol()<CR>', 3},
     {'gW', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>', 3},
     {'<F2>', '<cmd>lua vim.lsp.buf.rename()<CR>', 3},
-    -- {'gd', '<cmd>lua vim.lsp.buf.declaration()<CR>', 3},
+    {'gd', '<cmd>lua vim.lsp.buf.declaration()<CR>', 3},
     {'g[', '<cmd>PrevDiagnosticCycle<CR>', 3},
     {'g]', '<cmd>NextDiagnosticCycle<CR>', 3},
     {'<leader>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', 3},
+    -- {'<leader>f', '<cmd>Neoformat<CR>', 3},
     {'<leader>sd', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', 3},
   },
   i = {
-    {'<tab>', 'pumvisible() ? "<C-n>" : "<tab>"', 7},
-    {'<S-tab>', 'pumvisible() ? "<C-p>" : "<S-tab>"', 7},
+    {'<c-space>', 'compe#complete()', 7},
+    {'<cr>', 'compe#confirm("<cr>")', 7},
+    {'<c-e>', 'compe#close("<c-e>")', 7},
+    {'<c-f>', 'compe#scroll({"delta":+4})', 7},
+    {'<c-d>', 'compe#scroll({"delta":-4})', 7},
+    {'<tab>', 'pumvisible() ? "<C-n>" : "<tab>"', 5},
+    {'<S-tab>', 'pumvisible() ? "<C-p>" : "<S-tab>"', 5},
   }
 }
 

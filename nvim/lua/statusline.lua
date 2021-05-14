@@ -1,5 +1,28 @@
 local fn, lsp, api = vim.fn, vim.lsp, vim.api
 
+function tabline()
+  tabs = vim.api.nvim_list_tabpages()
+  nerdfont = vim.fn["nerdfont#find"]
+  str = ''
+  for i, v in pairs(tabs) do
+    if i+1 == vim.api.nvim_tabpage_get_number(0) then
+      str = str .. '%#TabLineSel#'
+    else
+      str = str .. '%#TabLine#'
+    end
+    str = str .. '%' .. i+1 .. 'T ' .. nerdfont() .. ' %{v:lua.tabname(' .. i+1 .. ')} '
+  end
+  str = str .. '%#TabLineFill#%T %=%#TabLine#%999XX'
+  return string.format('%s', str)
+end
+
+function tabname(n)
+  winnr = vim.api.nvim_win_get_number(n)
+  return vim.api.nvim_buf_get_name(vim.api.nvim_list_bufs()[n-1]):match("^.+/(.+)$") or '[New file]'
+end
+
+-- vim.o.tabline = string.format('%s', '%!v:lua.tabline()')
+
 local modes_text = {
   R = 'REPLACE',
   Rv = 'VIRTUAL',
@@ -88,7 +111,7 @@ function status_line()
       count = handler(type)
 
       if count and count > 0 then
-        line = line .. '' .. colors[index] .. ' ' .. icons[index] .. ' ' .. count -- .. '%#LineNr#'
+        line = line .. '' .. colors[index] .. ' ' .. icons[index] .. ' ' .. count .. '%#LineNr#'
       end
     end
     return line

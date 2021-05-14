@@ -4,6 +4,7 @@ local options = {
   background = "dark",
   backspace = 'indent,eol,start',
   backup = false,
+  belloff = 'all',
   breakindent = true,
   bufhidden = unload,
   clipboard = "unnamedplus",
@@ -19,6 +20,7 @@ local options = {
   expandtab = true,
   fileencoding = 'utf-8',
   fileformat = unix,
+  formatoptions = 'cqrnj',
   fillchars = 'vert:|',
   foldclose = all,
   foldcolumn = '1',
@@ -40,7 +42,7 @@ local options = {
   laststatus = 2,
   lazyredraw = true,
   linebreak = true,
-  list = true,
+  list = false,
   listchars = 'tab:→ ,eol:¬,trail:·,extends:❯,precedes:❮,nbsp:␣',
   magic = true,
   matchtime = 0,
@@ -52,7 +54,7 @@ local options = {
   report = 0,
   scrolloff = 3,
   shada = "",
-  shell = vim.fn.has('mac') == 1 and '/usr/local/bin/fish' or '/usr/bin/fish',
+  shell = '/usr/local/bin/fish',
   shiftround = true,
   shiftwidth = 2,
   shortmess = 'filnxtToOFc',
@@ -76,7 +78,7 @@ local options = {
   timeoutlen = 200,
   title = true,
   ttimeoutlen = 50,
-  undodir = vim.fn.expand('~/.config/nvim/undodir'),
+  undodir = "/Users/iago/.config/nvim/undodir",
   undofile = true,
   updatetime = 300,
   wildignore = '*\\tmp\\*,*.swp,*.zip,*.exe,*.tmp,.DS_Store',
@@ -91,7 +93,22 @@ local global = {
   ['airline#extensions#fzf#enabled'] = 0,
   ['airline#extensions#nvimlsp#enabled'] = 1,
 
-  lightline = {colorscheme = 'horizon'},
+  cursorhold_updatetime = 1000,
+
+  matchup_matchparen_offscreen = {
+    method = 'popup',
+  },
+
+  lightline = {
+    colorscheme = 'edge',
+    enable = {
+      statusline = 1,
+      tabline = 1,
+    },
+    tabline = {
+      left = {{'tabs'}},
+    },
+  },
   -- vimspector_enable_mappings = 'HUMAN',
 
   vimsyn_embed = 'lp',
@@ -100,9 +117,11 @@ local global = {
   loaded_ruby_provider = 0,
   loaded_python_provider = 0,
 
-  gruvbox_italic = 1,
-  gruvbox_invert_selection = '0',
-  gruvbox_contrast_dark = "medium",
+  gruvbox_material_enable_italic = 1,
+  gruvbox_material_background = 'soft',
+  gruvbox_material_sign_column_background = 'default',
+  gruvbox_material_diagnostic_virtual_text = 'colored',
+  gruvbox_material_better_performance = 1,
 
   fzf_buffers_jump = 1,
   fzf_preview_window = '',
@@ -148,6 +167,22 @@ local global = {
   terraform_align = 1,
   terraform_fmt_on_save = 1,
 
+  symbols_outline = {
+    highlight_hovered_item = true,
+    show_guides = true,
+    auto_preview = false,
+    position = 'right',
+    keymaps = {
+      close = "<Esc>",
+      goto_location = "<cr>",
+      focus_location = "o",
+      hover_symbol = "<c-space>",
+      rename_symbol = "r",
+      code_actions = "a",
+    },
+    lsp_blacklist = {},
+  },
+
   tex_conceal="ags",
 
   ['prettier#exec_cmd_async'] = 1,
@@ -173,7 +208,7 @@ local global = {
   -- floaterm_height = vim.o.lines * 0.5,
   -- floaterm_title = '',
   -- floaterm_borderchars = {'', '', '', '', '', '', '', ''},
-  floaterm_position = 'bottom',
+  floaterm_position = 'center',
 
   mix_format_on_save = 0,
   mix_format_options = '--check-equivalent',
@@ -227,8 +262,8 @@ local maps = {
     -- {'<leader>k', ':Dirvish<CR>', true, true},
     {'<leader>k', ':Explore<CR>', 3},
 
-    {'<C-p>', ':Telescope git_files<cr>', 1},
-    {'<leader>pf', ':Telescope find_files<cr>', 1},
+    {'<C-p>', "<cmd>lua require('telescope.builtin').git_files({previewer = false})<CR>", 1},
+    {'<leader>pf', "<cmd>lua require('telescope.builtin').find_files({prompt_position = 'top'})<CR>", 1},
 
     {'<leader>ws', '<Plug>VimwikiSplitLink', 0},
     {'<leader>wv', '<Plug>VimwikiVSplitLink', 0},

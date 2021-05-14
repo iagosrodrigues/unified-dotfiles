@@ -13,6 +13,8 @@ augroup END
 augroup Config
     autocmd!
 
+    autocmd ColorScheme * :lua require('vim.lsp.diagnostic')._define_default_signs_and_highlights()
+
     if !g:coc
       " autocmd InsertLeave,BufEnter,BufWinEnter,TabEnter,BufWritePost *.rs :lua require'lsp_extensions'.inlay_hints{ prefix = ' » ', highlight = "NonText", enabled = {"ChainingHint", "TypeHint", "ParameterHint"} }
     endif
@@ -28,11 +30,6 @@ augroup Config
     autocmd FileType skim tnoremap <buffer> <esc> <c-g>
 
     " autocmd BufWritePost *.exs,*.ex silent! call ElixirFormat()
-
-    if !has('nvim-0.5') " Fix terminal bug glitch on every keypress
-        autocmd TermEnter * setlocal scrolloff=0
-        autocmd TermLeave * setlocal scrolloff=3
-    endif
 
     autocmd FocusLost * silent! wa
 

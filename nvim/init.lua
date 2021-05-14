@@ -73,9 +73,11 @@ for mode, mappings in pairs(maps) do
   end
 end
 
+require'plugins'
+
 -- iago sousa
 vim.api.nvim_exec([[
-source ~/.config/nvim/plugins.vim
+" source ~/.config/nvim/plugins.vim
 
 colorscheme gruvbox-material
 
