@@ -78,7 +78,7 @@ local options = {
   timeoutlen = 200,
   title = true,
   ttimeoutlen = 50,
-  undodir = "/Users/iago/.config/nvim/undodir",
+  undodir = vim.fn.expand("~/.config/nvim/undodir"),
   undofile = true,
   updatetime = 300,
   wildignore = '*\\tmp\\*,*.swp,*.zip,*.exe,*.tmp,.DS_Store',
@@ -99,17 +99,6 @@ local global = {
     method = 'popup',
   },
 
-  lightline = {
-    colorscheme = 'edge',
-    enable = {
-      statusline = 1,
-      tabline = 1,
-    },
-    tabline = {
-      left = {{'tabs'}},
-    },
-  },
-
   vimsyn_embed = 'lp',
 
   loaded_perl_provider = 0,
@@ -121,12 +110,6 @@ local global = {
   gruvbox_material_sign_column_background = 'default',
   gruvbox_material_diagnostic_virtual_text = 'colored',
   gruvbox_material_better_performance = 1,
-
-  airline_powerline_fonts = 1,
-  airline_theme='gruvbox',
-
-  xcodedarkhc_match_paren_style = 1,
-  xcodedarkhc_green_comments = 1,
 
   closetag_filetypes = 'html,xhtml,phtml,javascriptreact,typescriptreact',
   closetag_shortcut = '>',
@@ -193,10 +176,6 @@ local global = {
   netrw_sort_direction = 'normal',
   netrw_winsize = 25,
 
-  -- floaterm_width = vim.o.columns,
-  -- floaterm_height = vim.o.lines * 0.5,
-  -- floaterm_title = '',
-  -- floaterm_borderchars = {'', '', '', '', '', '', '', ''},
   floaterm_position = 'center',
 
   mix_format_on_save = 0,

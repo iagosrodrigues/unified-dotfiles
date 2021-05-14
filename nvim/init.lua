@@ -1,4 +1,4 @@
-vim.cmd('syntax enable')
+vim.cmd('syntax on')
 vim.cmd('filetype plugin indent on')
 
 local config = require'config'
@@ -74,15 +74,9 @@ for mode, mappings in pairs(maps) do
 end
 
 require'plugins'
+require'treesitter'
 
-require'colorbuddy'.colorscheme('gruvbuddy')
-
--- iago sousa
 vim.api.nvim_exec([[
-" source ~/.config/nvim/plugins.vim
-
-" colorscheme gruvbox-material
-
 match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
 
 highlight Comment cterm=italic gui=italic
@@ -123,15 +117,6 @@ function! SortByLineLength() range abort
     call setline(a:firstline, sort(content, "Cmp"))
 endfunction
 
-function! LightlineReload(colorscheme)
-    if a:colorscheme
-        let g:lightline.colorscheme = a:colorscheme
-    endif
-    call lightline#init()
-    call lightline#colorscheme()
-    call lightline#update()
-endfunction
-
 " augroup dirvish_config
 "   autocmd!
 "
@@ -147,8 +132,8 @@ highlight MatchWordCur cterm=italic gui=italic
 vim.env.FZF_DEFAULT_COMMAND = 'fd'
 vim.env.SKIM_DEFAULT_COMMAND = 'fd'
 
-noamcore_bg_transparent = vim.fn.has('unix') == 1 and true or false
-noamcore_wayland = false
+local noamcore_bg_transparent = vim.fn.has('mac') == 0 and true or false
+local noamcore_wayland = false
 
 if vim.fn.has('mac') == 1 then
   vim.g.python3_host_prog = '/usr/local/bin/python3'
@@ -192,5 +177,3 @@ if not global.coc then
   require'lsp'
 end
 
-require'statusline'
-require'treesitter'

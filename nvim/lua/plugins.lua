@@ -1,61 +1,151 @@
 vim.cmd [[packadd packer.nvim]]
 
-return require('packer').startup(function(use)
-  use 'wbthomason/packer.nvim'
+return require('packer').startup(
+  function(use)
+    -- Packer can manage itself as an optional plugin
+    use 'wbthomason/packer.nvim'
 
-  use 'takac/vim-hardtime'
-  use {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'}
-  use 'nvim-treesitter/playground'
-  use 'nvim-treesitter/completion-treesitter'
-  use 'nvim-treesitter/nvim-treesitter-refactor'
-  use 'nvim-treesitter/nvim-treesitter-textobjects'
+    -- Telescope
+    use {'nvim-telescope/telescope.nvim', requires = {
+        {'nvim-lua/plenary.nvim'},
+        {'nvim-lua/popup.nvim'}
+      }
+    }
+    use 'nvim-telescope/telescope-fzy-native.nvim'
 
-  -- LSP
-  use 'neovim/nvim-lspconfig'
-  use 'hrsh7th/nvim-compe'
-  use 'simrat39/symbols-outline.nvim'
+    -- Autocomplete
+    use 'hrsh7th/nvim-compe'
+    use 'hrsh7th/vim-vsnip'
 
-  -- Debugger
-  use 'puremourning/vimspector'
-  use 'szw/vim-maximizer'
+    use {
+      'lewis6991/gitsigns.nvim',
+      requires = {
+        'nvim-lua/plenary.nvim'
+      },
+      config = function()
+        require('gitsigns').setup()
+      end
+    }
+    use {
+      'windwp/nvim-autopairs',
+      config = function()
+        require('nvim-autopairs').setup()
+      end
+    }
+    use 'kevinhwang91/nvim-bqf'
 
-  use 'voldikss/vim-floaterm'
-  use 'mbbill/undotree'
+    -- Statusbar and tabline
+    -- use 'romgrk/barbar.nvim'
+    use {
+      'glepnir/galaxyline.nvim',
+      branch = 'main',
+      config = function()
+        require'statusbar'
+      end
+    }
 
-  -- Colorschemes
-  use 'sainnhe/gruvbox-material'
-  use { 'tjdevries/gruvbuddy.nvim', requires = {{'tjdevries/colorbuddy.vim'}} }
+    -- Treesitter
+    use {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'}
+    use 'nvim-treesitter/playground'
+    use 'nvim-treesitter/completion-treesitter'
+    use 'nvim-treesitter/nvim-treesitter-refactor'
+    use 'nvim-treesitter/nvim-treesitter-textobjects'
 
-  -- Programming languages
-  use 'rust-lang/rust.vim'
-  use {'slashmili/alchemist.vim', ft = {'elixir'} }
-  use {'hashivim/vim-terraform', ft = {'terraform'} }
-  use {'bakpakin/fennel.vim', ft = {'fennel'} }
+    -- LSP
+    use 'neovim/nvim-lspconfig'
+    use 'simrat39/symbols-outline.nvim'
+    use {'glepnir/lspsaga.nvim', config = function ()
+      require'lspsaga'.init_lsp_saga({
+        code_action_prompt = {
+          enable = false
+        }
+      })
 
-  use 'vimwiki/vimwiki'
-  use 'editorconfig/editorconfig-vim'
-  use 'tpope/vim-dispatch'
-  use 'junegunn/gv.vim'
-  use 'kyazdani42/nvim-web-devicons'
+      vim.api.nvim_set_keymap('n', '<leader>ca', "<cmd>lua require('lspsaga.codeaction').code_action()<CR>", {noremap = true, silent = true})
+      vim.api.nvim_set_keymap('v', '<leader>ca', ":<C-U>lua require('lspsaga.codeaction').range_code_action()<CR>", {noremap = true, silent = true})
+      vim.api.nvim_set_keymap('n', 'K', "<cmd>lua require('lspsaga.hover').render_hover_doc()<CR>", {noremap = true, silent = true})
+      vim.api.nvim_set_keymap('n', '<c-f>', "<cmd>lua require('lspsaga.action').smart_scroll_with_saga(1)<CR>", {noremap = true, silent = true})
+      vim.api.nvim_set_keymap('n', '<c-b>', "<cmd>lua require('lspsaga.action').smart_scroll_with_saga(-1)<CR>", {noremap = true, silent = true})
+      vim.api.nvim_set_keymap('n', 'gs', "<cmd>lua require('lspsaga.signaturehelp').signature_help()<CR>", {noremap = true, silent = true})
+      vim.api.nvim_set_keymap('n', '<F2>', "<cmd>lua require('lspsaga.rename').rename()<CR>", {noremap = true, silent = true})
+      vim.api.nvim_set_keymap('n', 'gd', "<cmd>lua require('lspsaga.provider').preview_definition()<CR>", {noremap = true, silent = true})
+      vim.api.nvim_set_keymap('n', '<leader>cd', "<cmd>lua require('lspsaga.diagnostic').show_line_diagnostics()<CR>", {noremap = true, silent = true})
+      vim.api.nvim_set_keymap('n', '[e', "<cmd>lua require('lspsaga.diagnostic').lsp_jump_diagnostic_prev()<CR>", {noremap = true, silent = true})
+      vim.api.nvim_set_keymap('n', ']e', "<cmd>lua require('lspsaga.diagnostic').lsp_jump_diagnostic_next()<CR>", {noremap = true, silent = true})
+      vim.api.nvim_set_keymap('n', '<A-d>', "<cmd>lua require('lspsaga.floaterm').open_float_terminal()<CR>", {noremap = true, silent = true})
+      vim.api.nvim_set_keymap('t', '<A-d>', "<c-\\><c-n>:lua require('lspsaga.floaterm').close_float_terminal()<CR>", {noremap = true, silent = true})
+    end}
 
-  -- Telescope
-  use 'nvim-lua/popup.nvim'
-  use 'nvim-lua/plenary.nvim'
-  use 'nvim-telescope/telescope.nvim'
-  use 'nvim-telescope/telescope-fzy-native.nvim'
+    use 'takac/vim-hardtime'
 
-  use 'elixir-editors/vim-elixir'
+    -- Debugger
+    use 'puremourning/vimspector'
+    use 'szw/vim-maximizer'
 
-  use 'tpope/vim-commentary'
-  use 'tpope/vim-surround'
-  use 'justinmk/vim-sneak'
-  use 'kshenoy/vim-signature'
-  use {'junegunn/goyo.vim', cmd = 'Goyo' }
-  use 'junegunn/limelight.vim'
-  use 'tpope/vim-fugitive'
-  use {'lervag/vimtex', ft = {'tex'} }
-  use 'lambdalisue/nerdfont.vim'
+    use 'voldikss/vim-floaterm'
+    use 'mbbill/undotree'
 
-  use 'andymass/vim-matchup'
-  use 'antoinemadec/FixCursorHold.nvim'
-end)
+    -- Colorschemes
+    -- use 'sainnhe/gruvbox-material'
+    -- use { 'tjdevries/gruvbuddy.nvim', requires = {{'tjdevries/colorbuddy.vim'}} }
+    -- use {'christianchiarulli/nvcode-color-schemes.vim'}
+    use {'glepnir/zephyr-nvim', config = function ()
+      vim.cmd[[colorscheme zephyr]]
+    end}
+    -- use {'folke/tokyonight.nvim', opt = true, config = function ()
+    --   vim.cmd[[colorscheme tokyonight]]
+    -- end}
+    use 'folke/lsp-colors.nvim'
+    -- use {'glepnir/indent-guides.nvim', opt = true, config = function ()
+    --   require('indent_guides').setup()
+    -- end}
+    use 'windwp/nvim-ts-autotag'
+
+    use {
+      "blackCauldron7/surround.nvim",
+      config = function()
+        require "surround".setup {}
+      end
+    }
+
+    -- Programming languages
+    use 'rust-lang/rust.vim'
+    use {'slashmili/alchemist.vim', ft = {'elixir'} }
+    use {'hashivim/vim-terraform', ft = {'terraform'} }
+    use {'bakpakin/fennel.vim', ft = {'fennel'} }
+
+    use 'vimwiki/vimwiki'
+    use 'editorconfig/editorconfig-vim'
+    use 'tpope/vim-dispatch'
+    use 'junegunn/gv.vim'
+    use 'kyazdani42/nvim-web-devicons'
+
+    use 'elixir-editors/vim-elixir'
+
+    use 'tpope/vim-commentary'
+    use 'justinmk/vim-sneak'
+    use 'kshenoy/vim-signature'
+    use {'junegunn/goyo.vim', cmd = 'Goyo' }
+    use 'junegunn/limelight.vim'
+    use 'tpope/vim-fugitive'
+    use {'lervag/vimtex', ft = {'tex'} }
+    use 'lambdalisue/nerdfont.vim'
+
+    use 'andymass/vim-matchup'
+    use 'antoinemadec/FixCursorHold.nvim'
+
+    -- Firulas
+    use {'p00f/nvim-ts-rainbow', opt = true}
+
+    vim.cmd([[
+      packadd nvim-ts-rainbow
+    ]])
+
+    -- use {
+    --   'folke/todo-comments.nvim',
+    --   config = function()
+    --     require('todo-comments').setup {}
+    --   end
+    -- }
+  end
+)

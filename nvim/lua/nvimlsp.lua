@@ -1,3 +1,17 @@
+local npairs = require('nvim-autopairs')
+
+function _G.completion_confirm()
+  if vim.fn.pumvisible() ~= 0 then
+    if vim.fn.complete_info()['selected'] ~= -1 then
+      return vim.fn['compe#confirm'](npairs.esc('<cr>'))
+    else
+      return npairs.esc('<cr>')
+    end
+  else
+    return npairs.autopairs_cr()
+  end
+end
+
 local global = {
     completion_matching_strategy_list = {'exact', 'substring', 'fuzzy', 'all'},
     airline_section_c = "%<%<%{airline#extensions#fugitiveline#bufname()}%m %#__accent_red#%{airline#util#wrap(airline#parts#readonly(),0)}%#__restore__#%#__accent_bold#%{airline#util#wrap(v:lua.lsp_progress(),0)}%#__restore__#%#__accent_bold#%#__restore__#",
@@ -24,7 +38,7 @@ local maps = {
   },
   i = {
     {'<c-space>', 'compe#complete()', 7},
-    {'<cr>', 'compe#confirm("<cr>")', 7},
+    {'<cr>', 'v:lua.completion_confirm()', 7},
     {'<c-e>', 'compe#close("<c-e>")', 7},
     {'<c-f>', 'compe#scroll({"delta":+4})', 7},
     {'<c-d>', 'compe#scroll({"delta":-4})', 7},
