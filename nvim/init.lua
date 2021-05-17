@@ -1,3 +1,5 @@
+_O = {}
+
 vim.cmd('syntax on')
 vim.cmd('filetype plugin indent on')
 
@@ -176,4 +178,3 @@ end
 if not global.coc then
   require'lsp'
 end
-

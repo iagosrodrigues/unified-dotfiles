@@ -70,6 +70,9 @@ local servers_settings = {
       channel = "nightly"
     },
   },
+  elixirls = {
+    projectDir = ".",
+  },
   sumneko_lua = {
     Lua = {
       runtime = {

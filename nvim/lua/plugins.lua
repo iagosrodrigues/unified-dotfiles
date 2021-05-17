@@ -55,25 +55,26 @@ return require('packer').startup(
     use 'neovim/nvim-lspconfig'
     use 'simrat39/symbols-outline.nvim'
     use {'glepnir/lspsaga.nvim', config = function ()
+      local remap = vim.api.nvim_set_keymap
       require'lspsaga'.init_lsp_saga({
         code_action_prompt = {
           enable = false
         }
       })
 
-      vim.api.nvim_set_keymap('n', '<leader>ca', "<cmd>lua require('lspsaga.codeaction').code_action()<CR>", {noremap = true, silent = true})
-      vim.api.nvim_set_keymap('v', '<leader>ca', ":<C-U>lua require('lspsaga.codeaction').range_code_action()<CR>", {noremap = true, silent = true})
-      vim.api.nvim_set_keymap('n', 'K', "<cmd>lua require('lspsaga.hover').render_hover_doc()<CR>", {noremap = true, silent = true})
-      vim.api.nvim_set_keymap('n', '<c-f>', "<cmd>lua require('lspsaga.action').smart_scroll_with_saga(1)<CR>", {noremap = true, silent = true})
-      vim.api.nvim_set_keymap('n', '<c-b>', "<cmd>lua require('lspsaga.action').smart_scroll_with_saga(-1)<CR>", {noremap = true, silent = true})
-      vim.api.nvim_set_keymap('n', 'gs', "<cmd>lua require('lspsaga.signaturehelp').signature_help()<CR>", {noremap = true, silent = true})
-      vim.api.nvim_set_keymap('n', '<F2>', "<cmd>lua require('lspsaga.rename').rename()<CR>", {noremap = true, silent = true})
-      vim.api.nvim_set_keymap('n', 'gd', "<cmd>lua require('lspsaga.provider').preview_definition()<CR>", {noremap = true, silent = true})
-      vim.api.nvim_set_keymap('n', '<leader>cd', "<cmd>lua require('lspsaga.diagnostic').show_line_diagnostics()<CR>", {noremap = true, silent = true})
-      vim.api.nvim_set_keymap('n', '[e', "<cmd>lua require('lspsaga.diagnostic').lsp_jump_diagnostic_prev()<CR>", {noremap = true, silent = true})
-      vim.api.nvim_set_keymap('n', ']e', "<cmd>lua require('lspsaga.diagnostic').lsp_jump_diagnostic_next()<CR>", {noremap = true, silent = true})
-      vim.api.nvim_set_keymap('n', '<A-d>', "<cmd>lua require('lspsaga.floaterm').open_float_terminal()<CR>", {noremap = true, silent = true})
-      vim.api.nvim_set_keymap('t', '<A-d>', "<c-\\><c-n>:lua require('lspsaga.floaterm').close_float_terminal()<CR>", {noremap = true, silent = true})
+      remap('n', '<leader>ca', "<cmd>lua require('lspsaga.codeaction').code_action()<CR>", {noremap = true, silent = true})
+      remap('v', '<leader>ca', ":<C-U>lua require('lspsaga.codeaction').range_code_action()<CR>", {noremap = true, silent = true})
+      remap('n', 'K', "<cmd>lua require('lspsaga.hover').render_hover_doc()<CR>", {noremap = true, silent = true})
+      remap('n', '<c-f>', "<cmd>lua require('lspsaga.action').smart_scroll_with_saga(1)<CR>", {noremap = true, silent = true})
+      remap('n', '<c-b>', "<cmd>lua require('lspsaga.action').smart_scroll_with_saga(-1)<CR>", {noremap = true, silent = true})
+      remap('n', 'gs', "<cmd>lua require('lspsaga.signaturehelp').signature_help()<CR>", {noremap = true, silent = true})
+      remap('n', '<F2>', "<cmd>lua require('lspsaga.rename').rename()<CR>", {noremap = true, silent = true})
+      remap('n', 'gd', "<cmd>lua require('lspsaga.provider').preview_definition()<CR>", {noremap = true, silent = true})
+      remap('n', '<leader>cd', "<cmd>lua require('lspsaga.diagnostic').show_line_diagnostics()<CR>", {noremap = true, silent = true})
+      remap('n', '[e', "<cmd>lua require('lspsaga.diagnostic').lsp_jump_diagnostic_prev()<CR>", {noremap = true, silent = true})
+      remap('n', ']e', "<cmd>lua require('lspsaga.diagnostic').lsp_jump_diagnostic_next()<CR>", {noremap = true, silent = true})
+      remap('n', '<M-d>', "<cmd>lua require('lspsaga.floaterm').open_float_terminal()<CR>", {noremap = true, silent = true})
+      remap('t', '<M-d>', "<c-\\><c-n>:lua require('lspsaga.floaterm').close_float_terminal()<CR>", {noremap = true, silent = true})
     end}
 
     use 'takac/vim-hardtime'
@@ -109,18 +110,18 @@ return require('packer').startup(
     }
 
     -- Programming languages
-    use 'rust-lang/rust.vim'
-    use {'slashmili/alchemist.vim', ft = {'elixir'} }
+    use {'rust-lang/rust.vim', ft = {'rust'}}
+    -- use {'slashmili/alchemist.vim', ft = {'elixir'} }
     use {'hashivim/vim-terraform', ft = {'terraform'} }
     use {'bakpakin/fennel.vim', ft = {'fennel'} }
 
-    use 'vimwiki/vimwiki'
+    use {'vimwiki/vimwiki', ft = {'markdown'}}
     use 'editorconfig/editorconfig-vim'
     use 'tpope/vim-dispatch'
     use 'junegunn/gv.vim'
     use 'kyazdani42/nvim-web-devicons'
 
-    use 'elixir-editors/vim-elixir'
+    use {'elixir-editors/vim-elixir', ft = {'elixir'}}
 
     use 'tpope/vim-commentary'
     use 'justinmk/vim-sneak'
