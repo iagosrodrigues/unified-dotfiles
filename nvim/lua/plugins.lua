@@ -132,7 +132,12 @@ return require('packer').startup(
     use {'lervag/vimtex', ft = {'tex'} }
     use 'lambdalisue/nerdfont.vim'
 
-    use 'andymass/vim-matchup'
+    use {'andymass/vim-matchup', config = function()
+      vim.cmd[[
+        highlight MatchWord cterm=italic gui=italic
+        highlight MatchWordCur cterm=italic gui=italic
+      ]]
+    end}
     use 'antoinemadec/FixCursorHold.nvim'
 
     -- Firulas
@@ -141,12 +146,5 @@ return require('packer').startup(
     vim.cmd([[
       packadd nvim-ts-rainbow
     ]])
-
-    -- use {
-    --   'folke/todo-comments.nvim',
-    --   config = function()
-    --     require('todo-comments').setup {}
-    --   end
-    -- }
   end
 )

@@ -1,4 +1,4 @@
-local options = {
+set_opts {
   autoindent = true,
   autoread = true,
   background = "dark",
@@ -21,7 +21,9 @@ local options = {
   fileencoding = 'utf-8',
   fileformat = 'unix',
   formatoptions = 'cqrnj',
-  fillchars = 'vert:|',
+  fillchars = {
+    vert = '|'
+  },
   foldclose = 'all',
   foldcolumn = '1',
   foldenable = false,
@@ -43,7 +45,15 @@ local options = {
   lazyredraw = true,
   linebreak = true,
   list = true,
-  listchars = 'tab:→ ,eol:¬,trail:·,extends:❯,precedes:❮,nbsp:␣',
+  -- vim.opt
+  listchars = {
+    tab = '→ ',
+    eol = '¬',
+    trail = '·',
+    extends = '❯',
+    precedes = '❮',
+    nbsp = '␣',
+  },
   magic = true,
   matchtime = 0,
   mouse = 'a',
@@ -54,7 +64,7 @@ local options = {
   report = 0,
   scrolloff = 3,
   shada = "",
-  shell = '/usr/local/bin/fish',
+  shell = vim.fn.has('mac') == 1 and '/usr/local/bin/fish' or '/usr/bin/fish',
   shiftround = true,
   shiftwidth = 2,
   shortmess = 'filnxtToOFc',
@@ -89,105 +99,9 @@ local options = {
   writebackup = false,
 }
 
-local global = {
-  ['airline#extensions#fzf#enabled'] = 0,
-  ['airline#extensions#nvimlsp#enabled'] = 1,
-
-  cursorhold_updatetime = 1000,
-
-  matchup_matchparen_offscreen = {
-    method = 'popup',
-  },
-
-  vimsyn_embed = 'lp',
-
-  loaded_perl_provider = 0,
-  loaded_ruby_provider = 0,
-  loaded_python_provider = 0,
-
-  gruvbox_material_enable_italic = 1,
-  gruvbox_material_background = 'soft',
-  gruvbox_material_sign_column_background = 'default',
-  gruvbox_material_diagnostic_virtual_text = 'colored',
-  gruvbox_material_better_performance = 1,
-
-  closetag_filetypes = 'html,xhtml,phtml,javascriptreact,typescriptreact',
-  closetag_shortcut = '>',
-  closetag_close_shortcut = '<leader>>',
-  closetag_regions = {
-    ["typescript.tsx"] = 'jsxRegion,tsxRegion',
-    ["javascript.jsx"] = 'jsxRegion'
-  },
-
-  mapleader = ' ',
-
-  -- plugins
-  rainbow_conf = {
-    separately = {
-      vimwiki = 0,
-    },
-  },
-
-  rainbow_active = 1,
-
-  ['sneak#label'] = 1,
-
-  vimwiki_list = {
-    {path = '$HOME/.wiki', syntax = 'default', ext = '.md'},
-    {path = '$HOME/.cheat', syntax = 'default', ext = '.md'}
-  },
-
-  terraform_align = 1,
-  terraform_fmt_on_save = 1,
-
-  symbols_outline = {
-    highlight_hovered_item = true,
-    show_guides = true,
-    auto_preview = false,
-    position = 'right',
-    keymaps = {
-      close = "<Esc>",
-      goto_location = "<cr>",
-      focus_location = "o",
-      hover_symbol = "<c-space>",
-      rename_symbol = "r",
-      code_actions = "a",
-    },
-    lsp_blacklist = {},
-  },
-
-  tex_conceal="ags",
-
-  ['prettier#exec_cmd_async'] = 1,
-  ['prettier#quickfix_auto_focus'] = 0,
-
-  fzf_buffers_jump = 1,
-  fzf_preview_window = '',
-  fzf_layout = { window = '10split enew' },
-
-  netrw_cursor = 0,
-  netrw_bufsettings = 'noma nomod nonu nobl nowrap ro rnu',
-  netrw_banner = 0,
-  netrw_altv = 1,
-  netrw_altfile = 1,
-  netrw_liststyle = 0,
-  netrw_keepdir = 1,
-  netrw_sort_by = 'name',
-  netrw_sort_direction = 'normal',
-  netrw_winsize = 25,
-
-  floaterm_position = 'center',
-
-  mix_format_on_save = 0,
-  mix_format_options = '--check-equivalent',
-  mix_format_silent_errors = 1,
-
-  user_emmet_install_global = 0,
-}
-
 -- {lhs, rhs, options}
 -- options: noremap = 1, silent = 2, expr = 4, nowait = 8
-local maps = {
+set_mappings {
   [''] = {
     {'f', '<Plug>Sneak_f', 0},
     {'F', '<Plug>Sneak_F', 0},
@@ -259,7 +173,7 @@ local maps = {
     {'<', '<gv', 1},
     {'<leader>[', '<gv', 1},
     {'<leader>]', '>gv', 1},
-    {'<leader>su', ':call SortByLineLength()<CR>', 1},
+    {'<leader>su', '<cmd>lua SortByLength()<CR>', 1},
   },
 
   o = {
@@ -278,10 +192,4 @@ local maps = {
     {'<M-k>', '<C-\\><C-n><C-w>k', 1},
     {'<M-l>', '<C-\\><C-n><C-w>l', 1},
   },
-}
-
-return {
-  options = options,
-  global = global,
-  maps = maps,
 }

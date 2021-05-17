@@ -1,2 +1,3 @@
 **/undodir
 nvim/plugin/packer_compiled.vim
+nvim/pack/packer/opt

@@ -15,10 +15,6 @@ augroup Config
 
     autocmd ColorScheme * :lua require('vim.lsp.diagnostic')._define_default_signs_and_highlights()
 
-    if !g:coc
-      " autocmd InsertLeave,BufEnter,BufWinEnter,TabEnter,BufWritePost *.rs :lua require'lsp_extensions'.inlay_hints{ prefix = ' » ', highlight = "NonText", enabled = {"ChainingHint", "TypeHint", "ParameterHint"} }
-    endif
-
     autocmd BufWritePost init.vim,plugins.vim,ginit.vim,normal.vim ++nested source %
 
     " Disables automatic commenting on newline
