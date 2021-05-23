@@ -33,7 +33,7 @@ set_opts {
   foldmethod = 'expr',
   foldnestmax = 10,
   gdefault = true,
-  -- guicursor = '',
+  guicursor = 'a:blinkon100',
   hidden = true,
   history = 100,
   hlsearch = false,
