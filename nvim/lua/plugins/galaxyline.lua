@@ -70,6 +70,15 @@ gls.left[2] = {
 }
 
 gls.left[3] = {
+  FileName = {
+    provider = 'FileName',
+    separator = ' ',
+    separator_highlight = {'NONE', colors.bg},
+    highlight = {colors.grey, colors.bg}
+  }
+}
+
+gls.left[4] = {
     GitBranch = {
         provider = 'GitBranch',
         condition = condition.check_git_workspace,
@@ -79,7 +88,7 @@ gls.left[3] = {
     }
 }
 
-gls.left[4] = {
+gls.left[5] = {
     DiffAdd = {
         provider = 'DiffAdd',
         condition = condition.hide_in_width,
@@ -87,7 +96,7 @@ gls.left[4] = {
         highlight = {colors.green, colors.bg}
     }
 }
-gls.left[5] = {
+gls.left[6] = {
     DiffModified = {
         provider = 'DiffModified',
         condition = condition.hide_in_width,
@@ -95,7 +104,7 @@ gls.left[5] = {
         highlight = {colors.blue, colors.bg}
     }
 }
-gls.left[6] = {
+gls.left[7] = {
     DiffRemove = {
         provider = 'DiffRemove',
         condition = condition.hide_in_width,

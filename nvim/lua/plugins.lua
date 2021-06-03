@@ -1,20 +1,37 @@
-vim.cmd [[packadd packer.nvim]]
+require('plugins.explore')
+
+if not pcall(vim.cmd, 'packadd packer.nvim') then
+  local packer_path = vim.fn.stdpath('data') .. '/site/pack/packer/opt/packer.nvim'
+  vim.fn.system({'git', 'clone --depth 1', 'https://github.com/wbthomason/packer.nvim', packer_path})
+
+  vim.cmd('packadd packer.nvim')
+end
 
 return require('packer').startup(
-  function(use)
+  function()
     -- Packer can manage itself as an optional plugin
-    use 'wbthomason/packer.nvim'
+    use {'wbthomason/packer.nvim', opt = true}
 
     -- Telescope
-    use {'nvim-telescope/telescope.nvim', requires = {
-        {'nvim-lua/plenary.nvim'},
-        {'nvim-lua/popup.nvim'}
-      }
+    use {
+      'nvim-telescope/telescope.nvim',
+      requires = {
+        'nvim-lua/plenary.nvim',
+        'nvim-lua/popup.nvim'
+      },
+      config = function ()
+        require('plugins.telescope')
+      end
     }
     use 'nvim-telescope/telescope-fzy-native.nvim'
 
     -- Autocomplete
-    use 'hrsh7th/nvim-compe'
+    use {
+      'hrsh7th/nvim-compe',
+      config = function ()
+        require('plugins.compe')
+      end
+    }
     use 'hrsh7th/vim-vsnip'
 
     use {
@@ -40,63 +57,64 @@ return require('packer').startup(
       'glepnir/galaxyline.nvim',
       branch = 'main',
       config = function()
-        require'statusbar'
+        require('plugins.galaxyline')
       end
     }
 
     -- Treesitter
-    use {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'}
+    use {
+      'nvim-treesitter/nvim-treesitter',
+      run = ':TSUpdate',
+      config = function ()
+        require('plugins.treesitter')
+      end
+    }
     use 'nvim-treesitter/playground'
     use 'nvim-treesitter/completion-treesitter'
     use 'nvim-treesitter/nvim-treesitter-refactor'
     use 'nvim-treesitter/nvim-treesitter-textobjects'
 
     -- LSP
-    use 'neovim/nvim-lspconfig'
+    use {
+      'neovim/nvim-lspconfig',
+      config = function ()
+        require('plugins.nvim-lspconfig')
+      end
+    }
     use 'simrat39/symbols-outline.nvim'
     use {'glepnir/lspsaga.nvim', config = function ()
-      local remap = vim.api.nvim_set_keymap
       require'lspsaga'.init_lsp_saga({
         code_action_prompt = {
           enable = false
         }
       })
 
-      remap('n', '<leader>ca', "<cmd>lua require('lspsaga.codeaction').code_action()<CR>", {noremap = true, silent = true})
-      remap('v', '<leader>ca', ":<C-U>lua require('lspsaga.codeaction').range_code_action()<CR>", {noremap = true, silent = true})
-      remap('n', 'K', "<cmd>lua require('lspsaga.hover').render_hover_doc()<CR>", {noremap = true, silent = true})
-      remap('n', '<c-f>', "<cmd>lua require('lspsaga.action').smart_scroll_with_saga(1)<CR>", {noremap = true, silent = true})
-      remap('n', '<c-b>', "<cmd>lua require('lspsaga.action').smart_scroll_with_saga(-1)<CR>", {noremap = true, silent = true})
-      remap('n', 'gs', "<cmd>lua require('lspsaga.signaturehelp').signature_help()<CR>", {noremap = true, silent = true})
-      remap('n', '<F2>', "<cmd>lua require('lspsaga.rename').rename()<CR>", {noremap = true, silent = true})
-      remap('n', 'gd', "<cmd>lua require('lspsaga.provider').preview_definition()<CR>", {noremap = true, silent = true})
-      remap('n', '<leader>cd', "<cmd>lua require('lspsaga.diagnostic').show_line_diagnostics()<CR>", {noremap = true, silent = true})
-      remap('n', '[e', "<cmd>lua require('lspsaga.diagnostic').lsp_jump_diagnostic_prev()<CR>", {noremap = true, silent = true})
-      remap('n', ']e', "<cmd>lua require('lspsaga.diagnostic').lsp_jump_diagnostic_next()<CR>", {noremap = true, silent = true})
-      remap('n', '<M-d>', "<cmd>lua require('lspsaga.floaterm').open_float_terminal()<CR>", {noremap = true, silent = true})
-      remap('t', '<M-d>', "<c-\\><c-n>:lua require('lspsaga.floaterm').close_float_terminal()<CR>", {noremap = true, silent = true})
+      require('plugins.lspsaga')
     end}
-
-    use 'takac/vim-hardtime'
 
     -- Debugger
     use 'puremourning/vimspector'
     use 'szw/vim-maximizer'
 
-    use 'voldikss/vim-floaterm'
-    use 'mbbill/undotree'
+    use {
+      'mbbill/undotree',
+      config = function ()
+        require('plugins.undotree')
+      end
+    }
 
     -- Colorschemes
-    -- use 'sainnhe/gruvbox-material'
-    -- use { 'tjdevries/gruvbuddy.nvim', requires = {{'tjdevries/colorbuddy.vim'}} }
-    -- use {'christianchiarulli/nvcode-color-schemes.vim'}
-    use {'glepnir/zephyr-nvim', config = function ()
-      vim.cmd[[colorscheme zephyr]]
-    end}
-    -- use {'folke/tokyonight.nvim', opt = true, config = function ()
-    --   vim.cmd[[colorscheme tokyonight]]
+    -- use 'gruvbox-community/gruvbox'
+    -- use {'glepnir/zephyr-nvim', config = function ()
+    --   vim.cmd[[colorscheme zephyr]]
     -- end}
-    use 'folke/lsp-colors.nvim'
+    use {
+      'folke/tokyonight.nvim',
+      config = function ()
+        vim.cmd[[colorscheme tokyonight]]
+      end
+    }
+    -- use 'folke/lsp-colors.nvim'
     -- use {'glepnir/indent-guides.nvim', opt = true, config = function ()
     --   require('indent_guides').setup()
     -- end}
@@ -115,7 +133,13 @@ return require('packer').startup(
     use {'hashivim/vim-terraform', ft = {'terraform'} }
     use {'bakpakin/fennel.vim', ft = {'fennel'} }
 
-    use {'vimwiki/vimwiki', ft = {'markdown'}}
+    use {
+      'vimwiki/vimwiki',
+      ft = {'markdown'},
+      config = function ()
+        require('plugins.vimwiki')
+      end
+    }
     use 'editorconfig/editorconfig-vim'
     use 'tpope/vim-dispatch'
     use 'junegunn/gv.vim'
@@ -123,8 +147,46 @@ return require('packer').startup(
 
     use {'elixir-editors/vim-elixir', ft = {'elixir'}}
 
+    use {
+      'onsails/lspkind-nvim', config = function ()
+        require('lspkind').init({
+            with_text = true,
+
+            preset = 'default',
+
+            symbol_map = {
+              Text = '?',
+              Method = 'Ä',
+              Function = '?',
+              Constructor = '?',
+              Variable = '?',
+              Class = '?',
+              Interface = '?',
+              Module = '?',
+              Property = '?',
+              Unit = '?',
+              Value = '?',
+              Enum = '?',
+              Keyword = '?',
+              Snippet = '?',
+              Color = '?',
+              File = '?',
+              Folder = '?',
+              EnumMember = '?',
+              Constant = '?',
+              Struct = '?'
+            },
+        })
+      end
+    }
+
     use 'tpope/vim-commentary'
-    use 'justinmk/vim-sneak'
+    use {
+      'justinmk/vim-sneak',
+      config = function ()
+        require('plugins.vim-sneak')
+      end
+    }
     use 'kshenoy/vim-signature'
     use {'junegunn/goyo.vim', cmd = 'Goyo' }
     use 'junegunn/limelight.vim'
@@ -132,12 +194,19 @@ return require('packer').startup(
     use {'lervag/vimtex', ft = {'tex'} }
     use 'lambdalisue/nerdfont.vim'
 
-    use {'andymass/vim-matchup', config = function()
-      vim.cmd[[
-        highlight MatchWord cterm=italic gui=italic
-        highlight MatchWordCur cterm=italic gui=italic
-      ]]
-    end}
+    use {
+      'andymass/vim-matchup',
+      opt = true,
+      requires = {
+        'nvim-treesitter/nvim-treesitter'
+      },
+      config = function()
+        vim.cmd[[
+          highlight MatchWord cterm=italic gui=italic
+          highlight MatchWordCur cterm=italic gui=italic
+        ]]
+      end
+    }
     use 'antoinemadec/FixCursorHold.nvim'
 
     -- Firulas
@@ -145,6 +214,7 @@ return require('packer').startup(
 
     vim.cmd([[
       packadd nvim-ts-rainbow
+      packadd vim-matchup
     ]])
   end
 )

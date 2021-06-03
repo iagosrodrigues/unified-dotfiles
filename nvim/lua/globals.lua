@@ -1,7 +1,6 @@
-set_globals {
-  ['airline#extensions#fzf#enabled'] = 0,
-  ['airline#extensions#nvimlsp#enabled'] = 1,
+local utils = require('utils')
 
+utils.set_globals {
   cursorhold_updatetime = 1000,
 
   matchup_matchparen_offscreen = {
@@ -13,6 +12,8 @@ set_globals {
   loaded_perl_provider = 0,
   loaded_ruby_provider = 0,
   loaded_python_provider = 0,
+  python3_host_prog = vim.fn.has('mac') == 1
+    and '/usr/local/bin/python3' or '/usr/bin/python3',
 
   gruvbox_material_enable_italic = 1,
   gruvbox_material_background = 'soft',
