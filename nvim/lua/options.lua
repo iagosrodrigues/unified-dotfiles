@@ -15,7 +15,7 @@ utils.set_opts {
   completeopt = 'menuone,noinsert,noselect',
   conceallevel = 2,
   copyindent = true,
-  cursorline = false,
+  cursorline = true,
   diffopt = 'internal,filler,closeoff,context:4,vertical',
   equalalways = false,
   errorbells = false,

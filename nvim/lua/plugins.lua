@@ -104,20 +104,25 @@ return require('packer').startup(
     }
 
     -- Colorschemes
-    -- use 'gruvbox-community/gruvbox'
+    use {'dracula/vim', as = 'dracula'}
+    use {'gruvbox-community/gruvbox', opt = true}
     -- use {'glepnir/zephyr-nvim', config = function ()
     --   vim.cmd[[colorscheme zephyr]]
     -- end}
+    use {'sainnhe/gruvbox-material', opt = true}
     use {
       'folke/tokyonight.nvim',
-      config = function ()
-        vim.cmd[[colorscheme tokyonight]]
-      end
+      -- config = function ()
+      --   vim.cmd[[colorscheme tokyonight]]
+      -- end
     }
-    -- use 'folke/lsp-colors.nvim'
+    use 'folke/lsp-colors.nvim'
     -- use {'glepnir/indent-guides.nvim', opt = true, config = function ()
     --   require('indent_guides').setup()
     -- end}
+
+
+
     use 'windwp/nvim-ts-autotag'
 
     use {
@@ -156,7 +161,7 @@ return require('packer').startup(
 
             symbol_map = {
               Text = '?',
-              Method = 'Ä',
+              Method = 'Ã„',
               Function = '?',
               Constructor = '?',
               Variable = '?',
@@ -180,11 +185,11 @@ return require('packer').startup(
       end
     }
 
-    use 'tpope/vim-commentary'
+    use 'b3nj5m1n/kommentary'
     use {
-      'justinmk/vim-sneak',
+      'phaazon/hop.nvim',
       config = function ()
-        require('plugins.vim-sneak')
+        require('plugins.hop')
       end
     }
     use 'kshenoy/vim-signature'
@@ -211,10 +216,24 @@ return require('packer').startup(
 
     -- Firulas
     use {'p00f/nvim-ts-rainbow', opt = true}
+    use {'jacoborus/tender.vim', opt = true}
+    use {'sainnhe/sonokai', opt = true}
+    use {
+      'ThePrimeagen/harpoon',
+      requires = {
+        'nvim-lua/plenary.nvim',
+        'nvim-lua/popup.nvim'
+      },
+      config = function ()
+        require('harpoon')
+      end
+    }
 
     vim.cmd([[
       packadd nvim-ts-rainbow
       packadd vim-matchup
+
+      colorscheme dracula
     ]])
   end
 )

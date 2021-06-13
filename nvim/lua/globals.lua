@@ -15,11 +15,7 @@ utils.set_globals {
   python3_host_prog = vim.fn.has('mac') == 1
     and '/usr/local/bin/python3' or '/usr/bin/python3',
 
-  gruvbox_material_enable_italic = 1,
-  gruvbox_material_background = 'soft',
-  gruvbox_material_sign_column_background = 'default',
-  gruvbox_material_diagnostic_virtual_text = 'colored',
-  gruvbox_material_better_performance = 1,
+  dracula_italic = 1,
 
   mapleader = ' ',
 
@@ -31,8 +27,6 @@ utils.set_globals {
   },
 
   rainbow_active = 1,
-
-  ['sneak#label'] = 1,
 
   vimwiki_list = {
     {path = '$HOME/.wiki', syntax = 'default', ext = '.md'},
@@ -60,9 +54,6 @@ utils.set_globals {
 
   tex_conceal="ags",
 
-  ['prettier#exec_cmd_async'] = 1,
-  ['prettier#quickfix_auto_focus'] = 0,
-
   fzf_buffers_jump = 1,
   fzf_preview_window = '',
   fzf_layout = { window = '10split enew' },
@@ -78,11 +69,7 @@ utils.set_globals {
   netrw_sort_direction = 'normal',
   netrw_winsize = 25,
 
-  floaterm_position = 'center',
-
   mix_format_on_save = 0,
   mix_format_options = '--check-equivalent',
   mix_format_silent_errors = 1,
-
-  user_emmet_install_global = 0,
 }
