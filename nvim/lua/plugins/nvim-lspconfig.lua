@@ -52,10 +52,11 @@ end
 local servers = {
   'cmake',
   'vimls',
-  'texlab',
+  'gopls',
   'clangd',
-  'elixirls',
+  'texlab',
   'tsserver',
+  'elixirls',
   'rust_analyzer',
   'java_language_server',
 }
@@ -113,12 +114,19 @@ local servers_settings = {
       },
       rootDirectory = ".",
     }
+  },
+  gopls = {
+    analyses = {
+      unusedparams = true,
+    },
+    staticcheck = true,
   }
 }
 
 local commands = {
   elixirls = { '/usr/local/bin/elixir-ls/language_server.sh' },
-  java_language_server = { '/Users/iago/Projects/java/java-language-server/dist/lang_server_mac.sh' }
+  java_language_server = { '/Users/iago/Projects/java/java-language-server/dist/lang_server_mac.sh' },
+  gopls = {vim.fn.expand('~/go/bin/gopls'), 'serve'}
 }
 
 for _, server in pairs(servers) do

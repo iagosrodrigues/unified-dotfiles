@@ -106,9 +106,7 @@ return require('packer').startup(
     -- Colorschemes
     use {'dracula/vim', as = 'dracula'}
     use {'gruvbox-community/gruvbox', opt = true}
-    -- use {'glepnir/zephyr-nvim', config = function ()
-    --   vim.cmd[[colorscheme zephyr]]
-    -- end}
+    use {'glepnir/zephyr-nvim'}
     use {'sainnhe/gruvbox-material', opt = true}
     use {
       'folke/tokyonight.nvim',
@@ -233,7 +231,7 @@ return require('packer').startup(
       packadd nvim-ts-rainbow
       packadd vim-matchup
 
-      colorscheme dracula
+      colorscheme zephyr
     ]])
   end
 )
