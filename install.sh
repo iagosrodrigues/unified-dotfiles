@@ -5,29 +5,19 @@
 install_on_macos() {
   brew_softwares=(
     ansible
-    asciinema
-    autoconf
-    automake
-    awscli
     bandwhich
     bingrep
     cmake
-    deno
     dnscrypt-proxy
     dnsmasq
-    docker-compose
     dunst
     elixir
-    emacs
-    erlang
     exa
     exercism
     fd
-    ghc
     git
     git-lfs
     gnupg
-    haskell-stack
     htop
     httpie
     hyperfine
@@ -59,17 +49,19 @@ install_on_macos() {
   )
 
   echo "Installing Homebrew..."
-
   bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 
+  echo "Installing packages..."
   echo brew install "${brew_softwares[*]}"
+
+  echo "Installing cargo plugins..."
   echo cargo install "${cargo_softwares[*]}"
+}
+
+install_links() {
+  ln -sf $PWD/tmux/.tmux.conf $HOME
 }
 
 case "$OSTYPE" in
   darwin*) install_on_macos ;;
 esac
-
-# ZSH
-# git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k
-# git clone https://github.com/zdharma/fast-syntax-highlighting.git ~ZSH_CUSTOM/plugins/fast-syntax-highlighting
