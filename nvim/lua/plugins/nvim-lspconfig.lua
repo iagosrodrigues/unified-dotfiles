@@ -1,5 +1,53 @@
+local npairs = require('nvim-autopairs')
 local utils = require('../utils')
 local lsp = require('lspconfig')
+
+function completion_confirm()
+  if vim.fn.pumvisible() ~= 0 then
+    if vim.fn.complete_info()['selected'] ~= -1 then
+      return vim.fn['compe#confirm'](npairs.esc('<cr>'))
+    else
+      return npairs.esc('<cr>')
+    end
+  else
+    return npairs.autopairs_cr()
+  end
+end
+
+-- diagnostic
+local filetypes = {
+  typescript = "eslint",
+  typescriptreact = "eslint",
+}
+
+local linters = {
+  eslint = {
+    sourceName = "eslint",
+    command = "eslint_d",
+    rootPatterns = {".eslintrc.js", "package.json"},
+    debounce = 100,
+    args = {"-stdin", "stdin-filename", "%filepath", "--format", "json"},
+    parseJson = {
+      errorsRoot = "[0].messages",
+      line = "line",
+      column = "column",
+      endLine = "endLine",
+      endColumn = "endColumn",
+      message = "${message} [${ruleId}]",
+      security = "severity"
+    },
+    securities = {[2] = "error", [1] = "warning"}
+  }
+}
+
+local formatters = {
+  prettier = {command = "prettier", args = {"--stdin-filepath", "%filepath"}}
+}
+
+local formatFileTypes = {
+  typescript = "prettier",
+  typescriptreact = "prettier",
+}
 
 local noremap = {
   noremap = true,
@@ -53,8 +101,9 @@ local servers = {
   'cmake',
   'vimls',
   'gopls',
-  'clangd',
+  'jsonls',
   'texlab',
+  'clangd',
   'tsserver',
   'elixirls',
   'rust_analyzer',
@@ -120,13 +169,22 @@ local servers_settings = {
       unusedparams = true,
     },
     staticcheck = true,
+  },
+  diagnosticls = {
+    filetypes = vim.tbl_keys(filetypes),
+    init_options = {
+      filetypes = filetypes,
+      linters = linters,
+      formatters = formatters,
+      formatFileTypes = formatFileTypes
+    }
   }
 }
 
 local commands = {
   elixirls = { '/usr/local/bin/elixir-ls/language_server.sh' },
   java_language_server = { '/Users/iago/Projects/java/java-language-server/dist/lang_server_mac.sh' },
-  gopls = {vim.fn.expand('~/go/bin/gopls'), 'serve'}
+  gopls = {vim.fn.expand('~/go/bin/gopls'), 'serve'},
 }
 
 for _, server in pairs(servers) do

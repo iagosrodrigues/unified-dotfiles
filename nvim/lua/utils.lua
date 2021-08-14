@@ -1,5 +1,3 @@
-local npairs = require('nvim-autopairs')
-
 local set_attr = function (obj)
   local fn = function (table)
     for key, value in pairs(table) do
@@ -24,18 +22,6 @@ function check_back_space()
     return true
   else
     return false
-  end
-end
-
-function completion_confirm()
-  if vim.fn.pumvisible() ~= 0 then
-    if vim.fn.complete_info()['selected'] ~= -1 then
-      return vim.fn['compe#confirm'](npairs.esc('<cr>'))
-    else
-      return npairs.esc('<cr>')
-    end
-  else
-    return npairs.autopairs_cr()
   end
 end
 

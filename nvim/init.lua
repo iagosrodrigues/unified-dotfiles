@@ -1,4 +1,5 @@
 require('prelude')
+require('environment')
 require('globals')
 require('mapping')
 require('options')

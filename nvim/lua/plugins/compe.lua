@@ -1,5 +1,14 @@
 local utils = require('../utils')
 
+local noremap = {
+  noremap = true
+}
+
+local noremap_expr = {
+  noremap = true,
+  expr = true
+}
+
 require('compe').setup {
   enabled = true;
   autocomplete = true;

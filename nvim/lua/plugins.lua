@@ -132,6 +132,7 @@ return require('packer').startup(
 
     -- Programming languages
     use {'rust-lang/rust.vim', ft = {'rust'}}
+    use {'simrat39/rust-tools.nvim', ft = {'rust'}}
     -- use {'slashmili/alchemist.vim', ft = {'elixir'} }
     use {'hashivim/vim-terraform', ft = {'terraform'} }
     use {'bakpakin/fennel.vim', ft = {'fennel'} }
@@ -150,7 +151,7 @@ return require('packer').startup(
 
     use {'elixir-editors/vim-elixir', ft = {'elixir'}}
 
-    use {
+    --[[ use {
       'onsails/lspkind-nvim', config = function ()
         require('lspkind').init({
             with_text = true,
@@ -181,7 +182,7 @@ return require('packer').startup(
             },
         })
       end
-    }
+    } ]]
 
     use 'b3nj5m1n/kommentary'
     use {
@@ -224,12 +225,14 @@ return require('packer').startup(
       },
       config = function ()
         require('harpoon')
+        require('plugins.harpoon')
       end
     }
 
     vim.cmd([[
-      packadd nvim-ts-rainbow
+      " packadd nvim-ts-rainbow
       packadd vim-matchup
+      packadd sonokai
 
       colorscheme zephyr
     ]])
