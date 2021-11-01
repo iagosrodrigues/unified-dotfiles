@@ -65,7 +65,6 @@ utils.set_opts {
   report = 0,
   scrolloff = 3,
   shada = "",
-  shell = vim.fn.has('mac') == 1 and '/usr/local/bin/fish' or '/usr/bin/fish',
   shiftround = true,
   shiftwidth = 2,
   shortmess = 'filnxtToOFc',

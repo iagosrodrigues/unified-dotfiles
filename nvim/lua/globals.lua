@@ -13,7 +13,7 @@ utils.set_globals {
   loaded_ruby_provider = 0,
   loaded_python_provider = 0,
   python3_host_prog = vim.fn.has('mac') == 1
-    and '/usr/local/bin/python3' or '/usr/bin/python3',
+    and '/opt/homebrew/bin/python3' or '/usr/bin/python3',
 
   dracula_italic = 1,
 
@@ -24,6 +24,10 @@ utils.set_globals {
     separately = {
       vimwiki = 0,
     },
+  },
+
+  coq_settings = {
+    auto_start = 'shut-up'
   },
 
   rainbow_active = 1,

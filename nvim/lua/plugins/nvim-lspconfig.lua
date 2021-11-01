@@ -64,6 +64,8 @@ capabilities.textDocument.completion.completionItem.resolveSupport = {
   },
 }
 
+capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+
 local noremap_expr = vim.tbl_extend('force', noremap, {expr = true})
 
 utils.set_globals {
@@ -89,7 +91,6 @@ local on_attach = function (client, bufnr)
     vim.cmd[[
       augroup lsp_document_highlight
         autocmd! * <buffer>
-        autocmd CursorHold <buffer> Lspsaga show_cursor_diagnostics
         autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
         autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
       augroup END
@@ -98,14 +99,14 @@ local on_attach = function (client, bufnr)
 end
 
 local servers = {
-  'cmake',
   'vimls',
+  'cmake',
   'gopls',
-  'jsonls',
   'texlab',
+  'jsonls',
   'clangd',
-  'tsserver',
   'elixirls',
+  'tsserver',
   'rust_analyzer',
   'java_language_server',
 }
@@ -185,15 +186,22 @@ local commands = {
   elixirls = { '/usr/local/bin/elixir-ls/language_server.sh' },
   java_language_server = { '/Users/iago/Projects/java/java-language-server/dist/lang_server_mac.sh' },
   gopls = {vim.fn.expand('~/go/bin/gopls'), 'serve'},
+  jsonls = {
+    Format = {
+      function()
+        vim.lsp.buf.range_formatting({},{0,0},{vim.fn.line("$"),0})
+      end
+    }
+  },
 }
 
 for _, server in pairs(servers) do
-  lsp[server].setup {
+  lsp[server].setup({
     on_attach = on_attach,
     settings = servers_settings[server],
     capabilities = capabilities,
     cmd = commands[server],
-  }
+  })
 end
 
 utils.remap {
@@ -201,14 +209,12 @@ utils.remap {
     {'<F2>', '<cmd>lua vim.lsp.buf.rename()<CR>', noremap},
     {'<leader>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', noremap},
     {'<leader>sd', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', noremap},
-    {'K', '<cmd>lua vim.lsp.buf.hover()<CR>', noremap},
+    {'K', '<cmd>lua vim.lsp.buf.hover()<CR>', noremap}, -- already set on lspsaga
     {'[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', noremap},
     {']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', noremap},
     {'g0', '<cmd>lua vim.lsp.buf.document_symbol()<CR>', noremap},
     {'gW', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>', noremap},
     {'gd', '<cmd>lua vim.lsp.buf.declaration()<CR>', noremap},
-    {'gd', '<cmd>lua vim.lsp.buf.declaration()<CR>', noremap},
-    {'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', noremap},
     {'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', noremap},
     {'gr', '<cmd>lua vim.lsp.buf.references()<CR>', noremap},
     {'gs', '<cmd>lua vim.lsp.buf.signature_help()<CR>', noremap},

@@ -26,12 +26,15 @@ return require('packer').startup(
     use 'nvim-telescope/telescope-fzy-native.nvim'
 
     -- Autocomplete
+    use {'hrsh7th/cmp-nvim-lsp'}
+    use {'hrsh7th/cmp-buffer'}
     use {
-      'hrsh7th/nvim-compe',
-      config = function ()
-        require('plugins.compe')
+      'hrsh7th/nvim-cmp',
+      config = function()
+        require('plugins.nvim_cmp')
       end
     }
+
     use 'hrsh7th/vim-vsnip'
 
     use {
@@ -54,7 +57,7 @@ return require('packer').startup(
     -- Statusbar and tabline
     -- use 'romgrk/barbar.nvim'
     use {
-      'glepnir/galaxyline.nvim',
+      'NTBBloodbath/galaxyline.nvim',
       branch = 'main',
       config = function()
         require('plugins.galaxyline')
@@ -82,7 +85,7 @@ return require('packer').startup(
       end
     }
     use 'simrat39/symbols-outline.nvim'
-    use {'glepnir/lspsaga.nvim', config = function ()
+    use {'tami5/lspsaga.nvim', config = function ()
       require'lspsaga'.init_lsp_saga({
         code_action_prompt = {
           enable = false
@@ -90,7 +93,7 @@ return require('packer').startup(
       })
 
       require('plugins.lspsaga')
-    end}
+    end, disable = true}
 
     -- Debugger
     use 'puremourning/vimspector'
@@ -136,6 +139,7 @@ return require('packer').startup(
     -- use {'slashmili/alchemist.vim', ft = {'elixir'} }
     use {'hashivim/vim-terraform', ft = {'terraform'} }
     use {'bakpakin/fennel.vim', ft = {'fennel'} }
+    use {'github/copilot.vim', disable = true}
 
     use {
       'vimwiki/vimwiki',
@@ -214,7 +218,6 @@ return require('packer').startup(
     use 'antoinemadec/FixCursorHold.nvim'
 
     -- Firulas
-    use {'p00f/nvim-ts-rainbow', opt = true}
     use {'jacoborus/tender.vim', opt = true}
     use {'sainnhe/sonokai', opt = true}
     use {
@@ -232,9 +235,7 @@ return require('packer').startup(
     vim.cmd([[
       " packadd nvim-ts-rainbow
       packadd vim-matchup
-      packadd sonokai
-
-      colorscheme zephyr
+      colorscheme gruvbox
     ]])
   end
 )
