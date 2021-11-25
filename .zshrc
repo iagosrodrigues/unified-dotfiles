@@ -1,20 +1,25 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
+export GPG_TTY=$(tty)
 
 if type brew &>/dev/null; then
   FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
 fi
 
+alias backup_gpg="(umask 077 && tar -caf $HOME/gnupg-backup_`date +%Y%m%d_%H%M%S`.tar.xz -C $HOME .gnupg)"
+
+if [[ -d ~/.local/bin ]]; then
+  export PATH="$PATH:~/.local/bin"
+fi
+
 export HISTSIZE=10000
 export HISTFILE=~/.zsh_history
 
+export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+
 source ~/.aliases
 
-source /usr/local/share/zsh/site-functions/key-bindings.zsh
+export PATH="$PATH:/home/iago/.cargo/bin"
+
+# source /usr/local/share/zsh/site-functions/key-bindings.zsh
 
 function break_your_neck() {
     sudo sysctl -w kern.maxfiles=10485760
@@ -27,36 +32,8 @@ alias luamake=/Users/iago/Projects/lua-language-server/3rd/luamake/luamake
 
 gpgconf --launch gpg-agent
 
-### Added by Zinit's installer
-if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
-    print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}zdharma/zinit%F{220})…%f"
-    command mkdir -p "$HOME/.zinit" && command chmod g-rwX "$HOME/.zinit"
-    command git clone https://github.com/zdharma/zinit "$HOME/.zinit/bin" && \
-        print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
-        print -P "%F{160}▓▒░ The clone has failed.%f%b"
-fi
-
-source "$HOME/.zinit/bin/zinit.zsh"
-autoload -Uz _zinit
-(( ${+_comps} )) && _comps[zinit]=_zinit
-
-# Load a few important annexes, without Turbo
-# (this is currently required for annexes)
-zinit light-mode for \
-    zinit-zsh/z-a-rust \
-    zinit-zsh/z-a-as-monitor \
-    zinit-zsh/z-a-patch-dl \
-    zinit-zsh/z-a-bin-gem-node
-
-zinit ice depth="1"
-zinit light romkatv/powerlevel10k
-zinit light zsh-users/zsh-autosuggestions
-zinit light zdharma/fast-syntax-highlighting
-
-### End of Zinit's installer chunk
-
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+# [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # Enable selected completion to be highlighted
 zstyle ':completion:*:*:*:*:*' menu select
@@ -78,6 +55,30 @@ reload() {
   autoload -U _sconnect
 }
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
-[ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+# export NVM_DIR="$HOME/.nvm"
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+source ~/.zplug/init.zsh
+
+zplug "zsh-users/zsh-syntax-highlighting", defer:2
+
+zplug "stedolan/jq", \
+    from:gh-r, \
+    as:command, \
+    rename-to:jq
+zplug "b4b4r07/emoji-cli", \
+    on:"stedolan/jq"
+
+# zplug romkatv/powerlevel10k, as:theme, depth:1
+zplug "spaceship-prompt/spaceship-prompt", use:spaceship.zsh, from:github, as:theme
+zplug "lukechilds/zsh-nvm"
+
+if ! zplug check --verbose; then
+    printf "Install? [y/N]: "
+    if read -q; then
+        echo; zplug install
+    fi
+fi
+
+zplug load
