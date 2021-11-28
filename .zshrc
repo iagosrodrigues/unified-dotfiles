@@ -13,8 +13,6 @@ fi
 export HISTSIZE=10000
 export HISTFILE=~/.zsh_history
 
-export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
-
 source ~/.aliases
 
 export PATH="$PATH:/home/iago/.cargo/bin"
@@ -27,13 +25,6 @@ function break_your_neck() {
 }
 
 alias explode_ios=break_your_neck
-
-alias luamake=/Users/iago/Projects/lua-language-server/3rd/luamake/luamake
-
-gpgconf --launch gpg-agent
-
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-# [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # Enable selected completion to be highlighted
 zstyle ':completion:*:*:*:*:*' menu select
@@ -55,10 +46,6 @@ reload() {
   autoload -U _sconnect
 }
 
-# export NVM_DIR="$HOME/.nvm"
-# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
 source ~/.zplug/init.zsh
 
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
@@ -70,8 +57,6 @@ zplug "stedolan/jq", \
 zplug "b4b4r07/emoji-cli", \
     on:"stedolan/jq"
 
-# zplug romkatv/powerlevel10k, as:theme, depth:1
-zplug "spaceship-prompt/spaceship-prompt", use:spaceship.zsh, from:github, as:theme
 zplug "lukechilds/zsh-nvm"
 
 if ! zplug check --verbose; then
@@ -82,3 +67,7 @@ if ! zplug check --verbose; then
 fi
 
 zplug load
+
+eval "$(starship init zsh)"
+
+gpgconf --launch gpg-agent
