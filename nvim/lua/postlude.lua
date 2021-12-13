@@ -1,1 +1,3 @@
-vim.cmd[[highlight FoldColumn guibg=none ctermbg=none]]
+vim.cmd[[
+highlight FoldColumn guibg=none ctermbg=none
+]]

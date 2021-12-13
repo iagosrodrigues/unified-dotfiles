@@ -100,15 +100,16 @@ end
 
 local servers = {
   'vimls',
-  'cmake',
   'gopls',
-  'texlab',
-  'jsonls',
+  'cmake',
   'clangd',
+  'jsonls',
+  'texlab',
   'elixirls',
   'tsserver',
   'rust_analyzer',
   'java_language_server',
+  'kotlin_language_server',
 }
 
 local servers_settings = {

@@ -7,8 +7,10 @@ if not pcall(vim.cmd, 'packadd packer.nvim') then
   vim.cmd('packadd packer.nvim')
 end
 
-return require('packer').startup(
+return require('packer').startup({
   function()
+    use 'lewis6991/impatient.nvim'
+
     -- Packer can manage itself as an optional plugin
     use {'wbthomason/packer.nvim', opt = true}
 
@@ -118,6 +120,7 @@ return require('packer').startup(
       -- end
     }
     use 'folke/lsp-colors.nvim'
+    use 'arcticicestudio/nord-vim'
     -- use {'glepnir/indent-guides.nvim', opt = true, config = function ()
     --   require('indent_guides').setup()
     -- end}
@@ -235,7 +238,10 @@ return require('packer').startup(
     vim.cmd([[
       " packadd nvim-ts-rainbow
       packadd vim-matchup
-      colorscheme gruvbox
+      colorscheme nord
     ]])
-  end
-)
+  end,
+  config = {
+    compile_path = vim.fn.stdpath('config')..'/lua/packer_compiled.lua'
+  }
+})

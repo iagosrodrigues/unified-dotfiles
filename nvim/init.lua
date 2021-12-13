@@ -1,3 +1,4 @@
+require('impatient')
 require('prelude')
 require('environment')
 require('globals')
