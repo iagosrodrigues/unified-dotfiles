@@ -241,7 +241,7 @@ return require('packer').startup({
       colorscheme nord
     ]])
   end,
-  config = {
-    compile_path = vim.fn.stdpath('config')..'/lua/packer_compiled.lua'
-  }
+  --[[ config = {
+    compile_path = vim.fn.stdpath('config') .. '/lua/packer_compiled.lua'
+  } ]]
 })
