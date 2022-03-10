@@ -1,6 +1,11 @@
 local npairs = require('nvim-autopairs')
 local utils = require('../utils')
 local lsp = require('lspconfig')
+local null_ls = require("null-ls")
+
+local runtime_path = vim.split(package.path, ';')
+table.insert(runtime_path, "lua/?.lua")
+table.insert(runtime_path, "lua/?/init.lua")
 
 function completion_confirm()
   if vim.fn.pumvisible() ~= 0 then
@@ -13,41 +18,6 @@ function completion_confirm()
     return npairs.autopairs_cr()
   end
 end
-
--- diagnostic
-local filetypes = {
-  typescript = "eslint",
-  typescriptreact = "eslint",
-}
-
-local linters = {
-  eslint = {
-    sourceName = "eslint",
-    command = "eslint_d",
-    rootPatterns = {".eslintrc.js", "package.json"},
-    debounce = 100,
-    args = {"-stdin", "stdin-filename", "%filepath", "--format", "json"},
-    parseJson = {
-      errorsRoot = "[0].messages",
-      line = "line",
-      column = "column",
-      endLine = "endLine",
-      endColumn = "endColumn",
-      message = "${message} [${ruleId}]",
-      security = "severity"
-    },
-    securities = {[2] = "error", [1] = "warning"}
-  }
-}
-
-local formatters = {
-  prettier = {command = "prettier", args = {"--stdin-filepath", "%filepath"}}
-}
-
-local formatFileTypes = {
-  typescript = "prettier",
-  typescriptreact = "prettier",
-}
 
 local noremap = {
   noremap = true,
@@ -100,13 +70,13 @@ end
 
 local servers = {
   'vimls',
-  'gopls',
   'cmake',
-  'clangd',
-  'jsonls',
+  'gopls',
   'texlab',
+  'jsonls',
+  'clangd',
   'elixirls',
-  'tsserver',
+  -- 'sumneko_lua',
   'rust_analyzer',
   'java_language_server',
   'kotlin_language_server',
@@ -125,7 +95,7 @@ local servers_settings = {
     Lua = {
       runtime = {
         version = 'LuaJIT',
-        path = vim.split(package.path, ';'),
+        path = runtime_path,
       },
       diagnostics = {
         globals = {'vim', 'use', 'use_rocks'},
@@ -172,28 +142,12 @@ local servers_settings = {
     },
     staticcheck = true,
   },
-  diagnosticls = {
-    filetypes = vim.tbl_keys(filetypes),
-    init_options = {
-      filetypes = filetypes,
-      linters = linters,
-      formatters = formatters,
-      formatFileTypes = formatFileTypes
-    }
-  }
 }
 
 local commands = {
   elixirls = { '/usr/local/bin/elixir-ls/language_server.sh' },
   java_language_server = { '/Users/iago/Projects/java/java-language-server/dist/lang_server_mac.sh' },
   gopls = {vim.fn.expand('~/go/bin/gopls'), 'serve'},
-  jsonls = {
-    Format = {
-      function()
-        vim.lsp.buf.range_formatting({},{0,0},{vim.fn.line("$"),0})
-      end
-    }
-  },
 }
 
 for _, server in pairs(servers) do
@@ -204,6 +158,37 @@ for _, server in pairs(servers) do
     cmd = commands[server],
   })
 end
+
+lsp.tsserver.setup({
+  on_attach = function(client, bufnr)
+    client.resolved_capabilities.document_formatting = false
+    client.resolved_capabilities.document_range_formatting = false
+    local ts_utils = require("nvim-lsp-ts-utils")
+    ts_utils.setup({})
+    ts_utils.setup_client(client)
+
+
+    utils.remap {
+      n = {
+        {'gs', ':TSLspOrganize<CR>', noremap},
+        {'gi', ':TSLspRenameFile<CR>', noremap},
+        {'go', ':TSLspImportAll<CR>', noremap},
+      }
+    }
+
+    on_attach(client, bufnr)
+  end,
+})
+
+--[[ null_ls.setup({
+  sources = {
+    require("null-ls.helpers").conditional(function(util)
+        return util.root_has_file(".eslintrc.js") and null_ls.builtins.formatting.eslint_d and null_ls.builtins.code_actions.eslint_d or null_ls.builtins.formatting.prettier
+    end),
+    null_ls.builtins.formatting.prettierd
+  },
+  on_attach = on_attach
+}) ]]
 
 utils.remap {
   n = {

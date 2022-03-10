@@ -9,7 +9,7 @@ utils.set_opts {
   belloff = 'all',
   breakindent = true,
   bufhidden = 'unload',
-  clipboard = "unnamedplus",
+  -- clipboard = "unnamedplus",
   cmdheight = 2,
   compatible = false,
   completeopt = 'menuone,noinsert,noselect',

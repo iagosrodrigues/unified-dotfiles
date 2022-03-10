@@ -1,10 +1,9 @@
 require('plugins.explore')
 
-if not pcall(vim.cmd, 'packadd packer.nvim') then
-  local packer_path = vim.fn.stdpath('data') .. '/site/pack/packer/opt/packer.nvim'
-  vim.fn.system({'git', 'clone --depth 1', 'https://github.com/wbthomason/packer.nvim', packer_path})
-
-  vim.cmd('packadd packer.nvim')
+local fn = vim.fn
+local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
+if fn.empty(fn.glob(install_path)) > 0 then
+  packer_bootstrap = fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
 end
 
 return require('packer').startup({
@@ -12,7 +11,9 @@ return require('packer').startup({
     use 'lewis6991/impatient.nvim'
 
     -- Packer can manage itself as an optional plugin
-    use {'wbthomason/packer.nvim', opt = true}
+    use {'wbthomason/packer.nvim'}
+
+    use "rebelot/kanagawa.nvim"
 
     -- Telescope
     use {
@@ -86,7 +87,7 @@ return require('packer').startup({
         require('plugins.nvim-lspconfig')
       end
     }
-    use 'simrat39/symbols-outline.nvim'
+    -- use 'simrat39/symbols-outline.nvim'
     use {'tami5/lspsaga.nvim', config = function ()
       require'lspsaga'.init_lsp_saga({
         code_action_prompt = {
@@ -111,7 +112,6 @@ return require('packer').startup({
     -- Colorschemes
     use {'dracula/vim', as = 'dracula'}
     use {'gruvbox-community/gruvbox', opt = true}
-    use {'glepnir/zephyr-nvim'}
     use {'sainnhe/gruvbox-material', opt = true}
     use {
       'folke/tokyonight.nvim',
@@ -158,6 +158,10 @@ return require('packer').startup({
 
     use {'elixir-editors/vim-elixir', ft = {'elixir'}}
 
+    use 'jose-elias-alvarez/null-ls.nvim'
+    use 'jose-elias-alvarez/nvim-lsp-ts-utils'
+
+    use 'MunifTanjim/prettier.nvim'
     --[[ use {
       'onsails/lspkind-nvim', config = function ()
         require('lspkind').init({
@@ -223,6 +227,7 @@ return require('packer').startup({
     -- Firulas
     use {'jacoborus/tender.vim', opt = true}
     use {'sainnhe/sonokai', opt = true}
+    use {'lbrayner/vim-rzip'}
     use {
       'ThePrimeagen/harpoon',
       requires = {
@@ -238,8 +243,12 @@ return require('packer').startup({
     vim.cmd([[
       " packadd nvim-ts-rainbow
       packadd vim-matchup
-      colorscheme nord
+      colorscheme gruvbox
     ]])
+
+    if packer_bootstrap then
+      require('packer').sync()
+    end
   end,
   --[[ config = {
     compile_path = vim.fn.stdpath('config') .. '/lua/packer_compiled.lua'
