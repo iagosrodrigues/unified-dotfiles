@@ -13,7 +13,15 @@ return require('packer').startup({
     -- Packer can manage itself as an optional plugin
     use {'wbthomason/packer.nvim'}
 
-    use "rebelot/kanagawa.nvim"
+
+    -- Collection of minimal lua modules
+    use {
+      'echasnovski/mini.nvim',
+      config = function()
+        require('mini.surround').setup()
+        require('mini.pairs').setup()
+      end
+    }
 
     -- Telescope
     use {
@@ -31,11 +39,17 @@ return require('packer').startup({
     -- Autocomplete
     use {'hrsh7th/cmp-nvim-lsp'}
     use {'hrsh7th/cmp-buffer'}
+    use 'hrsh7th/cmp-path'
+    use 'hrsh7th/cmp-cmdline'
     use {
       'hrsh7th/nvim-cmp',
       config = function()
         require('plugins.nvim_cmp')
       end
+    }
+
+    use {
+      "ray-x/lsp_signature.nvim",
     }
 
     use 'hrsh7th/vim-vsnip'
@@ -49,12 +63,12 @@ return require('packer').startup({
         require('gitsigns').setup()
       end
     }
-    use {
+    --[[ use {
       'windwp/nvim-autopairs',
       config = function()
         require('nvim-autopairs').setup()
       end
-    }
+    } ]]
     use 'kevinhwang91/nvim-bqf'
 
     -- Statusbar and tabline
@@ -111,30 +125,9 @@ return require('packer').startup({
 
     -- Colorschemes
     use {'dracula/vim', as = 'dracula'}
-    use {'gruvbox-community/gruvbox', opt = true}
-    use {'sainnhe/gruvbox-material', opt = true}
-    use {
-      'folke/tokyonight.nvim',
-      -- config = function ()
-      --   vim.cmd[[colorscheme tokyonight]]
-      -- end
-    }
     use 'folke/lsp-colors.nvim'
-    use 'arcticicestudio/nord-vim'
-    -- use {'glepnir/indent-guides.nvim', opt = true, config = function ()
-    --   require('indent_guides').setup()
-    -- end}
-
-
 
     use 'windwp/nvim-ts-autotag'
-
-    use {
-      "blackCauldron7/surround.nvim",
-      config = function()
-        require "surround".setup {}
-      end
-    }
 
     -- Programming languages
     use {'rust-lang/rust.vim', ft = {'rust'}}
@@ -162,38 +155,6 @@ return require('packer').startup({
     use 'jose-elias-alvarez/nvim-lsp-ts-utils'
 
     use 'MunifTanjim/prettier.nvim'
-    --[[ use {
-      'onsails/lspkind-nvim', config = function ()
-        require('lspkind').init({
-            with_text = true,
-
-            preset = 'default',
-
-            symbol_map = {
-              Text = '?',
-              Method = 'Ä',
-              Function = '?',
-              Constructor = '?',
-              Variable = '?',
-              Class = '?',
-              Interface = '?',
-              Module = '?',
-              Property = '?',
-              Unit = '?',
-              Value = '?',
-              Enum = '?',
-              Keyword = '?',
-              Snippet = '?',
-              Color = '?',
-              File = '?',
-              Folder = '?',
-              EnumMember = '?',
-              Constant = '?',
-              Struct = '?'
-            },
-        })
-      end
-    } ]]
 
     use 'b3nj5m1n/kommentary'
     use {
@@ -226,7 +187,6 @@ return require('packer').startup({
 
     -- Firulas
     use {'jacoborus/tender.vim', opt = true}
-    use {'sainnhe/sonokai', opt = true}
     use {'lbrayner/vim-rzip'}
     use {
       'ThePrimeagen/harpoon',
@@ -243,14 +203,14 @@ return require('packer').startup({
     vim.cmd([[
       " packadd nvim-ts-rainbow
       packadd vim-matchup
-      colorscheme gruvbox
+      colorscheme dracula
     ]])
 
     if packer_bootstrap then
       require('packer').sync()
     end
   end,
-  --[[ config = {
+  config = {
     compile_path = vim.fn.stdpath('config') .. '/lua/packer_compiled.lua'
-  } ]]
+  }
 })

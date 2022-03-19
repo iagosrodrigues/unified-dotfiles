@@ -36,10 +36,6 @@ require "paq" {
     require('gitsigns').setup()
   end};
 
-  {'windwp/nvim-autopairs', run = function()
-    require('nvim-autopairs').setup()
-  end};
-
   'kevinhwang91/nvim-bqf';
 
   {'NTBBloodbath/galaxyline.nvim', run = function()

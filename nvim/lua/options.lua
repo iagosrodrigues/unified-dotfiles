@@ -35,7 +35,7 @@ utils.set_opts {
   foldmethod = 'expr',
   foldnestmax = 10,
   gdefault = true,
-  guicursor = 'a:blinkon100',
+  guicursor = 'a:block',
   hidden = true,
   history = 100,
   hlsearch = false,

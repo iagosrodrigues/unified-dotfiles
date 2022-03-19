@@ -1,23 +1,12 @@
-local npairs = require('nvim-autopairs')
 local utils = require('../utils')
 local lsp = require('lspconfig')
 local null_ls = require("null-ls")
 
+require 'lsp_signature'.setup()
+
 local runtime_path = vim.split(package.path, ';')
 table.insert(runtime_path, "lua/?.lua")
 table.insert(runtime_path, "lua/?/init.lua")
-
-function completion_confirm()
-  if vim.fn.pumvisible() ~= 0 then
-    if vim.fn.complete_info()['selected'] ~= -1 then
-      return vim.fn['compe#confirm'](npairs.esc('<cr>'))
-    else
-      return npairs.esc('<cr>')
-    end
-  else
-    return npairs.autopairs_cr()
-  end
-end
 
 local noremap = {
   noremap = true,
@@ -160,13 +149,13 @@ for _, server in pairs(servers) do
 end
 
 lsp.tsserver.setup({
+  capabilities = capabilities,
   on_attach = function(client, bufnr)
     client.resolved_capabilities.document_formatting = false
     client.resolved_capabilities.document_range_formatting = false
     local ts_utils = require("nvim-lsp-ts-utils")
     ts_utils.setup({})
     ts_utils.setup_client(client)
-
 
     utils.remap {
       n = {
@@ -178,6 +167,12 @@ lsp.tsserver.setup({
 
     on_attach(client, bufnr)
   end,
+  init_options = {
+    preferences = {
+      includeCompletionsWithSnippetText = true,
+      includeCompletionsForImportStatements = true,
+    }
+  }
 })
 
 --[[ null_ls.setup({
@@ -210,7 +205,7 @@ utils.remap {
     {'<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', noremap},
   },
   i = {
-    {'<cr>', 'v:lua.completion_confirm()', noremap_expr},
+    -- {'<cr>', 'v:lua.completion_confirm()', noremap_expr},
     {'<tab>', 'pumvisible() ? "<C-n>" : "<tab>"', noremap_expr},
     {'<S-tab>', 'pumvisible() ? "<C-p>" : "<S-tab>"', noremap_expr},
   }
