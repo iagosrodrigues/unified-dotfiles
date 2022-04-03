@@ -1,5 +1,3 @@
-require('plugins.explore')
-
 local fn = vim.fn
 local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
 if fn.empty(fn.glob(install_path)) > 0 then
@@ -9,19 +7,11 @@ end
 return require('packer').startup({
   function()
     use 'lewis6991/impatient.nvim'
+    use 'overcache/NeoSolarized'
+    use "projekt0n/github-nvim-theme"
 
     -- Packer can manage itself as an optional plugin
     use {'wbthomason/packer.nvim'}
-
-
-    -- Collection of minimal lua modules
-    use {
-      'echasnovski/mini.nvim',
-      config = function()
-        require('mini.surround').setup()
-        require('mini.pairs').setup()
-      end
-    }
 
     -- Telescope
     use {
@@ -63,12 +53,6 @@ return require('packer').startup({
         require('gitsigns').setup()
       end
     }
-    --[[ use {
-      'windwp/nvim-autopairs',
-      config = function()
-        require('nvim-autopairs').setup()
-      end
-    } ]]
     use 'kevinhwang91/nvim-bqf'
 
     -- Statusbar and tabline
@@ -94,6 +78,15 @@ return require('packer').startup({
     use 'nvim-treesitter/nvim-treesitter-refactor'
     use 'nvim-treesitter/nvim-treesitter-textobjects'
 
+    -- Collection of minimal lua modules
+    use {
+      'echasnovski/mini.nvim',
+      config = function()
+        require('mini.surround').setup()
+        require('mini.pairs').setup()
+      end
+    }
+
     -- LSP
     use {
       'neovim/nvim-lspconfig',
@@ -110,7 +103,7 @@ return require('packer').startup({
       })
 
       require('plugins.lspsaga')
-    end, disable = true}
+    end}
 
     -- Debugger
     use 'puremourning/vimspector'
@@ -203,7 +196,7 @@ return require('packer').startup({
     vim.cmd([[
       " packadd nvim-ts-rainbow
       packadd vim-matchup
-      colorscheme dracula
+      colorscheme github_dark
     ]])
 
     if packer_bootstrap then

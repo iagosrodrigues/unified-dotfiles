@@ -1,4 +1,4 @@
-_G.transparent = false
+_G.transparent = true
 
 -- Some functions
-require('utils')
+require('support')

@@ -13,8 +13,6 @@ augroup END
 augroup Config
     autocmd!
 
-    autocmd ColorScheme * :lua require('vim.lsp.diagnostic')._define_default_signs_and_highlights()
-
     autocmd BufWritePost init.vim,plugins.vim,ginit.vim,normal.vim ++nested source %
 
     " Disables automatic commenting on newline
@@ -29,11 +27,11 @@ augroup Config
 
     autocmd FocusLost * silent! wa
 
+    " highlight NonText guifg=#6272a4
+
     " Goyo
     autocmd User GoyoEnter Limelight
     autocmd User GoyoLeave Limelight!
-
-    " autocmd CursorHold * lua vim.lsp.diagnostic.show_line_diagnostics()
 augroup END
 
 augroup Term

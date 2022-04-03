@@ -65,7 +65,7 @@ local servers = {
   'jsonls',
   'clangd',
   'elixirls',
-  -- 'sumneko_lua',
+  'sumneko_lua',
   'rust_analyzer',
   'java_language_server',
   'kotlin_language_server',

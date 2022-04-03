@@ -20,6 +20,7 @@ utils.remap {
 
     {'<leader>h', ':diffget noremap<CR>', noremap},
     {'<leader>l', ':diffget 2<CR>', noremap},
+    {'<leader>k', ':Explore<CR>', noremap},
   },
 
   v = {

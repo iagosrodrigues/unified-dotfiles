@@ -1,4 +1,4 @@
-local set_attr = require('utils').set_attr
+local set_attr = require('support').set_attr
 
 local env = {
   FZF_DEFAULT_COMMAND = 'fd',
