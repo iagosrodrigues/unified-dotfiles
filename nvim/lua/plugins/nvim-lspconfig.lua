@@ -175,15 +175,23 @@ lsp.tsserver.setup({
   }
 })
 
---[[ null_ls.setup({
+null_ls.setup({
   sources = {
-    require("null-ls.helpers").conditional(function(util)
+    --[[ require("null-ls.helpers").conditional(function(util)
         return util.root_has_file(".eslintrc.js") and null_ls.builtins.formatting.eslint_d and null_ls.builtins.code_actions.eslint_d or null_ls.builtins.formatting.prettier
-    end),
-    null_ls.builtins.formatting.prettierd
+    end), ]]
+    null_ls.builtins.formatting.stylua,
+    null_ls.builtins.formatting.eslint_d,
+    null_ls.builtins.formatting.prettierd,
+    null_ls.builtins.formatting.gofmt,
+    null_ls.builtins.formatting.yapf,
+    null_ls.builtins.formatting.rustfmt,
+    null_ls.builtins.code_actions.gitsigns,
+    null_ls.builtins.diagnostics.credo,
+    null_ls.builtins.diagnostics.flake8,
   },
   on_attach = on_attach
-}) ]]
+})
 
 utils.remap {
   n = {

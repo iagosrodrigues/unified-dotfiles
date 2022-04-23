@@ -1,4 +1,4 @@
-require('support')
+local req = require('support').req
 req('impatient')
 req('environment')
 req('globals')

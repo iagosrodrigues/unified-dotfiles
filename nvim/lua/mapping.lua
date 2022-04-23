@@ -30,4 +30,8 @@ utils.remap {
     {'<leader>]', '>gv', noremap},
     {'<leader>su', ':lua sort_by_length()<CR>', noremap},
   },
+
+  x = {
+    {'Y', '"+y', noremap},
+  }
 }

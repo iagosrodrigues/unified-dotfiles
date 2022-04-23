@@ -1,5 +1,7 @@
 local fn = vim.fn
 local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
+local packer_bootstrap
+
 if fn.empty(fn.glob(install_path)) > 0 then
   packer_bootstrap = fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
 end
@@ -46,11 +48,8 @@ return require('packer').startup({
 
     use {
       'lewis6991/gitsigns.nvim',
-      requires = {
-        'nvim-lua/plenary.nvim'
-      },
       config = function()
-        require('gitsigns').setup()
+        require('plugins.gitsigns')
       end
     }
     use 'kevinhwang91/nvim-bqf'
