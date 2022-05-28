@@ -35,19 +35,19 @@ utils.set_globals {
 local on_attach = function (client, bufnr)
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
-  if client.resolved_capabilities.document_formatting then
+  if client.server_capabilities.document_formatting then
     utils.remap {
       n = {{'<leader>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', noremap}}
     }
   end
 
-  if client.resolved_capabilities.document_range_formatting then
+  if client.server_capabilities.document_range_formatting then
     utils.remap {
       v = {{'<leader>f', '<cmd>lua vim.lsp.buf.range_formatting()<CR>', noremap}}
     }
   end
 
-  if client.resolved_capabilities.document_highlight then
+  if client.server_capabilities.document_highlight then
     vim.cmd[[
       augroup lsp_document_highlight
         autocmd! * <buffer>
@@ -152,8 +152,8 @@ end
 lsp.tsserver.setup({
   capabilities = capabilities,
   on_attach = function(client, bufnr)
-    client.resolved_capabilities.document_formatting = false
-    client.resolved_capabilities.document_range_formatting = false
+    client.server_capabilities.document_formatting = false
+    client.server_capabilities.document_range_formatting = false
     local ts_utils = require("nvim-lsp-ts-utils")
     ts_utils.setup({})
     ts_utils.setup_client(client)
