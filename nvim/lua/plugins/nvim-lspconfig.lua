@@ -37,7 +37,7 @@ local on_attach = function (client, bufnr)
 
   if client.server_capabilities.document_formatting then
     utils.remap {
-      n = {{'<leader>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', noremap}}
+      n = {{'<leader>f', '<cmd>lua vim.lsp.buf.format({async = true})<CR>', noremap}}
     }
   end
 
@@ -60,8 +60,9 @@ end
 
 local servers = {
   'vimls',
-  'cmake',
   'gopls',
+  'pylsp',
+  'cmake',
   'texlab',
   'jsonls',
   'clangd',
@@ -228,6 +229,7 @@ null_ls.setup({
     null_ls.builtins.formatting.gofmt,
     null_ls.builtins.formatting.yapf,
     null_ls.builtins.formatting.rustfmt,
+    null_ls.builtins.formatting.terraform_fmt,
     null_ls.builtins.code_actions.gitsigns,
     null_ls.builtins.diagnostics.credo,
     null_ls.builtins.diagnostics.flake8,
@@ -239,7 +241,7 @@ null_ls.setup({
 utils.remap {
   n = {
     {'<F2>', '<cmd>lua vim.lsp.buf.rename()<CR>', noremap},
-    {'<leader>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', noremap},
+    {'<leader>f', '<cmd>lua vim.lsp.buf.format({async = true})<CR>', noremap},
     {'<leader>sd', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', noremap},
     {'K', '<cmd>lua vim.lsp.buf.hover()<CR>', noremap}, -- already set on lspsaga
     {'[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', noremap},
