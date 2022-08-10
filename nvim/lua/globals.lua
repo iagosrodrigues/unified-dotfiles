@@ -12,8 +12,7 @@ utils.set_globals {
   loaded_perl_provider = 0,
   loaded_ruby_provider = 0,
   loaded_python_provider = 0,
-  python3_host_prog = vim.fn.has('mac') == 1
-    and '/opt/homebrew/bin/python3' or '/usr/bin/python3',
+  -- python3_host_prog = vim.fn.has('mac') == 1 and '/opt/homebrew/opt/python@3.10/bin/python3' or '/usr/bin/python3',
 
   dracula_italic = 1,
 

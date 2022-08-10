@@ -219,7 +219,7 @@ local cfn_lint = {
   })
 }
 
-null_ls.register(cfn_lint)
+-- null_ls.register(cfn_lint)
 
 null_ls.setup({
   sources = {
@@ -233,7 +233,7 @@ null_ls.setup({
     null_ls.builtins.code_actions.gitsigns,
     null_ls.builtins.diagnostics.credo,
     null_ls.builtins.diagnostics.flake8,
-    cfn_lint,
+    -- cfn_lint,
   },
   on_attach = on_attach
 })
